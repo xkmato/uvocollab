@@ -1,4 +1,5 @@
 import { adminAuth, adminDb } from '@/lib/firebase-admin';
+import { sendApprovalEmail, sendDeclineEmail } from '@/lib/mailgun';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
@@ -93,8 +94,17 @@ export async function POST(request: NextRequest) {
       // Set custom claim on Firebase Auth
       await adminAuth.setCustomUserClaims(applicantUid, { role: 'legend' });
 
-      // TODO: Send approval email to applicant (or manager)
-      // This will be implemented when email functionality is added
+      // Send approval email to applicant (and manager if provided)
+      try {
+        await sendApprovalEmail(
+          applicationData.applicationData?.email || '',
+          applicationData.applicationData?.artistName || 'Artist',
+          applicationData.applicationData?.managementEmail
+        );
+      } catch (emailError) {
+        console.error('Failed to send approval email:', emailError);
+        // Don't fail the entire operation if email fails
+      }
     } else {
       // Declined - update role back to 'new_artist'
       await adminDb.collection('users').doc(applicantUid).update({
@@ -102,8 +112,18 @@ export async function POST(request: NextRequest) {
         updatedAt: new Date(),
       });
 
-      // TODO: Send decline email to applicant (or manager)
-      // This will be implemented when email functionality is added
+      // Send decline email to applicant (and manager if provided)
+      try {
+        await sendDeclineEmail(
+          applicationData.applicationData?.email || '',
+          applicationData.applicationData?.artistName || 'Artist',
+          notes,
+          applicationData.applicationData?.managementEmail
+        );
+      } catch (emailError) {
+        console.error('Failed to send decline email:', emailError);
+        // Don't fail the entire operation if email fails
+      }
     }
 
     return NextResponse.json(

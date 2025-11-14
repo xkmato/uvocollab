@@ -85,14 +85,14 @@ This epic is the platform's core curation mechanism. It covers the _application_
   - **Dependencies:** Task 2.3
   - **Acceptance Criteria (AC):**
 
-    - \[ \] Clicking "Approve" updates the legend_applications doc to status: 'approved'.
-    - \[ \] "Approve" triggers setting a custom claim on the user's Firebase Auth account: { role: 'legend' }.
-    - \[ \] "Approve" updates the user's Firestore users doc to role: 'legend'10.
+    - \[x\] Clicking "Approve" updates the legend_applications doc to status: 'approved'.
+    - \[x\] "Approve" triggers setting a custom claim on the user's Firebase Auth account: { role: 'legend' }.
+    - \[x\] "Approve" updates the user's Firestore users doc to role: 'legend'10.
 
-    - \[ \] Clicking "Decline" updates the application doc to status: 'declined'.
-    - \[ \] An automated email is sent to the applicant (or their manager 11) informing them of the decision.
+    - \[x\] Clicking "Decline" updates the application doc to status: 'declined'.
+    - \[x\] An automated email is sent to the applicant (or their manager 11) informing them of the decision.
 
-  - **Status:** To Do
+  - **Status:** Completed
 
 ### **Epic 3: "Legend" (Seller) Profile & Service Management**
 
