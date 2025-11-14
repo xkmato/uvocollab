@@ -26,15 +26,15 @@ This epic covers the foundational setup of the Next.js application, Firebase pro
 
 - **Task 1.3: Authentication Flow (Firebase Auth & Next.js)**
 
-  - **Description:** Implement the sign-up and login pages. New users should, by default, be assigned the new_artist (Buyer) role2. The "Apply as a Legend" path is a separate flow (see Epic 2).
+  - **Description:** Implement the sign-up and login pages. New users should, by default, be assigned the new_artist (Buyer) role. The "Apply as a Legend" path is a separate flow (see Epic 2).
 
   - **Dependencies:** Task 1.2
   - **Acceptance Criteria (AC):**
-    - \[ \] Users can create an account with email and password.
-    - \[ \] Users can log in and log out.
-    - \[ \] Upon creation, a corresponding user document is created in Firestore with role: 'new_artist'.
-    - \[ \] Implement basic protected routes in Next.js (e.g., for a user dashboard).
-  - **Status:** To Do
+    - \[x\] Users can create an account with email and password.
+    - \[x\] Users can log in and log out.
+    - \[x\] Upon creation, a corresponding user document is created in Firestore with role: 'new_artist'.
+    - \[x\] Implement basic protected routes in Next.js (e.g., for a user dashboard).
+  - **Status:** Completed
 
 ### **Epic 2: "Legend" (Seller) Onboarding & Vetting**
 
