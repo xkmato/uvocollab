@@ -47,18 +47,18 @@ This epic is the platform's core curation mechanism. It covers the _application_
   - **Dependencies:** Task 1.1
   - **Acceptance Criteria (AC):**
 
-    - \[ \] A public page /apply is created.
-    - \[ \] The form includes all fields necessary for vetting:
+    - \[x\] A public page /apply is created.
+    - \[x\] The form includes all fields necessary for vetting:
 
-      - \[ \] Primary Contact Info5.
+      - \[x\] Primary Contact Info5.
 
-      - \[ \] Management/Agency Info (name, email)666.
+      - \[x\] Management/Agency Info (name, email)666.
 
-      - \[ \] Proof of Status (links to Spotify, social media, press)7777.
+      - \[x\] Proof of Status (links to Spotify, social media, press)7777.
 
-      - \[ \] Optional: Referral from an existing member8888.
+      - \[x\] Optional: Referral from an existing member8888.
 
-  - **Status:** To Do
+  - **Status:** Completed
 
 - **Task 2.2: Backend: submitLegendApplication Function**
   - **Description:** Create a Firebase Function that saves the application data. If the applicant is not yet a user, it should create an auth account for them and a users doc with the role: 'legend_applicant'. If they are, it updates their role.
