@@ -24,6 +24,18 @@ export default function Dashboard() {
                 <h1 className="text-3xl font-bold">Dashboard</h1>
                 <p>Welcome, {userData?.displayName || user.email}!</p>
                 <p>Role: {userData?.role}</p>
+
+                {userData?.role === 'admin' && (
+                    <div className="mt-6">
+                        <a
+                            href="/admin/vetting"
+                            className="inline-block rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+                        >
+                            Admin: Review Legend Applications
+                        </a>
+                    </div>
+                )}
+
                 <button
                     onClick={logout}
                     className="mt-4 rounded-md bg-red-600 px-4 py-2 text-white hover:bg-red-700"

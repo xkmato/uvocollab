@@ -74,10 +74,10 @@ This epic is the platform's core curation mechanism. It covers the _application_
 
   - **Dependencies:** Task 2.2
   - **Acceptance Criteria (AC):**
-    - \[ \] The page /admin/vetting is only accessible to admin users.
-    - \[ \] The dashboard lists all pending applications, showing key data (Artist Name, Management, Links).
-    - \[ \] Each application has an "Approve" and "Decline" button.
-  - **Status:** To Do
+    - \[x\] The page /admin/vetting is only accessible to admin users.
+    - \[x\] The dashboard lists all pending applications, showing key data (Artist Name, Management, Links).
+    - \[x\] Each application has an "Approve" and "Decline" button.
+  - **Status:** Completed
 
 - **Task 2.4: Backend: reviewLegendApplication Function**
 
