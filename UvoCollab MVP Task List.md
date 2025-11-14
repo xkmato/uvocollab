@@ -61,14 +61,13 @@ This epic is the platform's core curation mechanism. It covers the _application_
   - **Status:** Completed
 
 - **Task 2.2: Backend: submitLegendApplication Function**
-  - **Description:** Create a Firebase Function that saves the application data. If the applicant is not yet a user, it should create an auth account for them and a users doc with the role: 'legend_applicant'. If they are, it updates their role.
+  - **Description:** Create a Nextjs severside that saves the application data. If the applicant is not yet a user, it should create an auth account for them and a users doc with the role: 'legend_applicant'. If they are, it updates their role.
   - **Dependencies:** Task 2.1, Task 1.2
   - **Acceptance Criteria (AC):**
-    - \[ \] Form submission triggers the Firebase Function.
-    - \[ \] A new document is created in an legend_applications collection with status: 'pending'.
-    - \[ \] The applicant's users doc is created/updated with role: 'legend_applicant'.
-    - \[ \] The function returns a success message to the user.
-  - **Status:** To Do
+    - \[x\] A new document is created in an legend_applications collection with status: 'pending'.
+    - \[x\] The applicant's users doc is created/updated with role: 'legend_applicant'.
+    - \[x\] The function returns a success message to the user.
+  - **Status:** Completed
 - **Task 2.3: Admin Vetting Dashboard (Internal Tool)**
 
   - **Description:** Create a new page/section in the Next.js app, protected for users with the admin role. This page will list all documents from the legend_applications collection9.

@@ -47,12 +47,19 @@ export default function ApplyAsLegend() {
         setIsSubmitting(true);
 
         try {
-            // TODO: Will be implemented in Task 2.2
-            // This will call the submitLegendApplication Firebase Function
-            console.log('Form data:', formData);
+            const response = await fetch('/api/legend-application', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
 
-            // Simulate API call for now
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to submit application');
+            }
 
             setSuccess(true);
             setTimeout(() => {
