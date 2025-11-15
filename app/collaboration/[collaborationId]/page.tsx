@@ -1,5 +1,6 @@
 'use client';
 
+import CommunicationThread from '@/app/components/CommunicationThread';
 import FileSharing from '@/app/components/FileSharing';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { Collaboration } from '@/app/types/collaboration';
@@ -429,6 +430,14 @@ export default function CollaborationHub() {
                                 collaboration={collaboration}
                                 isLegend={isLegend}
                                 onUpdate={loadCollaboration}
+                            />
+                        )}
+
+                        {/* Communication Thread */}
+                        {otherParty && (
+                            <CommunicationThread
+                                collaborationId={collaborationId}
+                                otherPartyName={otherParty.displayName}
                             />
                         )}
                     </div>

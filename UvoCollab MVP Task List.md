@@ -350,10 +350,10 @@ This is the private space where the work happens49494949.
 
   - **Dependencies:** Task 7.1
   - **Acceptance Criteria (AC):**
-    - \[ \] Use a Firestore subcollection (/collaborations/\[collabId\]/messages) to store messages.
-    - \[ \] Both Buyer and Legend can send and receive messages in real-time.
-    - \[ \] All communication is saved on the platform.
-  - **Status:** To Do
+    - \[x\] Use a Firestore subcollection (/collaborations/\[collabId\]/messages) to store messages.
+    - \[x\] Both Buyer and Legend can send and receive messages in real-time.
+    - \[x\] All communication is saved on the platform.
+  - **Status:** Completed
 
 - **Task 7.5: Hub: "Mark as Complete" Button**
 
