@@ -104,10 +104,10 @@ Once approved, "Legends" need to set up their "storefront"12.
   - **Dependencies:** Task 1.2
   - **Acceptance Criteria (AC):**
 
-    - \[ \] A services subcollection is added to the users schema.
-    - \[ \] The services document schema includes title (e.g., "16-bar verse") 13, description 141414, price 151515, and deliverable (e.g., "1 WAV file")16.
+    - \[x\] A services subcollection is added to the users schema.
+    - \[x\] The services document schema includes title (e.g., "16-bar verse") 13, description 141414, price 151515, and deliverable (e.g., "1 WAV file")16.
 
-  - **Status:** To Do
+  - **Status:** Completed
 
 - **Task 3.2: "Legend" Dashboard: Profile & Service Editor**
 
