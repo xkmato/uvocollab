@@ -40,6 +40,13 @@ export interface Collaboration {
   docusignEnvelopeId?: string; // DocuSign envelope ID for tracking contract signatures
   contractSentAt?: Date; // When contract was sent for signature
   allPartiesSignedAt?: Date; // When all parties completed signing
+  payoutTransferId?: string; // Flutterwave transfer ID for the payout to Legend
+  payoutReference?: string; // Transfer reference for the payout
+  payoutInitiatedAt?: string; // When the payout was initiated
+  payoutError?: {
+    message: string;
+    timestamp: string;
+  }; // Error details if payout failed
 }
 
 export interface CreateCollaborationData {

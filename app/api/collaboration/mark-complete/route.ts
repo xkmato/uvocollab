@@ -1,5 +1,5 @@
 import { db } from '@/lib/firebase';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
@@ -51,24 +51,33 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Update collaboration status to completed
-        // Note: The actual payout logic (Task 8.1) will be implemented separately
-        // For now, we're just updating the status
-        await updateDoc(collabRef, {
-            status: 'completed',
-            completedAt: new Date(),
-            updatedAt: new Date(),
-            escrowStatus: 'released', // This will trigger the payout in Task 8.1
+        // Call the trigger-payout API to process the payment
+        // This will handle the Flutterwave transfer and update the collaboration status
+        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+        const payoutResponse = await fetch(`${baseUrl}/api/collaboration/trigger-payout`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': request.headers.get('authorization') || '',
+            },
+            body: JSON.stringify({
+                collaborationId,
+            }),
         });
 
-        // TODO: Task 8.1 - Implement actual Flutterwave payout
-        // - Calculate platform commission (20%)
-        // - Transfer (price - fee) to Legend's Flutterwave subaccount
-        // - Send confirmation emails to both parties
+        const payoutData = await payoutResponse.json();
+
+        if (!payoutResponse.ok) {
+            return NextResponse.json(
+                { error: payoutData.error || 'Failed to process payout' },
+                { status: payoutResponse.status }
+            );
+        }
 
         return NextResponse.json({
             success: true,
-            message: 'Project marked as complete. Payout will be processed shortly.',
+            message: 'Project marked as complete and payout initiated successfully.',
+            payout: payoutData.data,
         });
     } catch (error) {
         console.error('Error marking collaboration as complete:', error);

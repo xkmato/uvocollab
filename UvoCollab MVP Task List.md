@@ -377,13 +377,13 @@ The final step: paying the Legend.
   - **Dependencies:** Task 7.5, Task 6.1
   - **Acceptance Criteria (AC):**
 
-    - \[ \] The function calculates the platform's commission (e.g., 20%)59.
+    - \[x\] The function calculates the platform's commission (e.g., 20%)59.
 
-    - \[ \] It instructs Flutterwave to execute the transfer, sending the (Price \- Fee) to the Legend's connected Flutterwave subaccount61.
+    - \[x\] It instructs Flutterwave to execute the transfer, sending the (Price \- Fee) to the Legend's connected Flutterwave subaccount61.
 
-    - \[ \] The platform's fee remains in the platform's primary Flutterwave account.
+    - \[x\] The platform's fee remains in the platform's primary Flutterwave account.
 
-  - **Status:** To Do
+  - **Status:** Completed
 
 - **Task 8.2: Final Project State**
   - **Description:** After the triggerPayout function is successfully _initiated_, update the project's final state.
