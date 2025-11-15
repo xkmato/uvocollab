@@ -114,10 +114,10 @@ export default function LegendDashboard() {
         try {
             setLoadingCollaborations(true);
             const collabsRef = collection(db, 'collaborations');
+            // Load all collaborations for the legend, not just pending_review
             const q = query(
                 collabsRef,
                 where('legendId', '==', user.uid),
-                where('status', '==', 'pending_review'),
                 orderBy('createdAt', 'desc')
             );
             const snapshot = await getDocs(q);
@@ -622,6 +622,23 @@ export default function LegendDashboard() {
                                     const buyer = buyersInfo[collab.buyerId];
                                     const service = services.find(s => s.id === collab.serviceId);
 
+                                    const getStatusBadge = (status: string) => {
+                                        const badges: Record<string, { color: string; text: string }> = {
+                                            pending_review: { color: 'bg-yellow-100 text-yellow-800', text: 'Pending Review' },
+                                            pending_payment: { color: 'bg-blue-100 text-blue-800', text: 'Awaiting Payment' },
+                                            awaiting_contract: { color: 'bg-purple-100 text-purple-800', text: 'Awaiting Contract' },
+                                            in_progress: { color: 'bg-green-100 text-green-800', text: 'In Progress' },
+                                            completed: { color: 'bg-gray-100 text-gray-800', text: 'Completed' },
+                                            declined: { color: 'bg-red-100 text-red-800', text: 'Declined' },
+                                        };
+                                        const badge = badges[status] || { color: 'bg-gray-100 text-gray-800', text: status };
+                                        return (
+                                            <span className={`px-3 py-1 rounded-full text-sm font-medium ${badge.color}`}>
+                                                {badge.text}
+                                            </span>
+                                        );
+                                    };
+
                                     return (
                                         <div key={collab.id} className="bg-white rounded-lg shadow overflow-hidden">
                                             <div className="p-6">
@@ -640,7 +657,8 @@ export default function LegendDashboard() {
                                                         </p>
                                                     </div>
                                                     <div className="text-right">
-                                                        <p className="text-2xl font-bold text-blue-600">${collab.price}</p>
+                                                        {getStatusBadge(collab.status)}
+                                                        <p className="text-2xl font-bold text-blue-600 mt-2">${collab.price}</p>
                                                         <p className="text-sm text-gray-500">{service?.deliverable}</p>
                                                     </div>
                                                 </div>
@@ -719,21 +737,82 @@ export default function LegendDashboard() {
                                                     </div>
                                                 </div>
 
-                                                {/* Action Buttons */}
-                                                <div className="flex space-x-3 mt-6">
-                                                    <button
-                                                        onClick={() => handleAcceptPitch(collab.id!)}
-                                                        className="flex-1 px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium transition-colors"
-                                                    >
-                                                        Accept Request
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleDeclinePitch(collab.id!)}
-                                                        className="flex-1 px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium transition-colors"
-                                                    >
-                                                        Decline Request
-                                                    </button>
-                                                </div>
+                                                {/* Status-specific Actions/Info */}
+                                                {collab.status === 'pending_review' && (
+                                                    <div className="flex space-x-3 mt-6">
+                                                        <button
+                                                            onClick={() => handleAcceptPitch(collab.id!)}
+                                                            className="flex-1 px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium transition-colors"
+                                                        >
+                                                            Accept Request
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDeclinePitch(collab.id!)}
+                                                            className="flex-1 px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium transition-colors"
+                                                        >
+                                                            Decline Request
+                                                        </button>
+                                                    </div>
+                                                )}
+
+                                                {collab.status === 'pending_payment' && (
+                                                    <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                                        <p className="text-blue-800">
+                                                            ✓ Request accepted! Waiting for the artist to complete payment.
+                                                        </p>
+                                                    </div>
+                                                )}
+
+                                                {collab.status === 'awaiting_contract' && (
+                                                    <div className="mt-4 bg-purple-50 border border-purple-200 rounded-lg p-4">
+                                                        <p className="text-purple-800 mb-2">
+                                                            <strong>✓ Payment Received!</strong> Funds are held in escrow.
+                                                        </p>
+                                                        {collab.docusignEnvelopeId ? (
+                                                            <p className="text-purple-700 text-sm">
+                                                                Contract sent for signature. Check your email to sign.
+                                                            </p>
+                                                        ) : (
+                                                            <p className="text-purple-700 text-sm">
+                                                                Contract will be sent to you shortly for signature.
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                )}
+
+                                                {collab.status === 'in_progress' && (
+                                                    <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-4">
+                                                        <p className="text-green-800 mb-2">
+                                                            <strong>✓ Contract Signed!</strong> You can now begin working on the project.
+                                                        </p>
+                                                        {collab.contractUrl && (
+                                                            <a
+                                                                href={collab.contractUrl}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="text-green-700 underline text-sm"
+                                                            >
+                                                                View Signed Contract
+                                                            </a>
+                                                        )}
+                                                    </div>
+                                                )}
+
+                                                {collab.status === 'completed' && (
+                                                    <div className="mt-4 bg-gray-50 border border-gray-200 rounded-lg p-4">
+                                                        <p className="text-gray-800">
+                                                            ✓ Project completed. Payment released from escrow.
+                                                        </p>
+                                                    </div>
+                                                )}
+
+                                                {collab.status === 'declined' && (
+                                                    <div className="mt-4 bg-red-50 border border-red-200 rounded-lg p-4">
+                                                        <p className="text-red-800">
+                                                            This request was declined.
+                                                        </p>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     );

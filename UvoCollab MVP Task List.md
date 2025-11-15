@@ -280,15 +280,15 @@ This epic covers the critical payment (escrow) and contract generation that happ
   - **Dependencies:** Task 6.3
   - **Acceptance Criteria (AC):**
 
-    - \[ \] The function must use a "Work for Hire" (WFH) template as the MVP default42424242.
+    - \[x\] The function must use a "Work for Hire" (WFH) template as the MVP default42424242.
 
-    - \[ \] It dynamically populates fields: \[Buyer Name\], \[Legend Name\], \[Service Description\], \[Price\] 43.
+    - \[x\] It dynamically populates fields: \[Buyer Name\], \[Legend Name\], \[Service Description\], \[Price\] 43.
 
-    - \[ \] The contract must include key clauses: WFH Master Ownership (Buyer owns master) 44, Publisher Share (Legend retains writer's share) 45, and Credit46.
+    - \[x\] The contract must include key clauses: WFH Master Ownership (Buyer owns master) 44, Publisher Share (Legend retains writer's share) 45, and Credit46.
 
-    - \[ \] The contract is sent to both parties for e-signature47474747.
+    - \[x\] The contract is sent to both parties for e-signature47474747.
 
-  - **Status:** To Do
+  - **Status:** Completed
 
 - **Task 6.5: Backend: handleContractSigned Webhook**
 

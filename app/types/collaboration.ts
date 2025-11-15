@@ -28,6 +28,9 @@ export interface Collaboration {
   platformCommission?: number; // Platform's 20% commission held in escrow
   legendAmount?: number; // Amount to be paid to Legend after completion
   escrowStatus?: 'held' | 'released'; // Status of funds in escrow
+  docusignEnvelopeId?: string; // DocuSign envelope ID for tracking contract signatures
+  contractSentAt?: Date; // When contract was sent for signature
+  allPartiesSignedAt?: Date; // When all parties completed signing
 }
 
 export interface CreateCollaborationData {

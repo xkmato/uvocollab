@@ -18,6 +18,7 @@ export default function Dashboard() {
     const [legendsInfo, setLegendsInfo] = useState<Record<string, User>>({});
     const [servicesInfo, setServicesInfo] = useState<Record<string, Service>>({});
     const [selectedCollab, setSelectedCollab] = useState<string | null>(null);
+    const [generatingContract, setGeneratingContract] = useState<string | null>(null);
 
     useEffect(() => {
         if (!loading && !user) {
@@ -105,6 +106,40 @@ export default function Dashboard() {
                 {badge.text}
             </span>
         );
+    };
+
+    const handleGenerateContract = async (collaborationId: string) => {
+        if (!user) return;
+
+        try {
+            setGeneratingContract(collaborationId);
+            const token = await user.getIdToken();
+
+            const response = await fetch('/api/contract/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({ collaborationId }),
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to generate contract');
+            }
+
+            const data = await response.json();
+            console.log('Contract generated:', data);
+
+            alert('Contract generated and sent for signature! Check your email.');
+            await loadCollaborations();
+        } catch (error) {
+            console.error('Error generating contract:', error);
+            alert(error instanceof Error ? error.message : 'Failed to generate contract');
+        } finally {
+            setGeneratingContract(null);
+        }
     };
 
     if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
@@ -223,10 +258,48 @@ export default function Dashboard() {
                                         )}
 
                                         {collab.status === 'awaiting_contract' && (
-                                            <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
-                                                <p className="text-blue-800">
-                                                    <strong>Next Step:</strong> The contract is being prepared and will be sent to you shortly for signature.
+                                            <div className="mt-4 space-y-3">
+                                                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                                    <p className="text-blue-800 mb-3">
+                                                        <strong>Payment Received!</strong> The funds are now held in escrow.
+                                                    </p>
+                                                    {collab.docusignEnvelopeId ? (
+                                                        <p className="text-blue-700 text-sm">
+                                                            ✅ Contract sent for signature. Check your email to sign.
+                                                        </p>
+                                                    ) : (
+                                                        <p className="text-blue-700 text-sm">
+                                                            Next: Generate and sign the collaboration contract.
+                                                        </p>
+                                                    )}
+                                                </div>
+                                                {!collab.docusignEnvelopeId && (
+                                                    <button
+                                                        onClick={() => handleGenerateContract(collab.id!)}
+                                                        disabled={generatingContract === collab.id}
+                                                        className="w-full px-6 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed"
+                                                    >
+                                                        {generatingContract === collab.id ? 'Generating Contract...' : 'Generate & Sign Contract'}
+                                                    </button>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        {collab.status === 'in_progress' && (
+                                            <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-4">
+                                                <p className="text-green-800">
+                                                    <strong>✓ Contract Signed!</strong> Your collaboration is now in progress.
                                                 </p>
+                                                {collab.contractUrl && (
+                                                    <a
+                                                        href={collab.contractUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-green-700 underline text-sm mt-2 inline-block"
+                                                    >
+                                                        View Signed Contract
+                                                    </a>
+                                                )}
                                             </div>
                                         )}
 
