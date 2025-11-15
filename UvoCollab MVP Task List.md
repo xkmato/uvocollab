@@ -315,10 +315,10 @@ This is the private space where the work happens49494949.
 
   - **Dependencies:** Task 6.5
   - **Acceptance Criteria (AC):**
-    - \[ \] The page is created when the collaborations doc status becomes in_progress.
-    - \[ \] Users not associated with the project are redirected.
-    - \[ \] The page displays the project's details (service, deadline, etc.).
-  - **Status:** To Do
+    - \[x\] The page is created when the collaborations doc status becomes in_progress.
+    - \[x\] Users not associated with the project are redirected.
+    - \[x\] The page displays the project's details (service, deadline, etc.).
+  - **Status:** Completed
 
 - **Task 7.2: Hub: Milestone Checklist**
 

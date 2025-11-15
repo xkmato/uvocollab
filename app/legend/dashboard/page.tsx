@@ -781,28 +781,44 @@ export default function LegendDashboard() {
                                                 )}
 
                                                 {collab.status === 'in_progress' && (
-                                                    <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-4">
-                                                        <p className="text-green-800 mb-2">
-                                                            <strong>✓ Contract Signed!</strong> You can now begin working on the project.
-                                                        </p>
-                                                        {collab.contractUrl && (
-                                                            <a
-                                                                href={collab.contractUrl}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                className="text-green-700 underline text-sm"
-                                                            >
-                                                                View Signed Contract
-                                                            </a>
-                                                        )}
+                                                    <div className="mt-4 space-y-3">
+                                                        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                                                            <p className="text-green-800 mb-2">
+                                                                <strong>✓ Contract Signed!</strong> You can now begin working on the project.
+                                                            </p>
+                                                            {collab.contractUrl && (
+                                                                <a
+                                                                    href={collab.contractUrl}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="text-green-700 underline text-sm"
+                                                                >
+                                                                    View Signed Contract
+                                                                </a>
+                                                            )}
+                                                        </div>
+                                                        <button
+                                                            onClick={() => router.push(`/collaboration/${collab.id}`)}
+                                                            className="w-full px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-semibold"
+                                                        >
+                                                            Open Collaboration Hub
+                                                        </button>
                                                     </div>
                                                 )}
 
                                                 {collab.status === 'completed' && (
-                                                    <div className="mt-4 bg-gray-50 border border-gray-200 rounded-lg p-4">
-                                                        <p className="text-gray-800">
-                                                            ✓ Project completed. Payment released from escrow.
-                                                        </p>
+                                                    <div className="mt-4 space-y-3">
+                                                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                                                            <p className="text-gray-800">
+                                                                ✓ Project completed. Payment released from escrow.
+                                                            </p>
+                                                        </div>
+                                                        <button
+                                                            onClick={() => router.push(`/collaboration/${collab.id}`)}
+                                                            className="w-full px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-semibold"
+                                                        >
+                                                            View Collaboration Hub
+                                                        </button>
                                                     </div>
                                                 )}
 

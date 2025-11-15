@@ -286,24 +286,46 @@ export default function Dashboard() {
                                         )}
 
                                         {collab.status === 'in_progress' && (
-                                            <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-4">
-                                                <p className="text-green-800">
-                                                    <strong>✓ Contract Signed!</strong> Your collaboration is now in progress.
-                                                </p>
-                                                {collab.contractUrl && (
-                                                    <a
-                                                        href={collab.contractUrl}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="text-green-700 underline text-sm mt-2 inline-block"
-                                                    >
-                                                        View Signed Contract
-                                                    </a>
-                                                )}
+                                            <div className="mt-4 space-y-3">
+                                                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                                                    <p className="text-green-800">
+                                                        <strong>✓ Contract Signed!</strong> Your collaboration is now in progress.
+                                                    </p>
+                                                    {collab.contractUrl && (
+                                                        <a
+                                                            href={collab.contractUrl}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-green-700 underline text-sm mt-2 inline-block"
+                                                        >
+                                                            View Signed Contract
+                                                        </a>
+                                                    )}
+                                                </div>
+                                                <button
+                                                    onClick={() => router.push(`/collaboration/${collab.id}`)}
+                                                    className="w-full px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-semibold"
+                                                >
+                                                    Open Collaboration Hub
+                                                </button>
                                             </div>
                                         )}
 
-                                        {collab.status === 'declined' && (
+                                        {collab.status === 'completed' && (
+                                            <div className="mt-4 space-y-3">
+                                                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                                                    <p className="text-gray-800">
+                                                        <strong>✓ Project Complete!</strong> Payment has been released from escrow.
+                                                    </p>
+                                                </div>
+                                                <button
+                                                    onClick={() => router.push(`/collaboration/${collab.id}`)}
+                                                    className="w-full px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-semibold"
+                                                >
+                                                    View Collaboration Hub
+                                                </button>
+                                            </div>
+                                        )}                                        {collab.status === 'declined' && (
                                             <div className="mt-4 bg-red-50 border border-red-200 rounded-lg p-4">
                                                 <p className="text-red-800">
                                                     This collaboration request was declined by the artist.
