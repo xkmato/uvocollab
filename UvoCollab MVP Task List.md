@@ -115,12 +115,12 @@ Once approved, "Legends" need to set up their "storefront"12.
 
   - **Dependencies:** Task 2.4, Task 3.1
   - **Acceptance Criteria (AC):**
-    - \[ \] Page is only accessible to users with the legend role.
-    - \[ \] Legends can update their public profile information.
-    - \[ \] Legends can add a new service, filling in the fields from Task 3.1.
-    - \[ \] Legends can edit or delete existing services.
-    - \[ \] Legends cannot set a price of $0.
-  - **Status:** To Do
+    - \[x\] Page is only accessible to users with the legend role.
+    - \[x\] Legends can update their public profile information.
+    - \[x\] Legends can add a new service, filling in the fields from Task 3.1.
+    - \[x\] Legends can edit or delete existing services.
+    - \[x\] Legends cannot set a price of $0.
+  - **Status:** Completed
 
 - **Task 3.3: "Legend" Public Profile Page (Storefront)**
 

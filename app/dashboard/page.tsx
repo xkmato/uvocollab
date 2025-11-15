@@ -12,7 +12,10 @@ export default function Dashboard() {
         if (!loading && !user) {
             router.push('/auth/login');
         }
-    }, [user, loading, router]);
+        if (!loading && userData && userData.role === 'legend') {
+            router.push('/legend/dashboard');
+        }
+    }, [user, userData, loading, router]);
 
     if (loading) return <div>Loading...</div>;
 
