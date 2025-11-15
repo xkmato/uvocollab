@@ -1,5 +1,7 @@
 'use client';
 
+import PitchForm from '@/app/components/PitchForm';
+import { useAuth } from '@/app/contexts/AuthContext';
 import { Service } from '@/app/types/service';
 import { User } from '@/app/types/user';
 import { db } from '@/lib/firebase';
@@ -11,12 +13,15 @@ import { useEffect, useState } from 'react';
 export default function LegendPublicProfile() {
     const params = useParams();
     const router = useRouter();
+    const { user } = useAuth();
     const legendId = params.legendId as string;
 
     const [legend, setLegend] = useState<User | null>(null);
     const [services, setServices] = useState<Service[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [showPitchForm, setShowPitchForm] = useState(false);
+    const [selectedService, setSelectedService] = useState<Service | null>(null);
 
     useEffect(() => {
         loadLegendProfile();
@@ -69,9 +74,44 @@ export default function LegendPublicProfile() {
     };
 
     const handleRequestCollaboration = (serviceId: string) => {
-        // TODO: Navigate to collaboration request form (Epic 5)
-        console.log('Request collaboration for service:', serviceId);
-        alert('Collaboration request feature coming soon!');
+        // Check if user is logged in
+        if (!user) {
+            router.push('/auth/login');
+            return;
+        }
+
+        // Check if user is trying to collaborate with themselves
+        if (user.uid === legendId) {
+            alert('You cannot request a collaboration with yourself!');
+            return;
+        }
+
+        // Find the service
+        const service = services.find((s) => s.id === serviceId);
+        if (!service) {
+            alert('Service not found');
+            return;
+        }
+
+        // Open pitch form
+        setSelectedService(service);
+        setShowPitchForm(true);
+    };
+
+    const handlePitchSuccess = () => {
+        setShowPitchForm(false);
+        setSelectedService(null);
+
+        // Show success message
+        alert('Your pitch has been submitted successfully! The Legend will review it and respond soon.');
+
+        // Optionally navigate to dashboard
+        router.push('/dashboard');
+    };
+
+    const handleClosePitchForm = () => {
+        setShowPitchForm(false);
+        setSelectedService(null);
     };
 
     if (loading) {
@@ -310,6 +350,17 @@ export default function LegendPublicProfile() {
                     </div>
                 </div>
             </div>
+
+            {/* Pitch Form Modal */}
+            {showPitchForm && selectedService && legend && user && (
+                <PitchForm
+                    legend={legend}
+                    service={selectedService}
+                    buyerId={user.uid}
+                    onClose={handleClosePitchForm}
+                    onSuccess={handlePitchSuccess}
+                />
+            )}
         </div>
     );
 }

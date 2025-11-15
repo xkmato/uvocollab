@@ -9,7 +9,7 @@ This epic covers the foundational setup of the Next.js application, Firebase pro
   - **Dependencies:** None.
   - **Acceptance Criteria (AC):**
     - \[ \] Firebase project is created.
-    - \[ \] Firestore, Firebase Auth, Firebase Storage, and Firebase Functions are enabled.
+    - \[ \] Firestore, Firebase Auth, Firebase Storage, and Backends are enabled.
     - \[ \] A new Next.js project is created.
     - \[ \] The Next.js app can successfully connect to the Firebase project.
   - **Status:** To Do
@@ -81,7 +81,7 @@ This epic is the platform's core curation mechanism. It covers the _application_
 
 - **Task 2.4: Backend: reviewLegendApplication Function**
 
-  - **Description:** Create a Firebase Function callable only by admins. This function takes an applicationId and an action ('approve' or 'decline').
+  - **Description:** Create a Backend callable only by admins. This function takes an applicationId and an action ('approve' or 'decline').
   - **Dependencies:** Task 2.3
   - **Acceptance Criteria (AC):**
 
@@ -180,25 +180,24 @@ This is the core transaction loop, from the initial "pitch" to the secure paymen
   - **Dependencies:** Task 3.3, Task 5.1
   - **Acceptance Criteria (AC):**
 
-    - \[ \] The form must require the Buyer to:
+    - \[x\] The form must require the Buyer to:
 
-      - \[ \] Upload their demo track (to Firebase Storage)27272727.
+      - \[x\] Upload their demo track (to Firebase Storage)27272727.
 
-      - \[ \] Provide a link to their best previous work28.
+      - \[x\] Provide a link to their best previous work28.
 
-      - \[ \] Write a short message about the creative concept29.
+      - \[x\] Write a short message about the creative concept29.
 
-    - \[ \] Submitting the form is disabled until all required fields are complete.
+    - \[x\] Submitting the form is disabled until all required fields are complete.
 
-  - **Status:** To Do
+  - **Status:** Completed
 
 - **Task 5.3: Backend: submitPitch Function**
 
-  - **Description:** A Firebase Function that creates the collaborations document in Firestore with the data from the pitch form.
+  - **Description:** A backend that creates the collaborations document in Firestore with the data from the pitch form.
   - **Dependencies:** Task 5.2
   - **Acceptance Criteria (AC):**
 
-    - \[ \] The function is triggered on pitch form submission.
     - \[ \] A new document is created in the collaborations collection.
     - \[ \] The document's status is set to pending_review.
     - \[ \] A notification (e.g., email) is sent to the "Legend" (or their manager 30) about the new request.
@@ -221,7 +220,7 @@ This is the core transaction loop, from the initial "pitch" to the secure paymen
 
 - **Task 5.5: Backend: respondToPitch Function**
 
-  - **Description:** A Firebase Function triggered by the Legend's "Accept" / "Decline" action.
+  - **Description:** A Backend triggered by the Legend's "Accept" / "Decline" action.
   - **Dependencies:** Task 5.4
   - **Acceptance Criteria (AC):**
 
@@ -256,13 +255,13 @@ This epic covers the critical payment (escrow) and contract generation that happ
     - \[ \] The checkout page uses Stripe Elements to collect payment info.
     - \[ \] The amount shown is the full, pre-funded service price37.
 
-    - \[ \] Payment submission triggers a Firebase Function.
+    - \[ \] Payment submission triggers a Backend.
 
   - **Status:** To Do
 
 - **Task 6.3: Backend: processPayment Function (Escrow)**
 
-  - **Description:** A Firebase Function that creates a Stripe PaymentIntent. The function must be configured to hold the funds in the platform's Stripe account (acting as escrow) 38383838383838 and _not_ pay out to the Legend immediately.
+  - **Description:** A Backend that creates a Stripe PaymentIntent. The function must be configured to hold the funds in the platform's Stripe account (acting as escrow) 38383838383838 and _not_ pay out to the Legend immediately.
 
   - **Dependencies:** Task 6.2
   - **Acceptance Criteria (AC):**
@@ -276,7 +275,7 @@ This epic covers the critical payment (escrow) and contract generation that happ
 
 - **Task 6.4: Backend: Dynamic Contract Generation**
 
-  - **Description:** Create a Firebase Function (or use an extension like PandaDoc 40or Dropbox Sign 4141) that triggers _after_ payment is successful (status awaiting_contract). This function generates a legal contract.
+  - **Description:** Create a Backend (or use an extension like PandaDoc 40or Dropbox Sign 4141) that triggers _after_ payment is successful (status awaiting_contract). This function generates a legal contract.
 
   - **Dependencies:** Task 6.3
   - **Acceptance Criteria (AC):**
@@ -293,7 +292,7 @@ This epic covers the critical payment (escrow) and contract generation that happ
 
 - **Task 6.5: Backend: handleContractSigned Webhook**
 
-  - **Description:** A Firebase Function (HTTP webhook) to listen for the "contract signed" event from the e-signature service.
+  - **Description:** A Backend (HTTP webhook) to listen for the "contract signed" event from the e-signature service.
   - **Dependencies:** Task 6.4
   - **Acceptance Criteria (AC):**
 
@@ -373,7 +372,7 @@ The final step: paying the Legend.
 
 - **Task 8.1: Backend: triggerPayout Function**
 
-  - **Description:** A Firebase Function triggered by the Buyer clicking "Mark as Complete" (Task 7.5)58.
+  - **Description:** A Backend triggered by the Buyer clicking "Mark as Complete" (Task 7.5)58.
 
   - **Dependencies:** Task 7.5, Task 6.1
   - **Acceptance Criteria (AC):**
