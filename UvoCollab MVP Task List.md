@@ -170,9 +170,9 @@ This is the core transaction loop, from the initial "pitch" to the secure paymen
   - **Description:** Define the schema for the root collaborations collection. This doc will track the entire lifecycle of a project.
   - **Dependencies:** Task 1.2, Task 3.1
   - **Acceptance Criteria (AC):**
-    - \[ \] A collaborations collection is created.
-    - \[ \] The doc schema includes buyerId, legendId, serviceId, price, status (e.g., 'pending_review', 'pending_payment', 'in_progress', 'completed'), pitchDemoUrl, pitchMessage, and contractUrl.
-  - **Status:** To Do
+    - \[x\] A collaborations collection is created.
+    - \[x\] The doc schema includes buyerId, legendId, serviceId, price, status (e.g., 'pending_review', 'pending_payment', 'in_progress', 'completed'), pitchDemoUrl, pitchMessage, and contractUrl.
+  - **Status:** Completed
 - **Task 5.2: "New Artist" (Buyer) \- "Pitch" Form**
 
   - **Description:** When a "New Artist" clicks "Request Collaboration" (from Task 3.3), they are shown a form to submit their "pitch"25252525. This form is critical for the Legend's brand protection26.

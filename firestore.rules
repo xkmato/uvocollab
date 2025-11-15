@@ -7,6 +7,32 @@ service cloud.firestore {
       // TODO: Add admin permissions later
     }
 
+    // Collaborations collection: participants can read/write their own collaborations
+    match /collaborations/{collaborationId} {
+      // Buyers can create new collaborations
+      allow create: if request.auth != null && request.resource.data.buyerId == request.auth.uid;
+      
+      // Both buyer and legend can read the collaboration
+      allow read: if request.auth != null && 
+                     (resource.data.buyerId == request.auth.uid || 
+                      resource.data.legendId == request.auth.uid);
+      
+      // Both buyer and legend can update (for status changes, file uploads, etc.)
+      allow update: if request.auth != null && 
+                       (resource.data.buyerId == request.auth.uid || 
+                        resource.data.legendId == request.auth.uid);
+      
+      // Messages subcollection for collaboration communication
+      match /messages/{messageId} {
+        allow read: if request.auth != null && 
+                       (get(/databases/$(database)/documents/collaborations/$(collaborationId)).data.buyerId == request.auth.uid ||
+                        get(/databases/$(database)/documents/collaborations/$(collaborationId)).data.legendId == request.auth.uid);
+        allow create: if request.auth != null && 
+                         (get(/databases/$(database)/documents/collaborations/$(collaborationId)).data.buyerId == request.auth.uid ||
+                          get(/databases/$(database)/documents/collaborations/$(collaborationId)).data.legendId == request.auth.uid);
+      }
+    }
+
     // Allow read/write for other collections as needed, but for now, restrict
     // This is a placeholder; update as more collections are added
     match /{document=**} {
