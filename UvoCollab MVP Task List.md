@@ -296,14 +296,14 @@ This epic covers the critical payment (escrow) and contract generation that happ
   - **Dependencies:** Task 6.4
   - **Acceptance Criteria (AC):**
 
-    - \[ \] The webhook waits until _both_ parties have signed.
-    - \[ \] Once all signatures are collected, it saves the final PDF to Firebase Storage48.
+    - \[x\] The webhook waits until _both_ parties have signed.
+    - \[x\] Once all signatures are collected, it saves the final PDF to Firebase Storage48.
 
-    - \[ \] It updates the collaborations doc contractUrl with the path to the PDF.
-    - \[ \] It updates the collaborations doc status to in_progress.
-    - \[ \] This triggers the creation of the "Collaboration Hub" (Epic 7).
+    - \[x\] It updates the collaborations doc contractUrl with the path to the PDF.
+    - \[x\] It updates the collaborations doc status to in_progress.
+    - \[x\] This triggers the creation of the "Collaboration Hub" (Epic 7).
 
-  - **Status:** To Do
+  - **Status:** Completed
 
 ### **Epic 7: Collaboration Hub (Minor Project Management)**
 

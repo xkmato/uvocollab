@@ -337,6 +337,210 @@ Questions? Reply to this email or contact us at support@uvocollab.com
 }
 
 /**
+ * Send contract signed notification emails
+ */
+export async function sendContractSignedEmails(
+  buyerEmail: string,
+  buyerName: string,
+  legendEmail: string,
+  legendName: string,
+  serviceTitle: string,
+  collaborationId: string
+): Promise<void> {
+  const hubUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://uvocollab.com'}/collaboration/${collaborationId}`;
+  
+  // Email to Buyer
+  const buyerSubject = '✅ Contract Signed - Collaboration Begins!';
+  const buyerText = `
+Hello ${buyerName},
+
+Excellent news! Both parties have signed the collaboration contract.
+
+Your collaboration with ${legendName} for "${serviceTitle}" is now officially in progress!
+
+What's Next:
+- Access your private Collaboration Hub to communicate with ${legendName}
+- Track project milestones and progress
+- Receive and download deliverables when complete
+- Mark the project as complete once you're satisfied
+
+Access Your Collaboration Hub:
+${hubUrl}
+
+The funds are securely held in escrow and will be released to ${legendName} once you mark the project as complete.
+
+Let's make something amazing!
+
+Best regards,
+The UvoCollab Team
+
+---
+Questions? Reply to this email or contact us at support@uvocollab.com
+`;
+
+  const buyerHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .header { background-color: #10B981; color: white; padding: 20px; text-align: center; }
+    .content { padding: 20px; }
+    .milestone { background-color: #D1FAE5; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #10B981; }
+    .next-steps { background-color: #EEF2FF; padding: 15px; border-radius: 5px; margin: 20px 0; }
+    .cta-button { 
+      display: inline-block; 
+      background-color: #4F46E5; 
+      color: white; 
+      padding: 12px 24px; 
+      text-decoration: none; 
+      border-radius: 5px; 
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #E5E7EB; font-size: 12px; color: #6B7280; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>✅ Contract Signed!</h1>
+  </div>
+  <div class="content">
+    <p>Hello <strong>${buyerName}</strong>,</p>
+    
+    <div class="milestone">
+      <h3>🎉 Excellent News!</h3>
+      <p>Both parties have signed the collaboration contract.</p>
+      <p>Your collaboration with <strong>${legendName}</strong> for "<strong>${serviceTitle}</strong>" is now officially in progress!</p>
+    </div>
+    
+    <div class="next-steps">
+      <h3>What's Next:</h3>
+      <ul>
+        <li>Access your private Collaboration Hub to communicate with ${legendName}</li>
+        <li>Track project milestones and progress</li>
+        <li>Receive and download deliverables when complete</li>
+        <li>Mark the project as complete once you're satisfied</li>
+      </ul>
+    </div>
+    
+    <p style="text-align: center;">
+      <a href="${hubUrl}" class="cta-button">Access Collaboration Hub</a>
+    </p>
+    
+    <p>The funds are securely held in escrow and will be released to ${legendName} once you mark the project as complete.</p>
+    
+    <p><strong>Let's make something amazing!</strong></p>
+    
+    <p><strong>Best regards,</strong><br>The UvoCollab Team</p>
+  </div>
+  <div class="footer">
+    Questions? Reply to this email or contact us at support@uvocollab.com
+  </div>
+</body>
+</html>
+`;
+
+  // Email to Legend
+  const legendSubject = '✅ Contract Signed - Time to Create!';
+  const legendText = `
+Hello ${legendName},
+
+Great news! Both parties have signed the collaboration contract.
+
+You can now begin work on your collaboration with ${buyerName} for "${serviceTitle}"!
+
+What's Next:
+- Access your private Collaboration Hub to communicate with ${buyerName}
+- Review the project requirements and creative vision
+- Upload deliverables through the hub when complete
+- Receive payment once ${buyerName} marks the project as complete
+
+Access Your Collaboration Hub:
+${hubUrl}
+
+The payment has been secured in escrow and will be released to your connected bank account once ${buyerName} confirms completion.
+
+Let's create something incredible!
+
+Best regards,
+The UvoCollab Team
+
+---
+Questions? Reply to this email or contact us at support@uvocollab.com
+`;
+
+  const legendHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .header { background-color: #10B981; color: white; padding: 20px; text-align: center; }
+    .content { padding: 20px; }
+    .milestone { background-color: #D1FAE5; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #10B981; }
+    .next-steps { background-color: #EEF2FF; padding: 15px; border-radius: 5px; margin: 20px 0; }
+    .cta-button { 
+      display: inline-block; 
+      background-color: #4F46E5; 
+      color: white; 
+      padding: 12px 24px; 
+      text-decoration: none; 
+      border-radius: 5px; 
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #E5E7EB; font-size: 12px; color: #6B7280; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>✅ Contract Signed!</h1>
+  </div>
+  <div class="content">
+    <p>Hello <strong>${legendName}</strong>,</p>
+    
+    <div class="milestone">
+      <h3>🎉 Great News!</h3>
+      <p>Both parties have signed the collaboration contract.</p>
+      <p>You can now begin work on your collaboration with <strong>${buyerName}</strong> for "<strong>${serviceTitle}</strong>"!</p>
+    </div>
+    
+    <div class="next-steps">
+      <h3>What's Next:</h3>
+      <ul>
+        <li>Access your private Collaboration Hub to communicate with ${buyerName}</li>
+        <li>Review the project requirements and creative vision</li>
+        <li>Upload deliverables through the hub when complete</li>
+        <li>Receive payment once ${buyerName} marks the project as complete</li>
+      </ul>
+    </div>
+    
+    <p style="text-align: center;">
+      <a href="${hubUrl}" class="cta-button">Access Collaboration Hub</a>
+    </p>
+    
+    <p>The payment has been secured in escrow and will be released to your connected bank account once ${buyerName} confirms completion.</p>
+    
+    <p><strong>Let's create something incredible!</strong></p>
+    
+    <p><strong>Best regards,</strong><br>The UvoCollab Team</p>
+  </div>
+  <div class="footer">
+    Questions? Reply to this email or contact us at support@uvocollab.com
+  </div>
+</body>
+</html>
+`;
+
+  // Send emails to both parties
+  await Promise.all([
+    sendEmail({ to: buyerEmail, subject: buyerSubject, text: buyerText, html: buyerHtml }),
+    sendEmail({ to: legendEmail, subject: legendSubject, text: legendText, html: legendHtml }),
+  ]);
+}
+
+/**
  * Send pitch declined email to buyer
  */
 export async function sendPitchDeclinedEmail(

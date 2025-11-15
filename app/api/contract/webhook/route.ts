@@ -4,6 +4,7 @@ import {
     getEnvelopeStatus,
 } from '@/lib/docusign';
 import { adminDb, adminStorage } from '@/lib/firebase-admin';
+import { sendContractSignedEmails } from '@/lib/mailgun';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -124,9 +125,38 @@ export async function POST(request: NextRequest) {
         updatedAt: new Date().toISOString(),
       });
 
-    // TODO: Send email notifications to both parties
-    // - Buyer: Contract signed! Your collaboration is now in progress.
-    // - Legend: Contract signed! You can now begin working on the project.
+    // Get buyer and legend details for email notifications
+    const buyerDoc = await adminDb.collection('users').doc(collabData.buyerId).get();
+    const legendDoc = await adminDb.collection('users').doc(collabData.legendId).get();
+    const buyerData = buyerDoc.data();
+    const legendData = legendDoc.data();
+
+    // Get service details for email
+    const serviceDoc = await adminDb
+      .collection('users')
+      .doc(collabData.legendId)
+      .collection('services')
+      .doc(collabData.serviceId)
+      .get();
+    const serviceData = serviceDoc.data();
+
+    // Send email notifications to both parties
+    if (buyerData && legendData && serviceData) {
+      try {
+        await sendContractSignedEmails(
+          buyerData.email,
+          buyerData.displayName || buyerData.email,
+          legendData.email,
+          legendData.displayName || legendData.email,
+          serviceData.title,
+          collaborationId
+        );
+        console.log(`Sent contract signed notifications to both parties for collaboration ${collaborationId}`);
+      } catch (emailError) {
+        console.error('Failed to send contract signed emails:', emailError);
+        // Don't fail the webhook if email fails
+      }
+    }
 
     // TODO: Create the Collaboration Hub (Epic 7)
     // This is where the private collaboration space is initialized
