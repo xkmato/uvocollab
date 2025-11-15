@@ -1,5 +1,6 @@
 import { CreateCollaborationData } from '@/app/types/collaboration';
 import { adminDb } from '@/lib/firebase-admin';
+import { sendEmail } from '@/lib/mailgun';
 import { auth } from 'firebase-admin';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -132,8 +133,27 @@ export async function POST(request: NextRequest) {
             .collection('collaborations')
             .add(collaborationData);
 
-        // TODO (Epic 5.3): Send notification email to legend/manager about new pitch
-        // This will be implemented in Task 5.3
+        // Get buyer information for the email
+        const buyerDoc = await adminDb.collection('users').doc(buyerId).get();
+        const buyerData = buyerDoc.data();
+        const buyerName = buyerData?.displayName || 'A new artist';
+
+        // Send notification email to legend/manager about new pitch
+        try {
+            await sendNewPitchNotification(
+                legendData.email,
+                legendData.displayName,
+                buyerName,
+                serviceData.title,
+                pitchMessage.trim(),
+                pitchBestWorkUrl.trim(),
+                collaborationRef.id,
+                legendData.managementInfo // This is the management email if provided
+            );
+        } catch (emailError) {
+            // Log the error but don't fail the request if email fails
+            console.error('Failed to send notification email:', emailError);
+        }
 
         return NextResponse.json({
             success: true,
@@ -146,5 +166,128 @@ export async function POST(request: NextRequest) {
             { error: 'Internal server error' },
             { status: 500 }
         );
+    }
+}
+
+/**
+ * Send notification email to Legend (and their manager) about a new pitch
+ */
+async function sendNewPitchNotification(
+    legendEmail: string,
+    legendName: string,
+    buyerName: string,
+    serviceTitle: string,
+    pitchMessage: string,
+    pitchBestWorkUrl: string,
+    collaborationId: string,
+    managementEmail?: string
+): Promise<void> {
+    const subject = `🎵 New Collaboration Request: ${serviceTitle}`;
+    
+    const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://uvocollab.com'}/legend/dashboard`;
+    
+    const text = `
+Hello ${legendName},
+
+You have a new collaboration request from ${buyerName}!
+
+Service Requested: ${serviceTitle}
+
+Artist's Message:
+"${pitchMessage}"
+
+Artist's Best Work:
+${pitchBestWorkUrl}
+
+To review this pitch and listen to the demo, visit your Legend Dashboard:
+${dashboardUrl}
+
+You can accept or decline this request from your dashboard. Remember, you have full control over which projects you take on.
+
+Best regards,
+The UvoCollab Team
+
+---
+Questions? Reply to this email or contact us at support@uvocollab.com
+`;
+
+    const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .header { background-color: #4F46E5; color: white; padding: 20px; text-align: center; }
+    .content { padding: 20px; }
+    .pitch-details { background-color: #F3F4F6; padding: 15px; border-radius: 5px; margin: 20px 0; }
+    .message-box { background-color: #EEF2FF; padding: 15px; border-left: 4px solid #4F46E5; margin: 20px 0; font-style: italic; }
+    .cta-button { 
+      display: inline-block; 
+      background-color: #4F46E5; 
+      color: white; 
+      padding: 12px 24px; 
+      text-decoration: none; 
+      border-radius: 5px; 
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #E5E7EB; font-size: 12px; color: #6B7280; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🎵 New Collaboration Request</h1>
+  </div>
+  <div class="content">
+    <p>Hello <strong>${legendName}</strong>,</p>
+    
+    <p>You have a new collaboration request from <strong>${buyerName}</strong>!</p>
+    
+    <div class="pitch-details">
+      <h3>Service Requested:</h3>
+      <p><strong>${serviceTitle}</strong></p>
+      
+      <h3>Artist's Best Work:</h3>
+      <p><a href="${pitchBestWorkUrl}" target="_blank">${pitchBestWorkUrl}</a></p>
+    </div>
+    
+    <h3>Artist's Message:</h3>
+    <div class="message-box">
+      "${pitchMessage}"
+    </div>
+    
+    <p>To review this pitch and listen to the demo, visit your Legend Dashboard:</p>
+    
+    <a href="${dashboardUrl}" class="cta-button">Review Pitch in Dashboard</a>
+    
+    <p>You can accept or decline this request from your dashboard. Remember, you have full control over which projects you take on.</p>
+    
+    <p><strong>Best regards,</strong><br>The UvoCollab Team</p>
+  </div>
+  <div class="footer">
+    Questions? Reply to this email or contact us at support@uvocollab.com
+  </div>
+</body>
+</html>
+`;
+
+    // Send to legend
+    await sendEmail({ to: legendEmail, subject, text, html });
+    
+    // Also send to management if provided and different from legend's email
+    if (managementEmail && managementEmail !== legendEmail) {
+        const mgmtText = `
+Hello,
+
+${legendName} has received a new collaboration request from ${buyerName} on UvoCollab.
+
+${text}
+`;
+        await sendEmail({ 
+            to: managementEmail, 
+            subject: `${legendName} - New Collaboration Request: ${serviceTitle}`, 
+            text: mgmtText,
+            html 
+        });
     }
 }

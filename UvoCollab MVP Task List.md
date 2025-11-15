@@ -198,11 +198,11 @@ This is the core transaction loop, from the initial "pitch" to the secure paymen
   - **Dependencies:** Task 5.2
   - **Acceptance Criteria (AC):**
 
-    - \[ \] A new document is created in the collaborations collection.
-    - \[ \] The document's status is set to pending_review.
-    - \[ \] A notification (e.g., email) is sent to the "Legend" (or their manager 30) about the new request.
+    - \[x\] A new document is created in the collaborations collection.
+    - \[x\] The document's status is set to pending_review.
+    - \[x\] A notification (e.g., email) is sent to the "Legend" (or their manager 30) about the new request.
 
-  - **Status:** To Do
+  - **Status:** Completed
 
 - **Task 5.4: "Legend" Dashboard: Review Requests**
 
