@@ -227,3 +227,213 @@ Questions? Reply to this email or contact us at support@uvocollab.com
     });
   }
 }
+
+/**
+ * Send pitch accepted email to buyer
+ */
+export async function sendPitchAcceptedEmail(
+  buyerEmail: string,
+  buyerName: string,
+  legendName: string,
+  serviceTitle: string,
+  price: number,
+  collaborationId: string
+): Promise<void> {
+  const subject = `🎉 ${legendName} Accepted Your Collaboration Request!`;
+  
+  const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://uvocollab.com'}/dashboard`;
+  
+  const text = `
+Hello ${buyerName},
+
+Great news! ${legendName} has accepted your collaboration request for "${serviceTitle}"!
+
+Project Details:
+- Service: ${serviceTitle}
+- Price: $${price}
+- Status: Awaiting Payment
+
+Next Steps:
+To move forward with this collaboration, you'll need to complete the payment. The funds will be held securely in escrow until you confirm the work is complete.
+
+Visit your dashboard to proceed with payment:
+${dashboardUrl}
+
+Once payment is processed, a contract will be generated and sent to both of you for e-signature. After both parties sign, you'll gain access to your private collaboration hub where you can communicate and exchange files.
+
+We're excited to see what you and ${legendName} create together!
+
+Best regards,
+The UvoCollab Team
+
+---
+Questions? Reply to this email or contact us at support@uvocollab.com
+`;
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .header { background-color: #10B981; color: white; padding: 20px; text-align: center; }
+    .content { padding: 20px; }
+    .project-details { background-color: #F3F4F6; padding: 15px; border-radius: 5px; margin: 20px 0; }
+    .cta-button { 
+      display: inline-block; 
+      background-color: #4F46E5; 
+      color: white; 
+      padding: 12px 24px; 
+      text-decoration: none; 
+      border-radius: 5px; 
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .next-steps { background-color: #EEF2FF; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #4F46E5; }
+    .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #E5E7EB; font-size: 12px; color: #6B7280; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🎉 Request Accepted!</h1>
+  </div>
+  <div class="content">
+    <p>Hello <strong>${buyerName}</strong>,</p>
+    
+    <p>Great news! <strong>${legendName}</strong> has accepted your collaboration request!</p>
+    
+    <div class="project-details">
+      <h3>Project Details:</h3>
+      <ul>
+        <li><strong>Service:</strong> ${serviceTitle}</li>
+        <li><strong>Price:</strong> $${price}</li>
+        <li><strong>Status:</strong> Awaiting Payment</li>
+      </ul>
+    </div>
+    
+    <div class="next-steps">
+      <h3>Next Steps:</h3>
+      <p>To move forward with this collaboration, you'll need to complete the payment. The funds will be held securely in escrow until you confirm the work is complete.</p>
+    </div>
+    
+    <p style="text-align: center;">
+      <a href="${dashboardUrl}" class="cta-button">Proceed with Payment</a>
+    </p>
+    
+    <p>Once payment is processed, a contract will be generated and sent to both of you for e-signature. After both parties sign, you'll gain access to your private collaboration hub where you can communicate and exchange files.</p>
+    
+    <p>We're excited to see what you and <strong>${legendName}</strong> create together!</p>
+    
+    <p><strong>Best regards,</strong><br>The UvoCollab Team</p>
+  </div>
+  <div class="footer">
+    Questions? Reply to this email or contact us at support@uvocollab.com
+  </div>
+</body>
+</html>
+`;
+
+  await sendEmail({ to: buyerEmail, subject, text, html });
+}
+
+/**
+ * Send pitch declined email to buyer
+ */
+export async function sendPitchDeclinedEmail(
+  buyerEmail: string,
+  buyerName: string,
+  legendName: string,
+  serviceTitle: string
+): Promise<void> {
+  const subject = `Update on Your Collaboration Request with ${legendName}`;
+  
+  const marketplaceUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://uvocollab.com'}/marketplace`;
+  
+  const text = `
+Hello ${buyerName},
+
+Thank you for your interest in collaborating with ${legendName}.
+
+After reviewing your pitch for "${serviceTitle}", ${legendName} has decided not to move forward with this particular project at this time.
+
+While this specific collaboration won't be happening, we encourage you to:
+- Continue exploring other Legends in the marketplace
+- Refine your pitch and demo for future requests
+- Keep creating and developing your craft
+
+Remember, our Legends receive many requests and have to be selective about which projects they can take on. This decision doesn't reflect on your talent or potential.
+
+Browse other Legends in the marketplace:
+${marketplaceUrl}
+
+Keep pushing forward!
+
+Best regards,
+The UvoCollab Team
+
+---
+Questions? Reply to this email or contact us at support@uvocollab.com
+`;
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .header { background-color: #6B7280; color: white; padding: 20px; text-align: center; }
+    .content { padding: 20px; }
+    .encouragement { background-color: #FEF3C7; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #F59E0B; }
+    .cta-button { 
+      display: inline-block; 
+      background-color: #4F46E5; 
+      color: white; 
+      padding: 12px 24px; 
+      text-decoration: none; 
+      border-radius: 5px; 
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #E5E7EB; font-size: 12px; color: #6B7280; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Collaboration Request Update</h1>
+  </div>
+  <div class="content">
+    <p>Hello <strong>${buyerName}</strong>,</p>
+    
+    <p>Thank you for your interest in collaborating with <strong>${legendName}</strong>.</p>
+    
+    <p>After reviewing your pitch for "<strong>${serviceTitle}</strong>", ${legendName} has decided not to move forward with this particular project at this time.</p>
+    
+    <div class="encouragement">
+      <h3>Keep Moving Forward!</h3>
+      <p>While this specific collaboration won't be happening, we encourage you to:</p>
+      <ul>
+        <li>Continue exploring other Legends in the marketplace</li>
+        <li>Refine your pitch and demo for future requests</li>
+        <li>Keep creating and developing your craft</li>
+      </ul>
+    </div>
+    
+    <p>Remember, our Legends receive many requests and have to be selective about which projects they can take on. This decision doesn't reflect on your talent or potential.</p>
+    
+    <p style="text-align: center;">
+      <a href="${marketplaceUrl}" class="cta-button">Browse Other Legends</a>
+    </p>
+    
+    <p><strong>Keep pushing forward!</strong></p>
+    
+    <p><strong>Best regards,</strong><br>The UvoCollab Team</p>
+  </div>
+  <div class="footer">
+    Questions? Reply to this email or contact us at support@uvocollab.com
+  </div>
+</body>
+</html>
+`;
+
+  await sendEmail({ to: buyerEmail, subject, text, html });
+}

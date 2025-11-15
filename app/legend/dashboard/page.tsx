@@ -187,16 +187,29 @@ export default function LegendDashboard() {
         }
 
         try {
-            // This will be handled by the respondToPitch function in Task 5.5
-            // For now, we'll show a placeholder message
-            alert('Accept functionality will be implemented in Task 5.5 (respondToPitch function)');
-            // TODO: Call the respondToPitch API endpoint
-            // await fetch('/api/respond-to-pitch', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify({ collaborationId, action: 'accept' })
-            // });
-            // await loadCollaborations();
+            const idToken = await user?.getIdToken();
+            if (!idToken) {
+                alert('Authentication error. Please log in again.');
+                return;
+            }
+
+            const response = await fetch('/api/respond-to-pitch', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${idToken}`
+                },
+                body: JSON.stringify({ collaborationId, action: 'accept' })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to accept pitch');
+            }
+
+            alert('Collaboration request accepted! The artist has been notified to proceed with payment.');
+            await loadCollaborations();
         } catch (error) {
             console.error('Error accepting pitch:', error);
             alert('Error accepting request. Please try again.');
@@ -209,16 +222,29 @@ export default function LegendDashboard() {
         }
 
         try {
-            // This will be handled by the respondToPitch function in Task 5.5
-            // For now, we'll show a placeholder message
-            alert('Decline functionality will be implemented in Task 5.5 (respondToPitch function)');
-            // TODO: Call the respondToPitch API endpoint
-            // await fetch('/api/respond-to-pitch', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify({ collaborationId, action: 'decline' })
-            // });
-            // await loadCollaborations();
+            const idToken = await user?.getIdToken();
+            if (!idToken) {
+                alert('Authentication error. Please log in again.');
+                return;
+            }
+
+            const response = await fetch('/api/respond-to-pitch', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${idToken}`
+                },
+                body: JSON.stringify({ collaborationId, action: 'decline' })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to decline pitch');
+            }
+
+            alert('Collaboration request declined. The artist has been notified.');
+            await loadCollaborations();
         } catch (error) {
             console.error('Error declining pitch:', error);
             alert('Error declining request. Please try again.');

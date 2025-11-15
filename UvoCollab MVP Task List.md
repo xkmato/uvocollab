@@ -224,12 +224,12 @@ This is the core transaction loop, from the initial "pitch" to the secure paymen
   - **Dependencies:** Task 5.4
   - **Acceptance Criteria (AC):**
 
-    - \[ \] If "Declined," the collaborations doc status is set to declined, and a polite rejection email is sent to the Buyer34.
+    - \[x\] If "Declined," the collaborations doc status is set to declined, and a polite rejection email is sent to the Buyer34.
 
-    - \[ \] If "Accepted," the collaborations doc status is set to pending_payment.
-    - \[ \] If "Accepted," an email is sent to the "New Artist" notifying them of the acceptance and prompting them to pay35353535.
+    - \[x\] If "Accepted," the collaborations doc status is set to pending_payment.
+    - \[x\] If "Accepted," an email is sent to the "New Artist" notifying them of the acceptance and prompting them to pay35353535.
 
-  - **Status:** To Do
+  - **Status:** Completed
 
 ### **Epic 6: Financials & Legal**
 
