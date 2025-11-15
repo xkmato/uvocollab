@@ -235,16 +235,16 @@ This is the core transaction loop, from the initial "pitch" to the secure paymen
 
 This epic covers the critical payment (escrow) and contract generation that happens _after_ a pitch is accepted.
 
-- **Task 6.1: Stripe Connect Integration (Seller Onboarding)**
+- **Task 6.1: Flutterwave Subaccount Integration (Seller Onboarding)**
 
-  - **Description:** Integrate Stripe Connect. As part of the "Legend" profile setup (Task 3.2), Legends _must_ complete the Stripe Connect onboarding flow to connect their bank account for payouts36.
+  - **Description:** Integrate Flutterwave Subaccounts. As part of the "Legend" profile setup (Task 3.2), Legends _must_ complete the Flutterwave subaccount setup to connect their bank account for payouts36.
 
   - **Dependencies:** Task 3.2
   - **Acceptance Criteria (AC):**
-    - \[ \] A "Connect Bank Account" button in the Legend dashboard starts the Stripe Connect flow.
-    - \[ \] The platform correctly saves the Legend's Stripe Account ID to their user doc.
-    - \[ \] A Legend's services cannot be "published" (visible in the marketplace) until their Stripe account is connected.
-  - **Status:** To Do
+    - \[x\] A "Connect Bank Account" button in the Legend dashboard starts the Flutterwave subaccount creation flow.
+    - \[x\] The platform correctly saves the Legend's Flutterwave Subaccount ID to their user doc.
+    - \[x\] A Legend's services cannot be "published" (visible in the marketplace) until their Flutterwave subaccount is connected.
+  - **Status:** Completed
 
 - **Task 6.2: "New Artist" (Buyer) \- Payment Flow**
 
@@ -252,7 +252,7 @@ This epic covers the critical payment (escrow) and contract generation that happ
   - **Dependencies:** Task 5.5, Task 6.1
   - **Acceptance Criteria (AC):**
 
-    - \[ \] The checkout page uses Stripe Elements to collect payment info.
+    - \[ \] The checkout page uses Flutterwave inline payment modal to collect payment info.
     - \[ \] The amount shown is the full, pre-funded service price37.
 
     - \[ \] Payment submission triggers a Backend.
@@ -261,13 +261,13 @@ This epic covers the critical payment (escrow) and contract generation that happ
 
 - **Task 6.3: Backend: processPayment Function (Escrow)**
 
-  - **Description:** A Backend that creates a Stripe PaymentIntent. The function must be configured to hold the funds in the platform's Stripe account (acting as escrow) 38383838383838 and _not_ pay out to the Legend immediately.
+  - **Description:** A Backend that processes Flutterwave payments. The function must be configured to hold the funds in the platform's Flutterwave account (acting as escrow) 38383838383838 and _not_ pay out to the Legend immediately.
 
   - **Dependencies:** Task 6.2
   - **Acceptance Criteria (AC):**
 
-    - \[ \] The function creates a PaymentIntent for the correct amount.
-    - \[ \] The payment is "captured" but held (using "Delayed Manual Payouts" 39 or similar Stripe Connect mechanism).
+    - \[ \] The function initiates a Flutterwave payment for the correct amount.
+    - \[ \] The payment is captured but held (using Flutterwave split payment configuration with delayed settlements).
 
     - \[ \] Upon successful payment, the collaborations doc status is updated to awaiting_contract.
 
@@ -379,9 +379,9 @@ The final step: paying the Legend.
 
     - \[ \] The function calculates the platform's commission (e.g., 20%)59.
 
-    - \[ \] It instructs Stripe to execute the "Manual Payout" 60, transferring the (Price \- Fee) to the Legend's connected Stripe account61.
+    - \[ \] It instructs Flutterwave to execute the transfer, sending the (Price \- Fee) to the Legend's connected Flutterwave subaccount61.
 
-    - \[ \] The platform's fee is transferred to the platform's primary Stripe account.
+    - \[ \] The platform's fee remains in the platform's primary Flutterwave account.
 
   - **Status:** To Do
 

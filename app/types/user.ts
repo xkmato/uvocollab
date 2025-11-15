@@ -8,4 +8,8 @@ export interface User {
   managementInfo?: string;
   genre?: string; // Primary genre (e.g., 'Hip Hop', 'R&B', 'Pop', 'Rock', 'Electronic', 'Jazz', etc.)
   priceRange?: 'budget' | 'mid' | 'premium'; // Price tier for filtering
+  flutterwaveSubaccountId?: string; // Flutterwave subaccount ID for payments
+  flutterwaveAccountBank?: string; // Bank code for the connected account
+  flutterwaveAccountNumber?: string; // Account number (last 4 digits only for security)
+  bankAccountVerified?: boolean; // Whether the bank account has been verified
 }
