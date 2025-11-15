@@ -1,5 +1,6 @@
 'use client';
 
+import FileSharing from '@/app/components/FileSharing';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { Collaboration } from '@/app/types/collaboration';
 import { Service } from '@/app/types/service';
@@ -420,6 +421,15 @@ export default function CollaborationHub() {
                                     )}
                                 </div>
                             </div>
+                        )}
+
+                        {/* File Sharing Card - Show when project is in progress or completed */}
+                        {(collaboration.status === 'in_progress' || collaboration.status === 'completed') && (
+                            <FileSharing
+                                collaboration={collaboration}
+                                isLegend={isLegend}
+                                onUpdate={loadCollaboration}
+                            />
                         )}
                     </div>
 

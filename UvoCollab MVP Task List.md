@@ -338,11 +338,11 @@ This is the private space where the work happens49494949.
   - **Dependencies:** Task 7.1
   - **Acceptance Criteria (AC):**
 
-    - \[ \] The Legend can upload files (which are saved to a protected folder in Firebase Storage, e.g., /collaborations/\[collabId\]/deliverables/).
-    - \[ \] The Buyer can download these files.
-    - \[ \] All file uploads are logged with a timestamp54.
+    - \[x\] The Legend can upload files (which are saved to a protected folder in Firebase Storage, e.g., /collaborations/\[collabId\]/deliverables/).
+    - \[x\] The Buyer can download these files.
+    - \[x\] All file uploads are logged with a timestamp54.
 
-  - **Status:** To Do
+  - **Status:** Completed
 
 - **Task 7.4: Hub: Communication Thread**
 

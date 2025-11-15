@@ -6,6 +6,14 @@ export type CollaborationStatus =
   | 'completed'
   | 'declined';
 
+export interface Deliverable {
+  fileName: string; // Name of the uploaded file
+  fileUrl: string; // Firebase Storage URL to the file
+  uploadedAt: Date; // When the file was uploaded
+  uploadedBy: string; // UID of the user who uploaded (should be Legend)
+  fileSize: number; // File size in bytes
+}
+
 export interface Collaboration {
   id?: string;
   buyerId: string; // UID of the "New Artist" requesting the collaboration
@@ -17,6 +25,7 @@ export interface Collaboration {
   pitchMessage: string; // Message from the buyer about their creative concept
   pitchBestWorkUrl: string; // Link to buyer's best previous work
   contractUrl?: string; // Firebase Storage URL to the signed contract PDF
+  deliverables?: Deliverable[]; // Files uploaded by Legend as project deliverables
   createdAt: Date; // When the pitch was submitted
   updatedAt: Date; // Last update timestamp
   acceptedAt?: Date; // When the Legend accepted the pitch
