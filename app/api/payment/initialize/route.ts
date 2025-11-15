@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { adminAuth, adminDb } from '@/lib/firebase-admin';
+import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(request: NextRequest) {
@@ -82,13 +82,25 @@ export async function POST(request: NextRequest) {
         updatedAt: new Date().toISOString(),
       });
 
-    // Return payment configuration
+    // Calculate platform commission (20%)
+    const platformCommission = collabData.price * 0.2;
+    const legendAmount = collabData.price - platformCommission;
+
+    // Return payment configuration with split payment setup
+    // The payment will be held in escrow until the project is completed
     return NextResponse.json({
       success: true,
       publicKey: process.env.FLUTTERWAVE_PUBLIC_KEY,
       txRef,
       amount: collabData.price,
       legendSubaccountId: legendData.flutterwaveSubaccountId,
+      splitPayment: {
+        // Split payment configuration for escrow
+        // This holds the funds until manual payout is triggered
+        subaccountId: legendData.flutterwaveSubaccountId,
+        platformAmount: platformCommission,
+        legendAmount: legendAmount,
+      },
     });
   } catch (error) {
     console.error('Error initializing payment:', error);

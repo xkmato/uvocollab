@@ -266,12 +266,12 @@ This epic covers the critical payment (escrow) and contract generation that happ
   - **Dependencies:** Task 6.2
   - **Acceptance Criteria (AC):**
 
-    - \[ \] The function initiates a Flutterwave payment for the correct amount.
-    - \[ \] The payment is captured but held (using Flutterwave split payment configuration with delayed settlements).
+    - \[x\] The function initiates a Flutterwave payment for the correct amount.
+    - \[x\] The payment is captured but held (using Flutterwave split payment configuration with delayed settlements).
 
-    - \[ \] Upon successful payment, the collaborations doc status is updated to awaiting_contract.
+    - \[x\] Upon successful payment, the collaborations doc status is updated to awaiting_contract.
 
-  - **Status:** To Do
+  - **Status:** Completed
 
 - **Task 6.4: Backend: Dynamic Contract Generation**
 

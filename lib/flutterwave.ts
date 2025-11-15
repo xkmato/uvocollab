@@ -121,3 +121,48 @@ export async function updateSubaccount(
     throw error;
   }
 }
+
+/**
+ * Initiate a transfer/payout to a subaccount
+ * This is used to release funds from escrow to the Legend after project completion
+ */
+export async function initiateTransfer(params: {
+  accountBank: string;
+  accountNumber: string;
+  amount: number;
+  narration: string;
+  reference: string;
+  currency?: string;
+  beneficiaryName?: string;
+}) {
+  try {
+    const payload = {
+      account_bank: params.accountBank,
+      account_number: params.accountNumber,
+      amount: params.amount,
+      narration: params.narration,
+      currency: params.currency || 'NGN',
+      reference: params.reference,
+      beneficiary_name: params.beneficiaryName,
+    };
+
+    const response = await flw.Transfer.initiate(payload);
+    return response;
+  } catch (error) {
+    console.error('Error initiating transfer:', error);
+    throw error;
+  }
+}
+
+/**
+ * Verify a transfer status
+ */
+export async function verifyTransfer(transferId: string) {
+  try {
+    const response = await flw.Transfer.get_a_transfer({ id: transferId });
+    return response;
+  } catch (error) {
+    console.error('Error verifying transfer:', error);
+    throw error;
+  }
+}

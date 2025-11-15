@@ -25,6 +25,9 @@ export interface Collaboration {
   pendingTxRef?: string; // Flutterwave transaction reference for pending payment
   transactionId?: string; // Flutterwave transaction ID after successful payment
   txRef?: string; // Final transaction reference after verification
+  platformCommission?: number; // Platform's 20% commission held in escrow
+  legendAmount?: number; // Amount to be paid to Legend after completion
+  escrowStatus?: 'held' | 'released'; // Status of funds in escrow
 }
 
 export interface CreateCollaborationData {

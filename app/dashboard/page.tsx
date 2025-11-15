@@ -1,14 +1,14 @@
 'use client';
 
+import PaymentCheckout from '@/app/components/PaymentCheckout';
 import { useAuth } from '@/app/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { db } from '@/lib/firebase';
-import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
 import { Collaboration } from '@/app/types/collaboration';
 import { Service } from '@/app/types/service';
 import { User } from '@/app/types/user';
-import PaymentCheckout from '@/app/components/PaymentCheckout';
+import { db } from '@/lib/firebase';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function Dashboard() {
     const { user, userData, logout, loading } = useAuth();

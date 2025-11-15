@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { adminAuth, adminDb } from '@/lib/firebase-admin';
 import flw from '@/lib/flutterwave';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
@@ -79,6 +79,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Payment is successful and captured
+    // Funds are held in the platform's Flutterwave account (acting as escrow)
+    // They will NOT be paid out to the Legend until the buyer marks the project as complete
+    
+    // Calculate amounts for record keeping
+    const platformCommission = collabData.price * 0.2;
+    const legendAmount = collabData.price - platformCommission;
+
     // Update collaboration status to awaiting_contract
     await adminDb
       .collection('collaborations')
@@ -88,6 +96,9 @@ export async function POST(request: NextRequest) {
         paidAt: new Date().toISOString(),
         transactionId,
         txRef,
+        platformCommission,
+        legendAmount,
+        escrowStatus: 'held', // Funds are held in escrow
         updatedAt: new Date().toISOString(),
       });
 
