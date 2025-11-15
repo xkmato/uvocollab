@@ -15,5 +15,9 @@ declare module 'flutterwave-node-v3' {
     Misc: {
       verify_Account(payload: { account_number: string; account_bank: string }): Promise<any>;
     };
+
+    Transaction: {
+      verify(payload: { id: string }): Promise<any>;
+    };
   }
 }

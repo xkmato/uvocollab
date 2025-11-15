@@ -252,12 +252,12 @@ This epic covers the critical payment (escrow) and contract generation that happ
   - **Dependencies:** Task 5.5, Task 6.1
   - **Acceptance Criteria (AC):**
 
-    - \[ \] The checkout page uses Flutterwave inline payment modal to collect payment info.
-    - \[ \] The amount shown is the full, pre-funded service price37.
+    - \[x\] The checkout page uses Flutterwave inline payment modal to collect payment info.
+    - \[x\] The amount shown is the full, pre-funded service price37.
 
-    - \[ \] Payment submission triggers a Backend.
+    - \[x\] Payment submission triggers a Backend.
 
-  - **Status:** To Do
+  - **Status:** Completed
 
 - **Task 6.3: Backend: processPayment Function (Escrow)**
 

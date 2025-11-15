@@ -22,6 +22,9 @@ export interface Collaboration {
   acceptedAt?: Date; // When the Legend accepted the pitch
   paidAt?: Date; // When payment was received
   completedAt?: Date; // When the buyer marked as complete
+  pendingTxRef?: string; // Flutterwave transaction reference for pending payment
+  transactionId?: string; // Flutterwave transaction ID after successful payment
+  txRef?: string; // Final transaction reference after verification
 }
 
 export interface CreateCollaborationData {
