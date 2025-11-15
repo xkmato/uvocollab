@@ -13,6 +13,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Mark problematic packages as external for server-side to avoid bundling issues
+  serverExternalPackages: ['pdfkit'],
 };
 
 export default nextConfig;

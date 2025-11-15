@@ -1,5 +1,5 @@
 import { adminAuth, adminDb } from '@/lib/firebase-admin';
-import flw from '@/lib/flutterwave';
+import { verifyTransaction } from '@/lib/flutterwave';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify payment with Flutterwave
-    const verifyResponse = await flw.Transaction.verify({ id: transactionId });
+    const verifyResponse = await verifyTransaction(transactionId);
 
     if (verifyResponse.status !== 'success') {
       return NextResponse.json(

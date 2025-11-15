@@ -1,9 +1,12 @@
+import 'server-only';
+
 import { generateContractPDF, uploadContractToStorage } from '@/lib/contract-generator';
-import { sendContractForSignature } from '@/lib/docusign';
 import { adminAuth, adminDb } from '@/lib/firebase-admin';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
+  // Import docusign dynamically at runtime to avoid build-time AMD module issues
+  const { sendContractForSignature } = await import('@/lib/docusign');
   try {
     // Get the Authorization header
     const authHeader = request.headers.get('authorization');

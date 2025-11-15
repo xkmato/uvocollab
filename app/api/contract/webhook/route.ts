@@ -81,8 +81,15 @@ export async function POST(request: NextRequest) {
 
     const collabData = collabDoc.data();
 
+    if (!collabData) {
+      return NextResponse.json(
+        { error: 'Collaboration data not found' },
+        { status: 404 }
+      );
+    }
+
     // Verify the envelope ID matches
-    if (collabData?.docusignEnvelopeId !== envelopeId) {
+    if (collabData.docusignEnvelopeId !== envelopeId) {
       return NextResponse.json(
         { error: 'Envelope ID mismatch' },
         { status: 400 }

@@ -1,12 +1,23 @@
 import Flutterwave from 'flutterwave-node-v3';
 
-// Initialize Flutterwave with your credentials
-const flw = new Flutterwave(
-  process.env.FLUTTERWAVE_PUBLIC_KEY!,
-  process.env.FLUTTERWAVE_SECRET_KEY!
-);
+// Lazy initialization to avoid issues during build
+let flw: Flutterwave | null = null;
 
-export default flw;
+function getFlutterwaveClient(): Flutterwave {
+  if (!flw) {
+    const publicKey = process.env.FLUTTERWAVE_PUBLIC_KEY;
+    const secretKey = process.env.FLUTTERWAVE_SECRET_KEY;
+    
+    if (!publicKey || !secretKey) {
+      throw new Error('Flutterwave credentials not configured');
+    }
+    
+    flw = new Flutterwave(publicKey, secretKey);
+  }
+  return flw;
+}
+
+export default getFlutterwaveClient;
 
 /**
  * Create a Flutterwave subaccount for a Legend
@@ -23,6 +34,7 @@ export async function createSubaccount(params: {
   splitValue: number;
 }) {
   try {
+    const flw = getFlutterwaveClient();
     const payload = {
       account_bank: params.accountBank,
       account_number: params.accountNumber,
@@ -47,6 +59,7 @@ export async function createSubaccount(params: {
  */
 export async function getBanks(country: string = 'NG') {
   try {
+    const flw = getFlutterwaveClient();
     const response = await flw.Bank.country({ country });
     return response;
   } catch (error) {
@@ -63,6 +76,7 @@ export async function verifyBankAccount(params: {
   accountBank: string;
 }) {
   try {
+    const flw = getFlutterwaveClient();
     const payload = {
       account_number: params.accountNumber,
       account_bank: params.accountBank,
@@ -81,6 +95,7 @@ export async function verifyBankAccount(params: {
  */
 export async function getSubaccount(subaccountId: string) {
   try {
+    const flw = getFlutterwaveClient();
     const response = await flw.Subaccount.fetch(subaccountId);
     return response;
   } catch (error) {
@@ -104,6 +119,7 @@ export async function updateSubaccount(
   }
 ) {
   try {
+    const flw = getFlutterwaveClient();
     const payload = {
       id: subaccountId,
       business_name: params.businessName,
@@ -136,6 +152,7 @@ export async function initiateTransfer(params: {
   beneficiaryName?: string;
 }) {
   try {
+    const flw = getFlutterwaveClient();
     const payload = {
       account_bank: params.accountBank,
       account_number: params.accountNumber,
@@ -159,10 +176,25 @@ export async function initiateTransfer(params: {
  */
 export async function verifyTransfer(transferId: string) {
   try {
+    const flw = getFlutterwaveClient();
     const response = await flw.Transfer.get_a_transfer({ id: transferId });
     return response;
   } catch (error) {
     console.error('Error verifying transfer:', error);
+    throw error;
+  }
+}
+
+/**
+ * Verify a transaction/payment status
+ */
+export async function verifyTransaction(transactionId: string) {
+  try {
+    const flw = getFlutterwaveClient();
+    const response = await flw.Transaction.verify({ id: transactionId });
+    return response;
+  } catch (error) {
+    console.error('Error verifying transaction:', error);
     throw error;
   }
 }

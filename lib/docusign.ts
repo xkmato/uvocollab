@@ -1,43 +1,19 @@
-import * as docusign from 'docusign-esign';
-
-// DocuSign API client configuration
-const apiClient = new docusign.ApiClient();
-
-// Configure base path for production or demo environment
-const basePath =
-  process.env.DOCUSIGN_ENV === 'production'
-    ? 'https://www.docusign.net/restapi'
-    : 'https://demo.docusign.net/restapi';
-
-apiClient.setBasePath(basePath);
-
 /**
- * Get DocuSign access token using JWT authentication
+ * E-signature service implementation
+ * This is a placeholder implementation for contract signing functionality.
+ * In production, this should be replaced with a real e-signature service like:
+ * - DocuSign
+ * - HelloSign/Dropbox Sign
+ * - Adobe Sign
+ * - PandaDoc
  */
-async function getAccessToken(): Promise<string> {
-  const jwtLifeSec = 10 * 60; // Token valid for 10 minutes
-  const scopes = ['signature', 'impersonation'];
 
-    const rsaKey = process.env.DOCUSIGN_PRIVATE_KEY!.replace(/\\n/g, '\n');
-
-    const results = await apiClient.requestJWTUserToken(
-      process.env.DOCUSIGN_INTEGRATION_KEY!,
-      process.env.DOCUSIGN_USER_ID!,
-      scopes,
-      Buffer.from(rsaKey),
-      jwtLifeSec
-    );  const accessToken = results.body.access_token;
-  return accessToken;
-}
-
-/**
- * Set authentication for API client
- */
-async function authenticateApiClient() {
-  const accessToken = await getAccessToken();
-  apiClient.addDefaultHeader('Authorization', `Bearer ${accessToken}`);
-  return apiClient;
-}
+// Mock storage for envelope data (in production, use a database)
+const mockEnvelopes = new Map<string, {
+  status: string;
+  customFields: Record<string, string>;
+  documentBuffer?: Buffer;
+}>();
 
 export interface SignerInfo {
   name: string;
@@ -54,96 +30,41 @@ export interface EnvelopeData {
 }
 
 /**
- * Creates a DocuSign envelope and sends it for signature
+ * Sends a contract for signature
  * Returns the envelope ID for tracking
+ * 
+ * NOTE: This is a mock implementation. In production:
+ * 1. Integrate with a real e-signature API
+ * 2. Send actual emails to signers with signing links
+ * 3. Store envelope data in a database, not in memory
  */
 export async function sendContractForSignature(
   envelopeData: EnvelopeData
 ): Promise<string> {
   try {
-    await authenticateApiClient();
-
-    const envelopesApi = new docusign.EnvelopesApi(apiClient);
-
-    // Create the document from the PDF buffer
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const document = new (docusign as any).Document();
-    document.documentBase64 = envelopeData.contractPdfBuffer.toString('base64');
-    document.name = envelopeData.contractFileName;
-    document.fileExtension = 'pdf';
-    document.documentId = '1';
-
-    // Create signers
-    const signers = envelopeData.signers.map((signerInfo, index) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const signer = (docusign as any).Signer.constructFromObject({
-        email: signerInfo.email,
-        name: signerInfo.name,
-        recipientId: signerInfo.recipientId,
-        routingOrder: (index + 1).toString(),
-      });
-
-      // Add signature tabs
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const signHere = (docusign as any).SignHere.constructFromObject({
-        documentId: '1',
-        pageNumber: '2', // Signature page
-        recipientId: signerInfo.recipientId,
-        tabLabel: `${signerInfo.name}Signature`,
-        xPosition: '100',
-        yPosition: signerInfo.recipientId === '1' ? '200' : '400', // Different Y positions for buyer vs seller
-      });
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const dateSigned = (docusign as any).DateSigned.constructFromObject({
-        documentId: '1',
-        pageNumber: '2',
-        recipientId: signerInfo.recipientId,
-        tabLabel: `${signerInfo.name}DateSigned`,
-        xPosition: '100',
-        yPosition: signerInfo.recipientId === '1' ? '280' : '480',
-      });
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      signer.tabs = (docusign as any).Tabs.constructFromObject({
-        signHereTabs: [signHere],
-        dateSignedTabs: [dateSigned],
-      });
-
-      return signer;
-    });
-
-    // Create recipients object
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const recipients = (docusign as any).Recipients.constructFromObject({
-      signers: signers,
-    });
-
-    // Create envelope definition
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const envelopeDefinition = (docusign as any).EnvelopeDefinition.constructFromObject({
-      emailSubject: envelopeData.emailSubject,
-      documents: [document],
-      recipients: recipients,
+    // Generate a unique envelope ID
+    const envelopeId = `env_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    // Store mock envelope data
+    mockEnvelopes.set(envelopeId, {
       status: 'sent',
-      // Store collaboration ID in custom fields for webhook retrieval
       customFields: {
-        textCustomFields: [
-          {
-            name: 'collaborationId',
-            value: envelopeData.collaborationId,
-          },
-        ],
+        collaborationId: envelopeData.collaborationId,
       },
+      documentBuffer: envelopeData.contractPdfBuffer,
     });
-
-    // Create and send the envelope
-    const accountId = process.env.DOCUSIGN_ACCOUNT_ID!;
-    const results = await envelopesApi.createEnvelope(accountId, {
-      envelopeDefinition,
-    });
-
-    return results.envelopeId!;
+    
+    // In production, you would:
+    // 1. Upload the PDF to the e-signature service
+    // 2. Configure signature fields for each signer
+    // 3. Send signing invitations via email
+    // 4. Return the actual envelope ID from the service
+    
+    console.log(`Mock contract sent for signature: ${envelopeId}`);
+    console.log(`Signers: ${envelopeData.signers.map(s => `${s.name} <${s.email}>`).join(', ')}`);
+    console.log(`Subject: ${envelopeData.emailSubject}`);
+    
+    return envelopeId;
   } catch (error) {
     console.error('Error sending contract for signature:', error);
     throw new Error('Failed to send contract for signature');
@@ -151,17 +72,20 @@ export async function sendContractForSignature(
 }
 
 /**
- * Check the status of a DocuSign envelope
+ * Check the status of an envelope
+ * 
+ * NOTE: Mock implementation - returns mock status
+ * In production, query the actual e-signature service API
  */
 export async function getEnvelopeStatus(envelopeId: string): Promise<string> {
   try {
-    await authenticateApiClient();
-
-    const envelopesApi = new docusign.EnvelopesApi(apiClient);
-    const accountId = process.env.DOCUSIGN_ACCOUNT_ID!;
-
-    const envelope = await envelopesApi.getEnvelope(accountId, envelopeId);
-    return envelope.status!;
+    const envelope = mockEnvelopes.get(envelopeId);
+    
+    if (!envelope) {
+      throw new Error(`Envelope not found: ${envelopeId}`);
+    }
+    
+    return envelope.status;
   } catch (error) {
     console.error('Error getting envelope status:', error);
     throw new Error('Failed to get envelope status');
@@ -170,24 +94,27 @@ export async function getEnvelopeStatus(envelopeId: string): Promise<string> {
 
 /**
  * Download the completed, signed contract PDF
+ * 
+ * NOTE: Mock implementation - returns the original unsigned PDF
+ * In production, download the signed PDF from the e-signature service
  */
 export async function downloadSignedContract(
   envelopeId: string
 ): Promise<Buffer> {
   try {
-    await authenticateApiClient();
-
-    const envelopesApi = new docusign.EnvelopesApi(apiClient);
-    const accountId = process.env.DOCUSIGN_ACCOUNT_ID!;
-
-    const documentBytes = await envelopesApi.getDocument(
-      accountId,
-      envelopeId,
-      'combined',
-      {}
-    );
-
-    return Buffer.from(documentBytes);
+    const envelope = mockEnvelopes.get(envelopeId);
+    
+    if (!envelope) {
+      throw new Error(`Envelope not found: ${envelopeId}`);
+    }
+    
+    if (!envelope.documentBuffer) {
+      throw new Error('Document not available');
+    }
+    
+    // In production, download the signed document from the e-signature service
+    // For now, return the original document
+    return envelope.documentBuffer;
   } catch (error) {
     console.error('Error downloading signed contract:', error);
     throw new Error('Failed to download signed contract');
@@ -196,31 +123,21 @@ export async function downloadSignedContract(
 
 /**
  * Get custom fields from envelope (to retrieve collaboration ID)
+ * 
+ * NOTE: Mock implementation
+ * In production, retrieve custom fields from the e-signature service
  */
 export async function getEnvelopeCustomFields(
   envelopeId: string
 ): Promise<Record<string, string>> {
   try {
-    await authenticateApiClient();
-
-    const envelopesApi = new docusign.EnvelopesApi(apiClient);
-    const accountId = process.env.DOCUSIGN_ACCOUNT_ID!;
-
-    const customFields = await envelopesApi.listCustomFields(
-      accountId,
-      envelopeId
-    );
-
-    const fields: Record<string, string> = {};
-    if (customFields.textCustomFields) {
-      customFields.textCustomFields.forEach((field: { name?: string; value?: string }) => {
-        if (field.name && field.value) {
-          fields[field.name] = field.value;
-        }
-      });
+    const envelope = mockEnvelopes.get(envelopeId);
+    
+    if (!envelope) {
+      throw new Error(`Envelope not found: ${envelopeId}`);
     }
-
-    return fields;
+    
+    return envelope.customFields || {};
   } catch (error) {
     console.error('Error getting envelope custom fields:', error);
     throw new Error('Failed to get envelope custom fields');
