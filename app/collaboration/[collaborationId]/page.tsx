@@ -23,6 +23,8 @@ export default function CollaborationHub() {
     const [service, setService] = useState<Service | null>(null);
     const [loadingCollab, setLoadingCollab] = useState(true);
     const [accessDenied, setAccessDenied] = useState(false);
+    const [markingComplete, setMarkingComplete] = useState(false);
+    const [completeError, setCompleteError] = useState<string | null>(null);
 
     useEffect(() => {
         if (!loading && !user) {
@@ -196,6 +198,46 @@ export default function CollaborationHub() {
     const isBuyer = user?.uid === collaboration.buyerId;
     const isLegend = user?.uid === collaboration.legendId;
     const otherParty = isBuyer ? legend : buyer;
+
+    // Check if the buyer can mark as complete
+    const canMarkComplete = isBuyer &&
+        collaboration.status === 'in_progress' &&
+        collaboration.deliverables &&
+        collaboration.deliverables.length > 0;
+
+    const handleMarkComplete = async () => {
+        if (!canMarkComplete || !user) return;
+
+        setCompleteError(null);
+        setMarkingComplete(true);
+
+        try {
+            const response = await fetch('/api/collaboration/mark-complete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    collaborationId: collaboration.id,
+                    buyerId: user.uid,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to mark as complete');
+            }
+
+            // Reload collaboration to show updated status
+            await loadCollaboration();
+        } catch (error) {
+            console.error('Error marking complete:', error);
+            setCompleteError(error instanceof Error ? error.message : 'Failed to mark project as complete');
+        } finally {
+            setMarkingComplete(false);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -431,6 +473,67 @@ export default function CollaborationHub() {
                                 isLegend={isLegend}
                                 onUpdate={loadCollaboration}
                             />
+                        )}
+
+                        {/* Mark as Complete Button - Only visible to Buyer */}
+                        {isBuyer && collaboration.status === 'in_progress' && (
+                            <div className="bg-white rounded-lg shadow p-6">
+                                <h2 className="text-xl font-bold text-gray-900 mb-4">Complete Project</h2>
+
+                                {completeError && (
+                                    <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                                        <p className="text-sm text-red-800">{completeError}</p>
+                                    </div>
+                                )}
+
+                                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                                    <h3 className="text-sm font-semibold text-blue-900 mb-2">Before marking as complete:</h3>
+                                    <ul className="space-y-2 text-sm text-blue-800">
+                                        <li className="flex items-start">
+                                            <svg className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Review all deliverables to ensure they meet your requirements</span>
+                                        </li>
+                                        <li className="flex items-start">
+                                            <svg className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Download and save all files for your records</span>
+                                        </li>
+                                        <li className="flex items-start">
+                                            <svg className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Marking complete will release payment to the Legend</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <button
+                                    onClick={handleMarkComplete}
+                                    disabled={!canMarkComplete || markingComplete}
+                                    className="w-full px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                >
+                                    {markingComplete ? (
+                                        <span className="flex items-center justify-center">
+                                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            Processing...
+                                        </span>
+                                    ) : (
+                                        '✓ Mark as Complete & Release Payment'
+                                    )}
+                                </button>
+
+                                {!canMarkComplete && collaboration.deliverables?.length === 0 && (
+                                    <p className="mt-3 text-sm text-gray-500 text-center">
+                                        Button will be enabled once the Legend uploads deliverables
+                                    </p>
+                                )}
+                            </div>
                         )}
 
                         {/* Communication Thread */}

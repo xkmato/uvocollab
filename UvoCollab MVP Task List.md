@@ -361,10 +361,10 @@ This is the private space where the work happens49494949.
 
   - **Dependencies:** Task 7.3
   - **Acceptance Criteria (AC):**
-    - \[ \] The button is only visible to the Buyer.
-    - \[ \] The button is disabled until the Legend has uploaded at least one file to the "deliverables" (Task 7.3).
-    - \[ \] Clicking this button triggers the final payout function.
-  - **Status:** To Do
+    - \[x\] The button is only visible to the Buyer.
+    - \[x\] The button is disabled until the Legend has uploaded at least one file to the "deliverables" (Task 7.3).
+    - \[x\] Clicking this button triggers the final payout function.
+  - **Status:** Completed
 
 ### **Epic 8: Payout & Completion**
 
