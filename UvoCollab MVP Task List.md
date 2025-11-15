@@ -327,9 +327,9 @@ This is the private space where the work happens49494949.
   - **Dependencies:** Task 7.1
   - **Acceptance Criteria (AC):**
 
-    - \[ \] The checklist visualizes the key statuses: e.g., "Project Funded," "In Progress," "Deliverables Submitted," "Completed" 52525252.
+    - \[x\] The checklist visualizes the key statuses: e.g., "Project Funded," "In Progress," "Deliverables Submitted," "Completed" 52525252.
 
-  - **Status:** To Do
+  - **Status:** Completed
 
 - **Task 7.3: Hub: Secure File Sharing**
 
