@@ -1,9 +1,11 @@
 'use client';
 
 import { useAuth } from '@/app/contexts/AuthContext';
+import { Collaboration } from '@/app/types/collaboration';
 import { Service } from '@/app/types/service';
+import { User } from '@/app/types/user';
 import { db } from '@/lib/firebase';
-import { collection, deleteDoc, doc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -12,7 +14,12 @@ export default function LegendDashboard() {
     const router = useRouter();
     const [services, setServices] = useState<Service[]>([]);
     const [loadingServices, setLoadingServices] = useState(true);
-    const [activeTab, setActiveTab] = useState<'profile' | 'services'>('profile');
+    const [activeTab, setActiveTab] = useState<'profile' | 'services' | 'requests'>('profile');
+
+    // Collaboration requests state
+    const [collaborations, setCollaborations] = useState<Collaboration[]>([]);
+    const [loadingCollaborations, setLoadingCollaborations] = useState(true);
+    const [buyersInfo, setBuyersInfo] = useState<Record<string, User>>({});
 
     // Profile editing state
     const [displayName, setDisplayName] = useState('');
@@ -51,6 +58,7 @@ export default function LegendDashboard() {
     useEffect(() => {
         if (user && userData?.role === 'legend') {
             loadServices();
+            loadCollaborations();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user, userData]);
@@ -73,6 +81,48 @@ export default function LegendDashboard() {
             console.error('Error loading services:', error);
         } finally {
             setLoadingServices(false);
+        }
+    };
+
+    const loadCollaborations = async () => {
+        if (!user) return;
+
+        try {
+            setLoadingCollaborations(true);
+            const collabsRef = collection(db, 'collaborations');
+            const q = query(
+                collabsRef,
+                where('legendId', '==', user.uid),
+                where('status', '==', 'pending_review'),
+                orderBy('createdAt', 'desc')
+            );
+            const snapshot = await getDocs(q);
+            const collabsData = snapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+                createdAt: doc.data().createdAt?.toDate(),
+                updatedAt: doc.data().updatedAt?.toDate(),
+                acceptedAt: doc.data().acceptedAt?.toDate(),
+                paidAt: doc.data().paidAt?.toDate(),
+                completedAt: doc.data().completedAt?.toDate(),
+            })) as Collaboration[];
+            setCollaborations(collabsData);
+
+            // Load buyer information for each collaboration
+            const buyerIds = [...new Set(collabsData.map(c => c.buyerId))];
+            const buyersData: Record<string, User> = {};
+            for (const buyerId of buyerIds) {
+                const buyerDoc = await getDocs(query(collection(db, 'users'), where('uid', '==', buyerId)));
+                if (!buyerDoc.empty) {
+                    const buyerData = buyerDoc.docs[0].data() as User;
+                    buyersData[buyerId] = buyerData;
+                }
+            }
+            setBuyersInfo(buyersData);
+        } catch (error) {
+            console.error('Error loading collaborations:', error);
+        } finally {
+            setLoadingCollaborations(false);
         }
     };
 
@@ -131,6 +181,50 @@ export default function LegendDashboard() {
         loadServices();
     };
 
+    const handleAcceptPitch = async (collaborationId: string) => {
+        if (!confirm('Are you sure you want to accept this collaboration request? The artist will be notified to proceed with payment.')) {
+            return;
+        }
+
+        try {
+            // This will be handled by the respondToPitch function in Task 5.5
+            // For now, we'll show a placeholder message
+            alert('Accept functionality will be implemented in Task 5.5 (respondToPitch function)');
+            // TODO: Call the respondToPitch API endpoint
+            // await fetch('/api/respond-to-pitch', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ collaborationId, action: 'accept' })
+            // });
+            // await loadCollaborations();
+        } catch (error) {
+            console.error('Error accepting pitch:', error);
+            alert('Error accepting request. Please try again.');
+        }
+    };
+
+    const handleDeclinePitch = async (collaborationId: string) => {
+        if (!confirm('Are you sure you want to decline this collaboration request? The artist will be notified.')) {
+            return;
+        }
+
+        try {
+            // This will be handled by the respondToPitch function in Task 5.5
+            // For now, we'll show a placeholder message
+            alert('Decline functionality will be implemented in Task 5.5 (respondToPitch function)');
+            // TODO: Call the respondToPitch API endpoint
+            // await fetch('/api/respond-to-pitch', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ collaborationId, action: 'decline' })
+            // });
+            // await loadCollaborations();
+        } catch (error) {
+            console.error('Error declining pitch:', error);
+            alert('Error declining request. Please try again.');
+        }
+    };
+
     if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
     if (!user || !userData || userData.role !== 'legend') return null;
@@ -175,6 +269,20 @@ export default function LegendDashboard() {
                                 } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
                         >
                             My Services
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('requests')}
+                            className={`${activeTab === 'requests'
+                                ? 'border-blue-500 text-blue-600'
+                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm relative`}
+                        >
+                            Collaboration Requests
+                            {collaborations.length > 0 && (
+                                <span className="ml-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                                    {collaborations.length}
+                                </span>
+                            )}
                         </button>
                     </nav>
                 </div>
@@ -388,6 +496,152 @@ export default function LegendDashboard() {
                                 userId={user.uid}
                                 onClose={handleServiceFormClose}
                             />
+                        )}
+                    </div>
+                )}
+
+                {/* Requests Tab */}
+                {activeTab === 'requests' && (
+                    <div>
+                        <h2 className="text-2xl font-bold mb-6">Collaboration Requests</h2>
+
+                        {loadingCollaborations ? (
+                            <div className="text-center py-12">Loading requests...</div>
+                        ) : collaborations.length === 0 ? (
+                            <div className="bg-white rounded-lg shadow p-8 text-center">
+                                <div className="text-gray-400 mb-4">
+                                    <svg className="mx-auto h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                                    </svg>
+                                </div>
+                                <h3 className="text-lg font-medium text-gray-900 mb-2">No pending requests</h3>
+                                <p className="text-gray-600">
+                                    When artists submit collaboration requests, they&apos;ll appear here for you to review.
+                                </p>
+                            </div>
+                        ) : (
+                            <div className="space-y-6">
+                                {collaborations.map((collab) => {
+                                    const buyer = buyersInfo[collab.buyerId];
+                                    const service = services.find(s => s.id === collab.serviceId);
+
+                                    return (
+                                        <div key={collab.id} className="bg-white rounded-lg shadow overflow-hidden">
+                                            <div className="p-6">
+                                                {/* Header */}
+                                                <div className="flex justify-between items-start mb-4">
+                                                    <div>
+                                                        <h3 className="text-xl font-bold text-gray-900 mb-1">
+                                                            {service?.title || 'Service Request'}
+                                                        </h3>
+                                                        <p className="text-sm text-gray-500">
+                                                            Submitted {collab.createdAt?.toLocaleDateString('en-US', {
+                                                                year: 'numeric',
+                                                                month: 'long',
+                                                                day: 'numeric'
+                                                            })}
+                                                        </p>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <p className="text-2xl font-bold text-blue-600">${collab.price}</p>
+                                                        <p className="text-sm text-gray-500">{service?.deliverable}</p>
+                                                    </div>
+                                                </div>
+
+                                                {/* Buyer Info */}
+                                                {buyer && (
+                                                    <div className="mb-4 pb-4 border-b">
+                                                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Artist Information</h4>
+                                                        <div className="flex items-center space-x-3">
+                                                            {buyer.profileImageUrl ? (
+                                                                <img
+                                                                    src={buyer.profileImageUrl}
+                                                                    alt={buyer.displayName}
+                                                                    className="w-12 h-12 rounded-full object-cover"
+                                                                />
+                                                            ) : (
+                                                                <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
+                                                                    <span className="text-gray-600 font-medium">
+                                                                        {buyer.displayName.charAt(0).toUpperCase()}
+                                                                    </span>
+                                                                </div>
+                                                            )}
+                                                            <div>
+                                                                <p className="font-medium text-gray-900">{buyer.displayName}</p>
+                                                                <p className="text-sm text-gray-500">{buyer.email}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {/* Pitch Details */}
+                                                <div className="space-y-4">
+                                                    {/* Best Work */}
+                                                    <div>
+                                                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Best Previous Work</h4>
+                                                        <a
+                                                            href={collab.pitchBestWorkUrl}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-blue-600 hover:text-blue-800 underline break-all"
+                                                        >
+                                                            {collab.pitchBestWorkUrl}
+                                                        </a>
+                                                    </div>
+
+                                                    {/* Demo Track */}
+                                                    {collab.pitchDemoUrl && (
+                                                        <div>
+                                                            <h4 className="text-sm font-semibold text-gray-700 mb-2">Demo Track</h4>
+                                                            <audio
+                                                                controls
+                                                                className="w-full"
+                                                                preload="metadata"
+                                                            >
+                                                                <source src={collab.pitchDemoUrl} type="audio/mpeg" />
+                                                                <source src={collab.pitchDemoUrl} type="audio/wav" />
+                                                                Your browser does not support the audio element.
+                                                            </audio>
+                                                            <a
+                                                                href={collab.pitchDemoUrl}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="text-sm text-blue-600 hover:text-blue-800 mt-2 inline-block"
+                                                            >
+                                                                Download Demo
+                                                            </a>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Message */}
+                                                    <div>
+                                                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Creative Concept</h4>
+                                                        <div className="bg-gray-50 rounded-lg p-4">
+                                                            <p className="text-gray-800 whitespace-pre-wrap">{collab.pitchMessage}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Action Buttons */}
+                                                <div className="flex space-x-3 mt-6">
+                                                    <button
+                                                        onClick={() => handleAcceptPitch(collab.id!)}
+                                                        className="flex-1 px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium transition-colors"
+                                                    >
+                                                        Accept Request
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDeclinePitch(collab.id!)}
+                                                        className="flex-1 px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium transition-colors"
+                                                    >
+                                                        Decline Request
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
                         )}
                     </div>
                 )}

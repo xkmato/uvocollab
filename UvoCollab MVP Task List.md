@@ -211,12 +211,12 @@ This is the core transaction loop, from the initial "pitch" to the secure paymen
   - **Dependencies:** Task 5.3
   - **Acceptance Criteria (AC):**
 
-    - \[ \] The Legend can see a list of all pending pitches.
-    - \[ \] The Legend can listen to the demo track and read the message within the dashboard3232.
+    - \[x\] The Legend can see a list of all pending pitches.
+    - \[x\] The Legend can listen to the demo track and read the message within the dashboard3232.
 
-    - \[ \] The Legend has "Accept" and "Decline" buttons for each pitch33333333.
+    - \[x\] The Legend has "Accept" and "Decline" buttons for each pitch33333333.
 
-  - **Status:** To Do
+  - **Status:** Completed
 
 - **Task 5.5: Backend: respondToPitch Function**
 
