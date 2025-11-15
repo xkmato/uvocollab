@@ -541,6 +541,7 @@ export default function CollaborationHub() {
                             <CommunicationThread
                                 collaborationId={collaborationId}
                                 otherPartyName={otherParty.displayName}
+                                isCompleted={collaboration.status === 'completed'}
                             />
                         )}
                     </div>

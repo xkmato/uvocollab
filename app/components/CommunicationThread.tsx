@@ -9,9 +9,10 @@ import { useEffect, useRef, useState } from 'react';
 interface CommunicationThreadProps {
     collaborationId: string;
     otherPartyName: string;
+    isCompleted?: boolean;
 }
 
-export default function CommunicationThread({ collaborationId, otherPartyName }: CommunicationThreadProps) {
+export default function CommunicationThread({ collaborationId, otherPartyName, isCompleted = false }: CommunicationThreadProps) {
     const { user } = useAuth();
     const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState('');
@@ -163,8 +164,8 @@ export default function CommunicationThread({ collaborationId, otherPartyName }:
                                         <div>
                                             <div
                                                 className={`rounded-lg px-4 py-2 ${isCurrentUser
-                                                        ? 'bg-blue-600 text-white'
-                                                        : 'bg-white text-gray-900 border border-gray-200'
+                                                    ? 'bg-blue-600 text-white'
+                                                    : 'bg-white text-gray-900 border border-gray-200'
                                                     }`}
                                             >
                                                 <p className="text-sm whitespace-pre-wrap break-words">
@@ -189,6 +190,13 @@ export default function CommunicationThread({ collaborationId, otherPartyName }:
 
             {/* Message Input */}
             <div className="p-4 border-t bg-white">
+                {isCompleted ? (
+                    <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg text-center">
+                        <p className="text-sm text-gray-600">
+                            This project is complete. The communication thread is now read-only.
+                        </p>
+                    </div>
+                ) : (
                 <form onSubmit={handleSendMessage} className="flex space-x-2">
                     <textarea
                         value={newMessage}
@@ -230,7 +238,9 @@ export default function CommunicationThread({ collaborationId, otherPartyName }:
                 <p className="text-xs text-gray-500 mt-2">
                     Press Enter to send, Shift+Enter for new line
                 </p>
-            </div>
+            </form>
+            )}
         </div>
+        </div >
     );
 }

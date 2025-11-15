@@ -386,10 +386,10 @@ The final step: paying the Legend.
   - **Status:** Completed
 
 - **Task 8.2: Final Project State**
-  - **Description:** After the triggerPayout function is successfully _initiated_, update the project's final state.
+  - **Description:** After the triggerPayout is successfully _initiated_, update the project's final state.
   - **Dependencies:** Task 8.1
   - **Acceptance Criteria (AC):**
-    - \[ \] The collaborations doc status is set to completed.
-    - \`\[ \]} The "Collaboration Hub" (Task 7.1) is now read-only.
-    - \[ \] Both Buyer and Legend receive a final confirmation email.
-  - **Status:** To Do
+    - \[x\] The collaborations doc status is set to completed.
+    - \[x\] The "Collaboration Hub" (Task 7.1) is now read-only.
+    - \[x\] Both Buyer and Legend receive a final confirmation email.
+  - **Status:** Completed
