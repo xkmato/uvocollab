@@ -158,9 +158,9 @@ This epic covers the "Buyer" 22 experience of finding and exploring Legends.
   - **Dependencies:** Task 4.1
   - **Acceptance Criteria (AC):**
 
-    - \[ \] Users can filter the list of Legends by genre, price range, and service type24242424. (Note: This requires adding genre and price_range fields to the Legend's user doc).
+    - \[x\] Users can filter the list of Legends by genre, price range, and service type24242424. (Note: This requires adding genre and price_range fields to the Legend's user doc).
 
-  - **Status:** To Do
+  - **Status:** Completed
 
 ### **Epic 5: Collaboration Flow: Pitch, Acceptance & Payment**
 

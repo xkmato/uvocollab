@@ -5,6 +5,7 @@ export interface Service {
   description: string; // Detailed description of what's included
   price: number; // Price in dollars (must be > 0)
   deliverable: string; // e.g., "1 WAV file", "Stems + Mixed Master", "2 revisions included"
+  serviceType?: string; // e.g., "Verse", "Feature", "Production", "Mixing", "Mastering", "Songwriting"
   createdAt: Date;
   updatedAt: Date;
   isActive: boolean; // Allow legends to unpublish services without deleting
@@ -15,6 +16,7 @@ export interface CreateServiceData {
   description: string;
   price: number;
   deliverable: string;
+  serviceType?: string;
 }
 
 export interface UpdateServiceData {
@@ -22,5 +24,6 @@ export interface UpdateServiceData {
   description?: string;
   price?: number;
   deliverable?: string;
+  serviceType?: string;
   isActive?: boolean;
 }
