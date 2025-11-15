@@ -147,10 +147,10 @@ This epic covers the "Buyer" 22 experience of finding and exploring Legends.
 
   - **Dependencies:** Task 3.3
   - **Acceptance Criteria (AC):**
-    - \[ \] A page /marketplace queries and displays all users with role: 'legend'.
-    - \[ \] Each Legend is shown as a card with their photo, name, and specialty.
-    - \[ \] Clicking a card navigates to their public profile page (Task 3.3).
-  - **Status:** To Do
+    - \[x\] A page /marketplace queries and displays all users with role: 'legend'.
+    - \[x\] Each Legend is shown as a card with their photo, name, and specialty.
+    - \[x\] Clicking a card navigates to their public profile page (Task 3.3).
+  - **Status:** Completed
 
 - **Task 4.2: Marketplace Filtering**
 
