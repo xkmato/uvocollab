@@ -19,5 +19,10 @@ declare module 'flutterwave-node-v3' {
     Transaction: {
       verify(payload: { id: string }): Promise<any>;
     };
+
+    Transfer: {
+      initiate(payload: any): Promise<any>;
+      get_a_transfer(params: { id: string }): Promise<any>;
+    };
   }
 }
