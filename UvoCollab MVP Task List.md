@@ -129,13 +129,13 @@ Once approved, "Legends" need to set up their "storefront"12.
   - **Dependencies:** Task 3.2
   - **Acceptance Criteria (AC):**
 
-    - \[ \] A dynamic route /legend/\[legendId\] displays the Legend's public info.
-    - \[ \] The page prominently features the "Verified Legend" badge21.
+    - \[x\] A dynamic route /legend/\[legendId\] displays the Legend's public info.
+    - \[x\] The page prominently features the "Verified Legend" badge21.
 
-    - \[ \] The page lists all services created by the Legend, with their prices and descriptions.
-    - \[ \] Each service has a "Request Collaboration" button.
+    - \[x\] The page lists all services created by the Legend, with their prices and descriptions.
+    - \[x\] Each service has a "Request Collaboration" button.
 
-  - **Status:** To Do
+  - **Status:** Completed
 
 ### **Epic 4: "New Artist" (Buyer) Marketplace & Discovery**
 
