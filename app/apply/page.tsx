@@ -179,8 +179,8 @@ export default function ApplyAsLegend() {
                             <div key={step.number} className="relative z-10 flex flex-col items-center">
                                 <div
                                     className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold transition-all duration-300 ${currentStep >= step.number
-                                            ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg scale-110'
-                                            : 'bg-white/10 text-white/40'
+                                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg scale-110'
+                                        : 'bg-white/10 text-white/40'
                                         }`}
                                 >
                                     {step.icon}
