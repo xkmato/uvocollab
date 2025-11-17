@@ -2,7 +2,7 @@
 
 import { User } from '@/app/types/user';
 import { auth, db } from '@/lib/firebase';
-import { createUserWithEmailAndPassword, User as FirebaseUser, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { User as FirebaseUser, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { createContext, useContext, useEffect, useState } from 'react';
 
@@ -10,8 +10,7 @@ interface AuthContextType {
     user: FirebaseUser | null;
     userData: User | null;
     loading: boolean;
-    signUp: (email: string, password: string, displayName: string) => Promise<void>;
-    signIn: (email: string, password: string) => Promise<void>;
+    signInWithGoogle: () => Promise<void>;
     logout: () => Promise<void>;
 }
 
@@ -38,6 +37,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
                 if (userDoc.exists()) {
                     setUserData(userDoc.data() as User);
+                } else {
+                    // Create user document for new Google sign-in users
+                    const newUserDoc: User = {
+                        uid: firebaseUser.uid,
+                        email: firebaseUser.email || '',
+                        displayName: firebaseUser.displayName || 'User',
+                        role: 'new_artist',
+                    };
+                    await setDoc(doc(db, 'users', firebaseUser.uid), newUserDoc);
+                    setUserData(newUserDoc);
                 }
             } else {
                 setUser(null);
@@ -49,22 +58,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return () => unsubscribe();
     }, []);
 
-    const signUp = async (email: string, password: string, displayName: string) => {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const uid = userCredential.user.uid;
-
-        // Create user document in Firestore
-        const userDoc: User = {
-            uid,
-            email,
-            displayName,
-            role: 'new_artist',
-        };
-        await setDoc(doc(db, 'users', uid), userDoc);
-    };
-
-    const signIn = async (email: string, password: string) => {
-        await signInWithEmailAndPassword(auth, email, password);
+    const signInWithGoogle = async () => {
+        const provider = new GoogleAuthProvider();
+        await signInWithPopup(auth, provider);
     };
 
     const logout = async () => {
@@ -75,8 +71,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         user,
         userData,
         loading,
-        signUp,
-        signIn,
+        signInWithGoogle,
         logout,
     };
 
