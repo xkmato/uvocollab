@@ -1,10 +1,42 @@
 'use client';
 
+import { db } from '@/lib/firebase';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { useAuth } from './contexts/AuthContext';
+import { LegendApplication } from './types/legendApplication';
 
 export default function Home() {
   const { user, loading } = useAuth();
+  const [legendApplication, setLegendApplication] = useState<LegendApplication | null>(null);
+  const [checkingApplication, setCheckingApplication] = useState(true);
+
+  useEffect(() => {
+    async function checkLegendApplication() {
+      if (!user) {
+        setCheckingApplication(false);
+        return;
+      }
+
+      try {
+        const applicationsRef = collection(db, 'legend_applications');
+        const q = query(applicationsRef, where('applicantUid', '==', user.uid));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+          const appData = querySnapshot.docs[0].data() as LegendApplication;
+          setLegendApplication({ ...appData, id: querySnapshot.docs[0].id });
+        }
+      } catch (error) {
+        console.error('Error checking legend application:', error);
+      } finally {
+        setCheckingApplication(false);
+      }
+    }
+
+    checkLegendApplication();
+  }, [user]);
 
   if (loading) {
     return (
@@ -174,27 +206,78 @@ export default function Home() {
                   </div>
                 </Link>
 
-                <Link
-                  href="/apply"
-                  className="group relative p-8 bg-gradient-to-br from-amber-500/20 to-orange-500/20 backdrop-blur-md border border-white/20 rounded-2xl hover:shadow-2xl hover:scale-105 transition-all duration-300 overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-amber-600/0 to-orange-600/0 group-hover:from-amber-600/20 group-hover:to-orange-600/20 transition-all duration-300"></div>
-                  <div className="relative z-10">
-                    <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-orange-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                      </svg>
-                    </div>
-                    <h3 className="text-2xl font-bold text-white mb-3">Become a Legend</h3>
-                    <p className="text-white/70 mb-4">Share your expertise with the world</p>
-                    <div className="text-amber-300 font-semibold group-hover:translate-x-2 transition-transform inline-flex items-center gap-2">
-                      Apply Now
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </svg>
+                {checkingApplication ? (
+                  <div className="relative p-8 bg-gradient-to-br from-amber-500/20 to-orange-500/20 backdrop-blur-md border border-white/20 rounded-2xl">
+                    <div className="flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-400"></div>
                     </div>
                   </div>
-                </Link>
+                ) : legendApplication ? (
+                  <div className="relative p-8 bg-gradient-to-br from-amber-500/20 to-orange-500/20 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden">
+                    <div className="relative z-10">
+                      <div className={`w-16 h-16 ${legendApplication.status === 'approved'
+                          ? 'bg-gradient-to-br from-green-400 to-emerald-400'
+                          : legendApplication.status === 'declined'
+                            ? 'bg-gradient-to-br from-red-400 to-rose-400'
+                            : 'bg-gradient-to-br from-amber-400 to-orange-400'
+                        } rounded-2xl flex items-center justify-center mb-6`}>
+                        {legendApplication.status === 'approved' ? (
+                          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        ) : legendApplication.status === 'declined' ? (
+                          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        ) : (
+                          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        )}
+                      </div>
+                      <h3 className="text-2xl font-bold text-white mb-3">Legend Application</h3>
+                      <p className="text-white/70 mb-2">
+                        {legendApplication.status === 'approved'
+                          ? 'Your application has been approved!'
+                          : legendApplication.status === 'declined'
+                            ? 'Your application was declined'
+                            : 'Your application is under review'}
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <span className={`px-3 py-1 rounded-full text-sm font-semibold ${legendApplication.status === 'approved'
+                            ? 'bg-green-500/20 text-green-300'
+                            : legendApplication.status === 'declined'
+                              ? 'bg-red-500/20 text-red-300'
+                              : 'bg-amber-500/20 text-amber-300'
+                          }`}>
+                          {legendApplication.status.charAt(0).toUpperCase() + legendApplication.status.slice(1)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    href="/apply"
+                    className="group relative p-8 bg-gradient-to-br from-amber-500/20 to-orange-500/20 backdrop-blur-md border border-white/20 rounded-2xl hover:shadow-2xl hover:scale-105 transition-all duration-300 overflow-hidden"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-amber-600/0 to-orange-600/0 group-hover:from-amber-600/20 group-hover:to-orange-600/20 transition-all duration-300"></div>
+                    <div className="relative z-10">
+                      <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-orange-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                        </svg>
+                      </div>
+                      <h3 className="text-2xl font-bold text-white mb-3">Become a Legend</h3>
+                      <p className="text-white/70 mb-4">Share your expertise with the world</p>
+                      <div className="text-amber-300 font-semibold group-hover:translate-x-2 transition-transform inline-flex items-center gap-2">
+                        Apply Now
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                      </div>
+                    </div>
+                  </Link>
+                )}
               </div>
             </div>
           )}

@@ -2,6 +2,36 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Users collection
+    match /users/{userId} {
+      // Allow authenticated users to read legend profiles for marketplace
+      allow read: if request.auth != null;
+      // Allow users to write their own profile
+      allow write: if request.auth != null && request.auth.uid == userId;
+      
+      // Services subcollection - readable by authenticated users
+      match /services/{serviceId} {
+        allow read: if request.auth != null;
+        allow write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+    // Legend applications - users can read their own applications
+    match /legend_applications/{applicationId} {
+      allow read: if request.auth != null && resource.data.applicantUid == request.auth.uid;
+      allow create: if false; // Only created via API
+      allow update, delete: if false; // Only updated via admin API
+    }
+
+    // Collaborations - users can read their own collaborations
+    match /collaborations/{collaborationId} {
+      allow read: if request.auth != null && 
+        (resource.data.buyerId == request.auth.uid || 
+         resource.data.legendId == request.auth.uid);
+      allow write: if false; // Only managed via API
+    }
+
+    // Default deny all other documents
     match /{document=**} {
       allow read, write: if false;
     }
