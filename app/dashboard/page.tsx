@@ -176,6 +176,54 @@ export default function Dashboard() {
             </div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                {/* Quick Actions */}
+                <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <a
+                        href="/marketplace"
+                        className="flex items-center gap-4 p-6 bg-white rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200"
+                    >
+                        <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-semibold text-gray-900">Browse Marketplace</h3>
+                            <p className="text-sm text-gray-600">Find industry legends</p>
+                        </div>
+                    </a>
+
+                    <a
+                        href="/apply"
+                        className="flex items-center gap-4 p-6 bg-white rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200"
+                    >
+                        <div className="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
+                            <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-semibold text-gray-900">Become a Legend</h3>
+                            <p className="text-sm text-gray-600">Apply to offer services</p>
+                        </div>
+                    </a>
+
+                    <a
+                        href="/"
+                        className="flex items-center gap-4 p-6 bg-white rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200"
+                    >
+                        <div className="flex-shrink-0 w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-semibold text-gray-900">Home</h3>
+                            <p className="text-sm text-gray-600">Back to main page</p>
+                        </div>
+                    </a>
+                </div>
+
                 <div className="mb-8">
                     <h2 className="text-2xl font-bold text-gray-900 mb-2">My Collaborations</h2>
                     <p className="text-gray-600">Track your collaboration requests and active projects</p>

@@ -288,12 +288,26 @@ export default function LegendDashboard() {
                             <h1 className="text-3xl font-bold text-gray-900">Legend Dashboard</h1>
                             <p className="text-gray-600">Welcome back, {userData.displayName}!</p>
                         </div>
-                        <button
-                            onClick={logout}
-                            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-                        >
-                            Logout
-                        </button>
+                        <div className="flex gap-4">
+                            <a
+                                href={`/legend/${user.uid}`}
+                                className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-600 rounded-md hover:bg-blue-100"
+                            >
+                                View Public Profile
+                            </a>
+                            <a
+                                href="/"
+                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                            >
+                                Home
+                            </a>
+                            <button
+                                onClick={logout}
+                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                            >
+                                Logout
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -30,32 +30,59 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-            if (firebaseUser) {
-                setUser(firebaseUser);
-                // Fetch user data from Firestore
-                const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
-                if (userDoc.exists()) {
-                    setUserData(userDoc.data() as User);
-                } else {
-                    // Create user document for new Google sign-in users
-                    const newUserDoc: User = {
-                        uid: firebaseUser.uid,
-                        email: firebaseUser.email || '',
-                        displayName: firebaseUser.displayName || 'User',
-                        role: 'new_artist',
-                    };
-                    await setDoc(doc(db, 'users', firebaseUser.uid), newUserDoc);
-                    setUserData(newUserDoc);
-                }
-            } else {
-                setUser(null);
-                setUserData(null);
-            }
+        // Set a timeout to prevent infinite loading
+        const loadingTimeout = setTimeout(() => {
+            console.log('Auth initialization completed via timeout');
             setLoading(false);
+        }, 3000); // 3 seconds timeout
+
+        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+            try {
+                if (firebaseUser) {
+                    setUser(firebaseUser);
+                    // Fetch user data from Firestore
+                    try {
+                        const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+                        if (userDoc.exists()) {
+                            setUserData(userDoc.data() as User);
+                        } else {
+                            // Create user document for new Google sign-in users
+                            const newUserDoc: User = {
+                                uid: firebaseUser.uid,
+                                email: firebaseUser.email || '',
+                                displayName: firebaseUser.displayName || 'User',
+                                role: 'new_artist',
+                            };
+                            await setDoc(doc(db, 'users', firebaseUser.uid), newUserDoc);
+                            setUserData(newUserDoc);
+                        }
+                    } catch (firestoreError) {
+                        console.error('Firestore error (may be blocked by ad blocker):', firestoreError);
+                        // Fallback: create basic user data from Firebase Auth
+                        const fallbackUserData: User = {
+                            uid: firebaseUser.uid,
+                            email: firebaseUser.email || '',
+                            displayName: firebaseUser.displayName || 'User',
+                            role: 'new_artist',
+                        };
+                        setUserData(fallbackUserData);
+                    }
+                } else {
+                    setUser(null);
+                    setUserData(null);
+                }
+            } catch (error) {
+                console.error('Auth error:', error);
+            } finally {
+                clearTimeout(loadingTimeout);
+                setLoading(false);
+            }
         });
 
-        return () => unsubscribe();
+        return () => {
+            clearTimeout(loadingTimeout);
+            unsubscribe();
+        };
     }, []);
 
     const signInWithGoogle = async () => {
