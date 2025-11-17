@@ -59,10 +59,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Update authenticated user's role to 'legend_applicant'
+    // Use set with merge to create the document if it doesn't exist
     const updateData: any = {
       role: 'legend_applicant',
       displayName: applicationData.artistName,
       bio: applicationData.bio,
+      email: userEmail,
+      uid: userUid,
       updatedAt: new Date(),
     };
 
@@ -71,7 +74,15 @@ export async function POST(request: NextRequest) {
       updateData.managementInfo = `${applicationData.managementName || 'N/A'} - ${applicationData.managementEmail || 'N/A'}`;
     }
 
-    await adminDb.collection('users').doc(userUid).update(updateData);
+    // Use set with merge instead of update to handle new users
+    try {
+      await adminDb.collection('users').doc(userUid).set(updateData, { merge: true });
+    } catch (dbError: unknown) {
+      console.error('Firestore user update error:', dbError);
+      console.error('User UID:', userUid);
+      console.error('Update data:', updateData);
+      throw dbError;
+    }
 
     // Create the legend application document
     const applicationDoc = await adminDb.collection('legend_applications').add({
