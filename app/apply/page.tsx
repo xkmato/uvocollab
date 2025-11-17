@@ -1,5 +1,6 @@
 'use client';
 
+import { useAuth } from '@/app/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -7,6 +8,7 @@ type WizardStep = 1 | 2 | 3 | 4 | 5;
 
 export default function ApplyAsLegend() {
     const router = useRouter();
+    const { user, loading } = useAuth();
     const [currentStep, setCurrentStep] = useState<WizardStep>(1);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
@@ -14,7 +16,6 @@ export default function ApplyAsLegend() {
 
     const [formData, setFormData] = useState({
         artistName: '',
-        email: '',
         phone: '',
         managementName: '',
         managementEmail: '',
@@ -34,9 +35,9 @@ export default function ApplyAsLegend() {
     const validateStep = (step: WizardStep): boolean => {
         switch (step) {
             case 1:
-                return !!(formData.artistName && formData.email && formData.phone);
+                return !!(formData.artistName && formData.phone);
             case 2:
-                return !!(formData.managementName && formData.managementEmail);
+                return true;
             case 3:
                 return !!formData.spotifyLink;
             case 4:
@@ -65,9 +66,19 @@ export default function ApplyAsLegend() {
         setIsSubmitting(true);
 
         try {
+            if (!user) {
+                throw new Error('You must be logged in to submit an application');
+            }
+
+            // Get the ID token for authentication
+            const token = await user.getIdToken();
+
             const response = await fetch('/api/legend-application', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify(formData),
             });
 
@@ -85,6 +96,19 @@ export default function ApplyAsLegend() {
             setIsSubmitting(false);
         }
     };
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-700 to-pink-600 flex items-center justify-center p-4">
+                <div className="text-white text-xl">Loading...</div>
+            </div>
+        );
+    }
+
+    if (!user) {
+        router.push('/auth/login');
+        return null;
+    }
 
     if (success) {
         return (
@@ -146,25 +170,23 @@ export default function ApplyAsLegend() {
                         {/* Progress Bar Background */}
                         <div className="absolute top-1/2 left-0 right-0 h-1 bg-white/10 -translate-y-1/2"></div>
                         {/* Active Progress Bar */}
-                        <div 
+                        <div
                             className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-purple-500 to-pink-500 -translate-y-1/2 transition-all duration-500"
                             style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
                         ></div>
-                        
+
                         {steps.map((step) => (
                             <div key={step.number} className="relative z-10 flex flex-col items-center">
                                 <div
-                                    className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold transition-all duration-300 ${
-                                        currentStep >= step.number
+                                    className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold transition-all duration-300 ${currentStep >= step.number
                                             ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg scale-110'
                                             : 'bg-white/10 text-white/40'
-                                    }`}
+                                        }`}
                                 >
                                     {step.icon}
                                 </div>
-                                <span className={`mt-2 text-sm font-medium transition-colors ${
-                                    currentStep >= step.number ? 'text-white' : 'text-white/40'
-                                }`}>
+                                <span className={`mt-2 text-sm font-medium transition-colors ${currentStep >= step.number ? 'text-white' : 'text-white/40'
+                                    }`}>
                                     {step.title}
                                 </span>
                             </div>
@@ -184,7 +206,7 @@ export default function ApplyAsLegend() {
                     {currentStep === 1 && (
                         <div className="space-y-6 animate-fadeIn">
                             <h2 className="text-3xl font-bold text-white mb-6">Let's start with your contact information</h2>
-                            
+
                             <div>
                                 <label className="block text-white font-semibold mb-2">Artist/Professional Name *</label>
                                 <input
@@ -198,15 +220,14 @@ export default function ApplyAsLegend() {
                             </div>
 
                             <div>
-                                <label className="block text-white font-semibold mb-2">Email Address *</label>
+                                <label className="block text-white font-semibold mb-2">Email Address</label>
                                 <input
                                     type="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:bg-white/20 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/50 transition-all"
-                                    placeholder="your.email@example.com"
+                                    value={user?.email || ''}
+                                    disabled
+                                    className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white/60 cursor-not-allowed"
                                 />
+                                <p className="mt-2 text-sm text-white/60">Using your logged-in email address</p>
                             </div>
 
                             <div>
@@ -227,9 +248,10 @@ export default function ApplyAsLegend() {
                     {currentStep === 2 && (
                         <div className="space-y-6 animate-fadeIn">
                             <h2 className="text-3xl font-bold text-white mb-6">Tell us about your management</h2>
-                            
+                            <p className="text-white/60 mb-6">If you manage yourself, you can skip this step</p>
+
                             <div>
-                                <label className="block text-white font-semibold mb-2">Manager/Agency Name *</label>
+                                <label className="block text-white font-semibold mb-2">Manager/Agency Name</label>
                                 <input
                                     type="text"
                                     name="managementName"
@@ -241,7 +263,7 @@ export default function ApplyAsLegend() {
                             </div>
 
                             <div>
-                                <label className="block text-white font-semibold mb-2">Manager/Agency Email *</label>
+                                <label className="block text-white font-semibold mb-2">Manager/Agency Email</label>
                                 <input
                                     type="email"
                                     name="managementEmail"
@@ -259,7 +281,7 @@ export default function ApplyAsLegend() {
                         <div className="space-y-6 animate-fadeIn">
                             <h2 className="text-3xl font-bold text-white mb-2">Verify your professional status</h2>
                             <p className="text-white/60 mb-6">Share your profiles and achievements to help us verify your credentials</p>
-                            
+
                             <div>
                                 <label className="block text-white font-semibold mb-2">Spotify Artist Profile *</label>
                                 <input
@@ -315,7 +337,7 @@ export default function ApplyAsLegend() {
                         <div className="space-y-6 animate-fadeIn">
                             <h2 className="text-3xl font-bold text-white mb-2">Tell your story</h2>
                             <p className="text-white/60 mb-6">Share your journey and what makes you a legend in your field</p>
-                            
+
                             <div>
                                 <label className="block text-white font-semibold mb-2">Professional Bio *</label>
                                 <textarea
@@ -352,20 +374,28 @@ export default function ApplyAsLegend() {
                     {currentStep === 5 && (
                         <div className="space-y-6 animate-fadeIn">
                             <h2 className="text-3xl font-bold text-white mb-6">Review your application</h2>
-                            
+
                             <div className="space-y-4">
                                 <div className="p-4 bg-white/5 rounded-xl border border-white/10">
                                     <h3 className="text-purple-300 font-semibold mb-2">Contact Information</h3>
                                     <p className="text-white"><strong>Name:</strong> {formData.artistName}</p>
-                                    <p className="text-white"><strong>Email:</strong> {formData.email}</p>
+                                    <p className="text-white"><strong>Email:</strong> {user?.email}</p>
                                     <p className="text-white"><strong>Phone:</strong> {formData.phone}</p>
                                 </div>
 
-                                <div className="p-4 bg-white/5 rounded-xl border border-white/10">
-                                    <h3 className="text-purple-300 font-semibold mb-2">Management</h3>
-                                    <p className="text-white"><strong>Manager/Agency:</strong> {formData.managementName}</p>
-                                    <p className="text-white"><strong>Email:</strong> {formData.managementEmail}</p>
-                                </div>
+                                {(formData.managementName || formData.managementEmail) && (
+                                    <div className="p-4 bg-white/5 rounded-xl border border-white/10">
+                                        <h3 className="text-purple-300 font-semibold mb-2">Management</h3>
+                                        {formData.managementName && <p className="text-white"><strong>Manager/Agency:</strong> {formData.managementName}</p>}
+                                        {formData.managementEmail && <p className="text-white"><strong>Email:</strong> {formData.managementEmail}</p>}
+                                    </div>
+                                )}
+                                {!formData.managementName && !formData.managementEmail && (
+                                    <div className="p-4 bg-white/5 rounded-xl border border-white/10">
+                                        <h3 className="text-purple-300 font-semibold mb-2">Management</h3>
+                                        <p className="text-white/60">Self-managed</p>
+                                    </div>
+                                )}
 
                                 <div className="p-4 bg-white/5 rounded-xl border border-white/10">
                                     <h3 className="text-purple-300 font-semibold mb-2">Verification</h3>

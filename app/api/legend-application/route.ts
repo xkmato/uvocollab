@@ -4,29 +4,48 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
+    // Verify authentication
+    const authHeader = request.headers.get('Authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return NextResponse.json(
+        { error: 'Unauthorized - No authentication token provided' },
+        { status: 401 }
+      );
+    }
+
+    const token = authHeader.split('Bearer ')[1];
+    let decodedToken;
+    
+    try {
+      decodedToken = await adminAuth.verifyIdToken(token);
+    } catch (error) {
+      return NextResponse.json(
+        { error: 'Unauthorized - Invalid authentication token' },
+        { status: 401 }
+      );
+    }
+
+    const userEmail = decodedToken.email;
+    const userUid = decodedToken.uid;
+
+    if (!userEmail) {
+      return NextResponse.json(
+        { error: 'User email not found in authentication token' },
+        { status: 400 }
+      );
+    }
+
     const applicationData: LegendApplicationData = await request.json();
 
-    // Validate required fields
+    // Validate required fields (excluding email since it comes from auth)
     if (
       !applicationData.artistName ||
-      !applicationData.email ||
       !applicationData.phone ||
-      !applicationData.managementName ||
-      !applicationData.managementEmail ||
       !applicationData.spotifyLink ||
       !applicationData.bio
     ) {
       return NextResponse.json(
         { error: 'Missing required fields' },
-        { status: 400 }
-      );
-    }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(applicationData.email)) {
-      return NextResponse.json(
-        { error: 'Invalid email format' },
         { status: 400 }
       );
     }
@@ -39,58 +58,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let userUid: string;
-    let isNewUser = false;
+    // Update authenticated user's role to 'legend_applicant'
+    const updateData: any = {
+      role: 'legend_applicant',
+      displayName: applicationData.artistName,
+      bio: applicationData.bio,
+      updatedAt: new Date(),
+    };
 
-    try {
-      // Check if user already exists
-      const existingUser = await adminAuth.getUserByEmail(applicationData.email);
-      userUid = existingUser.uid;
-
-      // Update existing user's role to 'legend_applicant'
-      await adminDb.collection('users').doc(userUid).update({
-        role: 'legend_applicant',
-        displayName: applicationData.artistName,
-        bio: applicationData.bio,
-        managementInfo: `${applicationData.managementName} - ${applicationData.managementEmail}`,
-        updatedAt: new Date(),
-      });
-    } catch (error: unknown) {
-      // User doesn't exist, create a new one
-      const firebaseError = error as { code?: string };
-      if (firebaseError.code === 'auth/user-not-found') {
-        isNewUser = true;
-
-        // Generate a random temporary password
-        const tempPassword = Math.random().toString(36).slice(-12) + 'A1!';
-
-        // Create new Firebase Auth user
-        const newUser = await adminAuth.createUser({
-          email: applicationData.email,
-          password: tempPassword,
-          displayName: applicationData.artistName,
-        });
-
-        userUid = newUser.uid;
-
-        // Create user document in Firestore
-        await adminDb.collection('users').doc(userUid).set({
-          uid: userUid,
-          email: applicationData.email,
-          displayName: applicationData.artistName,
-          role: 'legend_applicant',
-          bio: applicationData.bio,
-          managementInfo: `${applicationData.managementName} - ${applicationData.managementEmail}`,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        });
-
-        // Send password reset email so user can set their own password
-        await adminAuth.generatePasswordResetLink(applicationData.email);
-      } else {
-        throw error;
-      }
+    // Only add management info if provided
+    if (applicationData.managementName || applicationData.managementEmail) {
+      updateData.managementInfo = `${applicationData.managementName || 'N/A'} - ${applicationData.managementEmail || 'N/A'}`;
     }
+
+    await adminDb.collection('users').doc(userUid).update(updateData);
 
     // Create the legend application document
     const applicationDoc = await adminDb.collection('legend_applications').add({
@@ -98,7 +79,7 @@ export async function POST(request: NextRequest) {
       status: 'pending',
       applicationData: {
         artistName: applicationData.artistName,
-        email: applicationData.email,
+        email: userEmail,
         phone: applicationData.phone,
         managementName: applicationData.managementName,
         managementEmail: applicationData.managementEmail,
@@ -117,7 +98,6 @@ export async function POST(request: NextRequest) {
         success: true,
         message: 'Application submitted successfully',
         applicationId: applicationDoc.id,
-        isNewUser,
       },
       { status: 201 }
     );

@@ -4,9 +4,9 @@ export interface LegendApplicationData {
   email: string;
   phone: string;
 
-  // Management/Agency Info
-  managementName: string;
-  managementEmail: string;
+  // Management/Agency Info (optional for self-managed artists)
+  managementName?: string;
+  managementEmail?: string;
 
   // Proof of Status
   spotifyLink: string;
