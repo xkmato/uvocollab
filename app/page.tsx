@@ -161,7 +161,7 @@ export default function Home() {
           {user && (
             <div className="max-w-6xl mx-auto animate-fadeIn">
               <h2 className="text-4xl font-bold text-white text-center mb-12">Welcome Back!</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <Link
                   href="/marketplace"
                   className="group relative p-8 bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-md border border-white/20 rounded-2xl hover:shadow-2xl hover:scale-105 transition-all duration-300 overflow-hidden"
@@ -177,6 +177,28 @@ export default function Home() {
                     <p className="text-white/70 mb-4">Discover and connect with industry legends</p>
                     <div className="text-purple-300 font-semibold group-hover:translate-x-2 transition-transform inline-flex items-center gap-2">
                       Browse Now
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </div>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/marketplace/podcasts"
+                  className="group relative p-8 bg-gradient-to-br from-pink-500/20 to-rose-500/20 backdrop-blur-md border border-white/20 rounded-2xl hover:shadow-2xl hover:scale-105 transition-all duration-300 overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-pink-600/0 to-rose-600/0 group-hover:from-pink-600/20 group-hover:to-rose-600/20 transition-all duration-300"></div>
+                  <div className="relative z-10">
+                    <div className="w-16 h-16 bg-gradient-to-br from-pink-400 to-rose-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-3">Explore Podcasts</h3>
+                    <p className="text-white/70 mb-4">Find podcasts to collaborate with</p>
+                    <div className="text-pink-300 font-semibold group-hover:translate-x-2 transition-transform inline-flex items-center gap-2">
+                      Browse Podcasts
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                       </svg>
