@@ -21,10 +21,10 @@ This epic covers the data structure and the flow for users to list their podcast
   - **Description:** Create a page where authenticated users can register their podcast.
   - **Dependencies:** Task 1.1
   - **Acceptance Criteria (AC):**
-    - [ ] A protected route `/podcasts/register` is created.
-    - [ ] Form collects: Podcast Title, Description, RSS Feed, Category, Audience Size, Cover Image.
-    - [ ] Validation ensures required fields are present.
-  - **Status:** To Do
+    - [x] A protected route `/podcasts/register` is created.
+    - [x] Form collects: Podcast Title, Description, RSS Feed, Category, Audience Size, Cover Image.
+    - [x] Validation ensures required fields are present.
+  - **Status:** Done
 
 - **Task 1.3: Backend: submitPodcastListing Function**
 
