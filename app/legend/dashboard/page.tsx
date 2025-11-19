@@ -9,6 +9,8 @@ import { db } from '@/lib/firebase';
 import { collection, deleteDoc, doc, getDocs, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import ProfileWizard from './components/ProfileWizard';
+import ServiceWizard from './components/ServiceWizard';
 
 export default function LegendDashboard() {
     const { user, userData, logout, loading } = useAuth();
@@ -25,18 +27,13 @@ export default function LegendDashboard() {
     const [buyersInfo, setBuyersInfo] = useState<Record<string, User>>({});
 
     // Profile editing state
-    const [displayName, setDisplayName] = useState('');
-    const [bio, setBio] = useState('');
-    const [profileImageUrl, setProfileImageUrl] = useState('');
-    const [managementInfo, setManagementInfo] = useState('');
-    const [genre, setGenre] = useState('');
-    const [priceRange, setPriceRange] = useState<'budget' | 'mid' | 'premium' | ''>('');
     const [savingProfile, setSavingProfile] = useState(false);
     const [profileMessage, setProfileMessage] = useState('');
 
     // Service editing state
     const [editingService, setEditingService] = useState<Service | null>(null);
     const [showServiceForm, setShowServiceForm] = useState(false);
+    const [savingService, setSavingService] = useState(false);
 
     useEffect(() => {
         if (!loading && !user) {
@@ -46,17 +43,6 @@ export default function LegendDashboard() {
             router.push('/dashboard');
         }
     }, [user, userData, loading, router]);
-
-    useEffect(() => {
-        if (userData) {
-            setDisplayName(userData.displayName || '');
-            setBio(userData.bio || '');
-            setProfileImageUrl(userData.profileImageUrl || '');
-            setManagementInfo(userData.managementInfo || '');
-            setGenre(userData.genre || '');
-            setPriceRange(userData.priceRange || '');
-        }
-    }, [userData]);
 
     useEffect(() => {
         if (user && userData?.role === 'legend') {
@@ -150,8 +136,7 @@ export default function LegendDashboard() {
         }
     };
 
-    const handleSaveProfile = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleSaveProfile = async (data: Partial<User>) => {
         if (!user) return;
 
         setSavingProfile(true);
@@ -160,19 +145,62 @@ export default function LegendDashboard() {
         try {
             const userRef = doc(db, 'users', user.uid);
             await updateDoc(userRef, {
-                displayName,
-                bio,
-                profileImageUrl,
-                managementInfo,
-                genre: genre || null,
-                priceRange: priceRange || null,
+                displayName: data.displayName,
+                bio: data.bio,
+                profileImageUrl: data.profileImageUrl,
+                managementInfo: data.managementInfo,
+                genre: data.genre || null,
+                priceRange: data.priceRange || null,
             });
             setProfileMessage('Profile updated successfully!');
+            // Show success message for 3 seconds then clear
+            setTimeout(() => setProfileMessage(''), 3000);
         } catch (error) {
             console.error('Error updating profile:', error);
             setProfileMessage('Error updating profile. Please try again.');
         } finally {
             setSavingProfile(false);
+        }
+    };
+
+    const handleSaveService = async (serviceData: Partial<Service>) => {
+        if (!user) return;
+        setSavingService(true);
+
+        try {
+            const dataToSave = {
+                title: serviceData.title,
+                description: serviceData.description,
+                price: serviceData.price,
+                deliverable: serviceData.deliverable,
+                serviceType: serviceData.serviceType || null,
+                isActive: serviceData.isActive,
+                updatedAt: new Date(),
+            };
+
+            if (editingService?.id) {
+                // Update existing service
+                const serviceRef = doc(db, 'users', user.uid, 'services', editingService.id);
+                await updateDoc(serviceRef, dataToSave);
+            } else {
+                // Create new service
+                const servicesRef = collection(db, 'users', user.uid, 'services');
+                const newServiceRef = doc(servicesRef);
+                await setDoc(newServiceRef, {
+                    ...dataToSave,
+                    legendUid: user.uid,
+                    createdAt: new Date(),
+                });
+            }
+
+            setShowServiceForm(false);
+            setEditingService(null);
+            loadServices();
+        } catch (error) {
+            console.error('Error saving service:', error);
+            alert('Error saving service. Please try again.');
+        } finally {
+            setSavingService(false);
         }
     };
 
@@ -202,7 +230,6 @@ export default function LegendDashboard() {
     const handleServiceFormClose = () => {
         setShowServiceForm(false);
         setEditingService(null);
-        loadServices();
     };
 
     const handleAcceptPitch = async (collaborationId: string) => {
@@ -275,35 +302,48 @@ export default function LegendDashboard() {
         }
     };
 
-    if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    if (loading) return (
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <div className="animate-pulse flex flex-col items-center">
+                <div className="h-12 w-12 bg-blue-200 rounded-full mb-4"></div>
+                <div className="h-4 w-32 bg-gray-200 rounded"></div>
+            </div>
+        </div>
+    );
 
     if (!user || !userData || userData.role !== 'legend') return null;
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <div className="bg-white border-b">
+            {/* Header */}
+            <div className="bg-white border-b sticky top-0 z-30 shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center py-6">
-                        <div>
-                            <h1 className="text-3xl font-bold text-gray-900">Legend Dashboard</h1>
-                            <p className="text-gray-600">Welcome back, {userData.displayName}!</p>
+                    <div className="flex justify-between items-center py-4">
+                        <div className="flex items-center space-x-4">
+                            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-md">
+                                {userData.displayName?.charAt(0).toUpperCase() || 'L'}
+                            </div>
+                            <div>
+                                <h1 className="text-xl font-bold text-gray-900">Legend Dashboard</h1>
+                                <p className="text-xs text-gray-500">Welcome back, {userData.displayName}</p>
+                            </div>
                         </div>
-                        <div className="flex gap-4">
+                        <div className="flex gap-3">
                             <a
                                 href={`/legend/${user.uid}`}
-                                className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-600 rounded-md hover:bg-blue-100"
+                                className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors"
                             >
                                 View Public Profile
                             </a>
                             <a
                                 href="/"
-                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                             >
                                 Home
                             </a>
                             <button
                                 onClick={logout}
-                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                                className="px-4 py-2 text-sm font-medium text-red-600 bg-white border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
                             >
                                 Logout
                             </button>
@@ -315,759 +355,449 @@ export default function LegendDashboard() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Bank Account Warning */}
                 {!checkingBankStatus && !bankAccountConnected && (
-                    <div className="mb-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+                    <div className="mb-8 bg-gradient-to-r from-yellow-50 to-orange-50 border-l-4 border-yellow-400 p-6 rounded-r-lg shadow-sm animate-fadeIn">
                         <div className="flex">
                             <div className="flex-shrink-0">
-                                <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                <svg className="h-6 w-6 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
                                     <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                                 </svg>
                             </div>
-                            <div className="ml-3">
-                                <p className="text-sm text-yellow-700">
-                                    <strong>Action Required:</strong> You need to connect your bank account to receive payments.
+                            <div className="ml-4">
+                                <h3 className="text-lg font-medium text-yellow-800">Action Required</h3>
+                                <p className="mt-1 text-yellow-700">
+                                    You need to connect your bank account to receive payments.
                                     Your services will not be visible in the marketplace until your bank account is connected.
-                                    {' '}
+                                </p>
+                                <div className="mt-4">
                                     <button
                                         onClick={() => setActiveTab('payment')}
-                                        className="font-medium underline hover:text-yellow-600"
+                                        className="px-4 py-2 bg-yellow-100 text-yellow-800 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors"
                                     >
-                                        Connect now
+                                        Connect Bank Account
                                     </button>
-                                </p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 )}
 
                 {/* Tab Navigation */}
-                <div className="border-b border-gray-200 mb-8">
-                    <nav className="-mb-px flex space-x-8">
+                <div className="flex space-x-1 bg-white p-1 rounded-xl shadow-sm mb-8 overflow-x-auto">
+                    {[
+                        { id: 'profile', label: 'Profile & Settings' },
+                        { id: 'services', label: 'My Services' },
+                        { id: 'payment', label: 'Payment Settings', alert: !bankAccountConnected && !checkingBankStatus },
+                        { id: 'requests', label: 'Collaboration Requests', count: collaborations.length }
+                    ].map((tab) => (
                         <button
-                            onClick={() => setActiveTab('profile')}
-                            className={`${activeTab === 'profile'
-                                ? 'border-blue-500 text-blue-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+                            key={tab.id}
+                            onClick={() => setActiveTab(tab.id as any)}
+                            className={`
+                                flex-1 py-3 px-4 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap flex items-center justify-center
+                                ${activeTab === tab.id
+                                    ? 'bg-gray-900 text-white shadow-md'
+                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                }
+                            `}
                         >
-                            Profile & Settings
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('services')}
-                            className={`${activeTab === 'services'
-                                ? 'border-blue-500 text-blue-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
-                        >
-                            My Services
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('payment')}
-                            className={`${activeTab === 'payment'
-                                ? 'border-blue-500 text-blue-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm relative`}
-                        >
-                            Payment Settings
-                            {!bankAccountConnected && !checkingBankStatus && (
-                                <span className="ml-1 inline-flex items-center justify-center w-2 h-2 bg-red-600 rounded-full"></span>
+                            {tab.label}
+                            {tab.alert && (
+                                <span className="ml-2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
                             )}
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('requests')}
-                            className={`${activeTab === 'requests'
-                                ? 'border-blue-500 text-blue-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm relative`}
-                        >
-                            Collaboration Requests
-                            {collaborations.length > 0 && (
-                                <span className="ml-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
-                                    {collaborations.length}
+                            {tab.count ? (
+                                <span className={`ml-2 px-2 py-0.5 text-xs rounded-full ${
+                                    activeTab === tab.id ? 'bg-white text-gray-900' : 'bg-gray-200 text-gray-600'
+                                }`}>
+                                    {tab.count}
                                 </span>
-                            )}
+                            ) : null}
                         </button>
-                    </nav>
+                    ))}
                 </div>
 
-                {/* Profile Tab */}
-                {activeTab === 'profile' && (
-                    <div className="bg-white rounded-lg shadow p-6">
-                        <h2 className="text-2xl font-bold mb-6">Public Profile</h2>
-                        <form onSubmit={handleSaveProfile} className="space-y-6">
-                            <div>
-                                <label htmlFor="displayName" className="block text-sm font-medium text-gray-700">
-                                    Display Name *
-                                </label>
-                                <input
-                                    type="text"
-                                    id="displayName"
-                                    value={displayName}
-                                    onChange={(e) => setDisplayName(e.target.value)}
-                                    required
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border"
-                                />
+                {/* Content Area */}
+                <div className="animate-fadeIn">
+                    {/* Profile Tab */}
+                    {activeTab === 'profile' && (
+                        <div className="max-w-3xl mx-auto">
+                            <div className="mb-6">
+                                <h2 className="text-2xl font-bold text-gray-900">Public Profile</h2>
+                                <p className="text-gray-500">Manage how you appear to artists and fans.</p>
                             </div>
-
-                            <div>
-                                <label htmlFor="profileImageUrl" className="block text-sm font-medium text-gray-700">
-                                    Profile Image URL
-                                </label>
-                                <input
-                                    type="url"
-                                    id="profileImageUrl"
-                                    value={profileImageUrl}
-                                    onChange={(e) => setProfileImageUrl(e.target.value)}
-                                    placeholder="https://example.com/your-image.jpg"
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border"
-                                />
-                                <p className="mt-1 text-sm text-gray-500">Enter a URL to your profile image</p>
-                            </div>
-
-                            <div>
-                                <label htmlFor="bio" className="block text-sm font-medium text-gray-700">
-                                    Bio
-                                </label>
-                                <textarea
-                                    id="bio"
-                                    value={bio}
-                                    onChange={(e) => setBio(e.target.value)}
-                                    rows={6}
-                                    placeholder="Tell your story. What makes you unique? What are your notable achievements?"
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border"
-                                />
-                                <p className="mt-1 text-sm text-gray-500">
-                                    This will be visible on your public profile page
-                                </p>
-                            </div>
-
-                            <div>
-                                <label htmlFor="managementInfo" className="block text-sm font-medium text-gray-700">
-                                    Management/Contact Info
-                                </label>
-                                <textarea
-                                    id="managementInfo"
-                                    value={managementInfo}
-                                    onChange={(e) => setManagementInfo(e.target.value)}
-                                    rows={3}
-                                    placeholder="Management contact, booking info, or other professional details"
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border"
-                                />
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label htmlFor="genre" className="block text-sm font-medium text-gray-700">
-                                        Primary Genre
-                                    </label>
-                                    <select
-                                        id="genre"
-                                        value={genre}
-                                        onChange={(e) => setGenre(e.target.value)}
-                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border"
-                                    >
-                                        <option value="">Select a genre</option>
-                                        <option value="Hip Hop">Hip Hop</option>
-                                        <option value="R&B">R&B</option>
-                                        <option value="Pop">Pop</option>
-                                        <option value="Rock">Rock</option>
-                                        <option value="Electronic">Electronic</option>
-                                        <option value="Jazz">Jazz</option>
-                                        <option value="Country">Country</option>
-                                        <option value="Latin">Latin</option>
-                                        <option value="Gospel">Gospel</option>
-                                        <option value="Alternative">Alternative</option>
-                                    </select>
-                                    <p className="mt-1 text-sm text-gray-500">
-                                        Helps buyers find you in the marketplace
-                                    </p>
-                                </div>
-
-                                <div>
-                                    <label htmlFor="priceRange" className="block text-sm font-medium text-gray-700">
-                                        Price Range
-                                    </label>
-                                    <select
-                                        id="priceRange"
-                                        value={priceRange}
-                                        onChange={(e) => setPriceRange(e.target.value as 'budget' | 'mid' | 'premium')}
-                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border"
-                                    >
-                                        <option value="">Select a price range</option>
-                                        <option value="budget">Budget ($0 - $500)</option>
-                                        <option value="mid">Mid-Range ($500 - $2000)</option>
-                                        <option value="premium">Premium ($2000+)</option>
-                                    </select>
-                                    <p className="mt-1 text-sm text-gray-500">
-                                        Based on your typical service prices
-                                    </p>
-                                </div>
-                            </div>
-
+                            
                             {profileMessage && (
-                                <div
-                                    className={`p-3 rounded-md ${profileMessage.includes('success')
-                                        ? 'bg-green-50 text-green-800'
-                                        : 'bg-red-50 text-red-800'
-                                        }`}
-                                >
+                                <div className={`mb-6 p-4 rounded-lg flex items-center ${
+                                    profileMessage.includes('success') 
+                                        ? 'bg-green-50 text-green-800 border border-green-100' 
+                                        : 'bg-red-50 text-red-800 border border-red-100'
+                                }`}>
+                                    {profileMessage.includes('success') ? (
+                                        <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
+                                    ) : (
+                                        <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"/></svg>
+                                    )}
                                     {profileMessage}
                                 </div>
                             )}
 
-                            <div className="flex justify-end">
-                                <button
-                                    type="submit"
-                                    disabled={savingProfile}
-                                    className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    {savingProfile ? 'Saving...' : 'Save Profile'}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                )}
-
-                {/* Payment Settings Tab */}
-                {activeTab === 'payment' && (
-                    <div>
-                        <BankAccountForm onSuccess={() => {
-                            checkBankAccountStatus();
-                        }} />
-                    </div>
-                )}
-
-                {/* Services Tab */}
-                {activeTab === 'services' && (
-                    <div>
-                        <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-2xl font-bold">My Services</h2>
-                            <button
-                                onClick={handleAddNewService}
-                                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                            >
-                                Add New Service
-                            </button>
+                            <ProfileWizard 
+                                initialData={userData} 
+                                onSave={handleSaveProfile}
+                                isSaving={savingProfile}
+                            />
                         </div>
+                    )}
 
-                        {loadingServices ? (
-                            <div className="text-center py-12">Loading services...</div>
-                        ) : services.length === 0 ? (
-                            <div className="bg-white rounded-lg shadow p-8 text-center">
-                                <p className="text-gray-600 mb-4">You haven&apos;t created any services yet.</p>
+                    {/* Payment Settings Tab */}
+                    {activeTab === 'payment' && (
+                        <div className="max-w-3xl mx-auto">
+                            <div className="mb-6">
+                                <h2 className="text-2xl font-bold text-gray-900">Payment Settings</h2>
+                                <p className="text-gray-500">Manage your bank account and payout preferences.</p>
+                            </div>
+                            <div className="bg-white rounded-2xl shadow-xl overflow-hidden p-8">
+                                <BankAccountForm onSuccess={() => {
+                                    checkBankAccountStatus();
+                                }} />
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Services Tab */}
+                    {activeTab === 'services' && (
+                        <div>
+                            <div className="flex justify-between items-center mb-8">
+                                <div>
+                                    <h2 className="text-2xl font-bold text-gray-900">My Services</h2>
+                                    <p className="text-gray-500">Manage the services you offer to artists.</p>
+                                </div>
                                 <button
                                     onClick={handleAddNewService}
-                                    className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                                    className="px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all flex items-center"
                                 >
-                                    Create Your First Service
+                                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    </svg>
+                                    Add New Service
                                 </button>
                             </div>
-                        ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {services.map((service) => (
-                                    <div key={service.id} className="bg-white rounded-lg shadow p-6">
-                                        <div className="flex justify-between items-start mb-4">
-                                            <h3 className="text-lg font-bold text-gray-900">{service.title}</h3>
-                                            <span
-                                                className={`px-2 py-1 text-xs rounded ${service.isActive
-                                                    ? 'bg-green-100 text-green-800'
-                                                    : 'bg-gray-100 text-gray-800'
-                                                    }`}
-                                            >
-                                                {service.isActive ? 'Active' : 'Inactive'}
-                                            </span>
-                                        </div>
-                                        <p className="text-gray-600 text-sm mb-4 line-clamp-3">{service.description}</p>
-                                        <div className="mb-4">
-                                            <p className="text-2xl font-bold text-blue-600">${service.price}</p>
-                                            <p className="text-sm text-gray-500">{service.deliverable}</p>
-                                        </div>
-                                        <div className="flex space-x-2">
-                                            <button
-                                                onClick={() => handleEditService(service)}
-                                                className="flex-1 px-3 py-2 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm"
-                                            >
-                                                Edit
-                                            </button>
-                                            <button
-                                                onClick={() => handleDeleteService(service.id!)}
-                                                className="flex-1 px-3 py-2 bg-red-50 text-red-600 rounded-md hover:bg-red-100 text-sm"
-                                            >
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
 
-                        {/* Service Form Modal */}
-                        {showServiceForm && (
-                            <ServiceFormModal
-                                service={editingService}
-                                userId={user.uid}
-                                onClose={handleServiceFormClose}
-                            />
-                        )}
-                    </div>
-                )}
-
-                {/* Requests Tab */}
-                {activeTab === 'requests' && (
-                    <div>
-                        <h2 className="text-2xl font-bold mb-6">Collaboration Requests</h2>
-
-                        {loadingCollaborations ? (
-                            <div className="text-center py-12">Loading requests...</div>
-                        ) : collaborations.length === 0 ? (
-                            <div className="bg-white rounded-lg shadow p-8 text-center">
-                                <div className="text-gray-400 mb-4">
-                                    <svg className="mx-auto h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                                    </svg>
+                            {loadingServices ? (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {[1, 2, 3].map(i => (
+                                        <div key={i} className="bg-white rounded-xl shadow-sm p-6 h-64 animate-pulse">
+                                            <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+                                            <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                                            <div className="h-4 bg-gray-200 rounded w-5/6 mb-6"></div>
+                                            <div className="h-8 bg-gray-200 rounded w-1/3 mt-auto"></div>
+                                        </div>
+                                    ))}
                                 </div>
-                                <h3 className="text-lg font-medium text-gray-900 mb-2">No pending requests</h3>
-                                <p className="text-gray-600">
-                                    When artists submit collaboration requests, they&apos;ll appear here for you to review.
-                                </p>
-                            </div>
-                        ) : (
-                            <div className="space-y-6">
-                                {collaborations.map((collab) => {
-                                    const buyer = buyersInfo[collab.buyerId];
-                                    const service = services.find(s => s.id === collab.serviceId);
-
-                                    const getStatusBadge = (status: string) => {
-                                        const badges: Record<string, { color: string; text: string }> = {
-                                            pending_review: { color: 'bg-yellow-100 text-yellow-800', text: 'Pending Review' },
-                                            pending_payment: { color: 'bg-blue-100 text-blue-800', text: 'Awaiting Payment' },
-                                            awaiting_contract: { color: 'bg-purple-100 text-purple-800', text: 'Awaiting Contract' },
-                                            in_progress: { color: 'bg-green-100 text-green-800', text: 'In Progress' },
-                                            completed: { color: 'bg-gray-100 text-gray-800', text: 'Completed' },
-                                            declined: { color: 'bg-red-100 text-red-800', text: 'Declined' },
-                                        };
-                                        const badge = badges[status] || { color: 'bg-gray-100 text-gray-800', text: status };
-                                        return (
-                                            <span className={`px-3 py-1 rounded-full text-sm font-medium ${badge.color}`}>
-                                                {badge.text}
-                                            </span>
-                                        );
-                                    };
-
-                                    return (
-                                        <div key={collab.id} className="bg-white rounded-lg shadow overflow-hidden">
+                            ) : services.length === 0 ? (
+                                <div className="bg-white rounded-2xl shadow-sm p-12 text-center border border-gray-100">
+                                    <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                                        <svg className="w-10 h-10 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                        </svg>
+                                    </div>
+                                    <h3 className="text-xl font-bold text-gray-900 mb-2">No services yet</h3>
+                                    <p className="text-gray-500 mb-8 max-w-md mx-auto">Create your first service to start accepting collaboration requests from artists.</p>
+                                    <button
+                                        onClick={handleAddNewService}
+                                        className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-lg transition-all"
+                                    >
+                                        Create Your First Service
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {services.map((service) => (
+                                        <div key={service.id} className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group">
                                             <div className="p-6">
-                                                {/* Header */}
                                                 <div className="flex justify-between items-start mb-4">
+                                                    <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{service.title}</h3>
+                                                    <span
+                                                        className={`px-2.5 py-1 text-xs font-medium rounded-full ${service.isActive
+                                                            ? 'bg-green-100 text-green-800'
+                                                            : 'bg-gray-100 text-gray-800'
+                                                            }`}
+                                                    >
+                                                        {service.isActive ? 'Active' : 'Inactive'}
+                                                    </span>
+                                                </div>
+                                                <p className="text-gray-600 text-sm mb-6 line-clamp-3 h-15">{service.description}</p>
+                                                
+                                                <div className="flex items-end justify-between mb-6">
                                                     <div>
-                                                        <h3 className="text-xl font-bold text-gray-900 mb-1">
-                                                            {service?.title || 'Service Request'}
-                                                        </h3>
-                                                        <p className="text-sm text-gray-500">
-                                                            Submitted {collab.createdAt?.toLocaleDateString('en-US', {
-                                                                year: 'numeric',
-                                                                month: 'long',
-                                                                day: 'numeric'
-                                                            })}
-                                                        </p>
+                                                        <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold">Price</p>
+                                                        <p className="text-2xl font-bold text-gray-900">${service.price}</p>
                                                     </div>
                                                     <div className="text-right">
-                                                        {getStatusBadge(collab.status)}
-                                                        <p className="text-2xl font-bold text-blue-600 mt-2">${collab.price}</p>
-                                                        <p className="text-sm text-gray-500">{service?.deliverable}</p>
+                                                        <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold">Deliverable</p>
+                                                        <p className="text-sm text-gray-900 font-medium truncate max-w-[120px]">{service.deliverable}</p>
                                                     </div>
                                                 </div>
 
-                                                {/* Buyer Info */}
-                                                {buyer && (
-                                                    <div className="mb-4 pb-4 border-b">
-                                                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Artist Information</h4>
-                                                        <div className="flex items-center space-x-3">
-                                                            {buyer.profileImageUrl ? (
-                                                                <img
-                                                                    src={buyer.profileImageUrl}
-                                                                    alt={buyer.displayName}
-                                                                    className="w-12 h-12 rounded-full object-cover"
-                                                                />
-                                                            ) : (
-                                                                <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
-                                                                    <span className="text-gray-600 font-medium">
-                                                                        {buyer.displayName.charAt(0).toUpperCase()}
-                                                                    </span>
+                                                <div className="grid grid-cols-2 gap-3">
+                                                    <button
+                                                        onClick={() => handleEditService(service)}
+                                                        className="px-4 py-2 bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100 text-sm font-medium transition-colors"
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDeleteService(service.id!)}
+                                                        className="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 text-sm font-medium transition-colors"
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* Service Form Modal */}
+                            {showServiceForm && (
+                                <ServiceWizard
+                                    initialData={editingService}
+                                    onSave={handleSaveService}
+                                    onCancel={handleServiceFormClose}
+                                    isSaving={savingService}
+                                />
+                            )}
+                        </div>
+                    )}
+
+                    {/* Requests Tab */}
+                    {activeTab === 'requests' && (
+                        <div>
+                            <div className="mb-8">
+                                <h2 className="text-2xl font-bold text-gray-900">Collaboration Requests</h2>
+                                <p className="text-gray-500">Review and manage pitches from artists.</p>
+                            </div>
+
+                            {loadingCollaborations ? (
+                                <div className="space-y-4">
+                                    {[1, 2].map(i => (
+                                        <div key={i} className="bg-white rounded-xl shadow-sm p-6 h-40 animate-pulse"></div>
+                                    ))}
+                                </div>
+                            ) : collaborations.length === 0 ? (
+                                <div className="bg-white rounded-2xl shadow-sm p-12 text-center border border-gray-100">
+                                    <div className="w-20 h-20 bg-purple-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                                        <svg className="w-10 h-10 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                        </svg>
+                                    </div>
+                                    <h3 className="text-lg font-bold text-gray-900 mb-2">No pending requests</h3>
+                                    <p className="text-gray-600 max-w-md mx-auto">
+                                        When artists submit collaboration requests, they&apos;ll appear here for you to review.
+                                    </p>
+                                </div>
+                            ) : (
+                                <div className="space-y-6">
+                                    {collaborations.map((collab) => {
+                                        const buyer = buyersInfo[collab.buyerId];
+                                        const service = services.find(s => s.id === collab.serviceId);
+
+                                        const getStatusBadge = (status: string) => {
+                                            const badges: Record<string, { color: string; text: string; icon: string }> = {
+                                                pending_review: { color: 'bg-yellow-100 text-yellow-800 border-yellow-200', text: 'Pending Review', icon: '⏳' },
+                                                pending_payment: { color: 'bg-blue-100 text-blue-800 border-blue-200', text: 'Awaiting Payment', icon: '💳' },
+                                                awaiting_contract: { color: 'bg-purple-100 text-purple-800 border-purple-200', text: 'Awaiting Contract', icon: '📝' },
+                                                in_progress: { color: 'bg-green-100 text-green-800 border-green-200', text: 'In Progress', icon: '▶️' },
+                                                completed: { color: 'bg-gray-100 text-gray-800 border-gray-200', text: 'Completed', icon: '✅' },
+                                                declined: { color: 'bg-red-100 text-red-800 border-red-200', text: 'Declined', icon: '❌' },
+                                            };
+                                            const badge = badges[status] || { color: 'bg-gray-100 text-gray-800', text: status, icon: '•' };
+                                            return (
+                                                <span className={`px-3 py-1 rounded-full text-xs font-bold border flex items-center gap-1 ${badge.color}`}>
+                                                    <span>{badge.icon}</span> {badge.text}
+                                                </span>
+                                            );
+                                        };
+
+                                        return (
+                                            <div key={collab.id} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden">
+                                                <div className="p-6">
+                                                    {/* Header */}
+                                                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 pb-6 border-b border-gray-100">
+                                                        <div className="mb-4 md:mb-0">
+                                                            <div className="flex items-center gap-3 mb-1">
+                                                                <h3 className="text-xl font-bold text-gray-900">
+                                                                    {service?.title || 'Service Request'}
+                                                                </h3>
+                                                                {getStatusBadge(collab.status)}
+                                                            </div>
+                                                            <p className="text-sm text-gray-500 flex items-center">
+                                                                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                                                Submitted {collab.createdAt?.toLocaleDateString('en-US', {
+                                                                    year: 'numeric',
+                                                                    month: 'long',
+                                                                    day: 'numeric'
+                                                                })}
+                                                            </p>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <p className="text-3xl font-bold text-gray-900">${collab.price}</p>
+                                                            <p className="text-sm text-gray-500">{service?.deliverable}</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                                                        {/* Left Column: Artist Info & Message */}
+                                                        <div className="lg:col-span-2 space-y-6">
+                                                            {/* Buyer Info */}
+                                                            {buyer && (
+                                                                <div className="flex items-center space-x-4 bg-gray-50 p-4 rounded-lg">
+                                                                    {buyer.profileImageUrl ? (
+                                                                        <img
+                                                                            src={buyer.profileImageUrl}
+                                                                            alt={buyer.displayName}
+                                                                            className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm"
+                                                                        />
+                                                                    ) : (
+                                                                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold shadow-sm">
+                                                                            {buyer.displayName.charAt(0).toUpperCase()}
+                                                                        </div>
+                                                                    )}
+                                                                    <div>
+                                                                        <p className="font-bold text-gray-900">{buyer.displayName}</p>
+                                                                        <p className="text-sm text-gray-500">{buyer.email}</p>
+                                                                    </div>
                                                                 </div>
                                                             )}
+
+                                                            {/* Message */}
                                                             <div>
-                                                                <p className="font-medium text-gray-900">{buyer.displayName}</p>
-                                                                <p className="text-sm text-gray-500">{buyer.email}</p>
+                                                                <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-2">Creative Concept</h4>
+                                                                <div className="bg-white border border-gray-200 rounded-lg p-4 text-gray-700 leading-relaxed">
+                                                                    {collab.pitchMessage}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Right Column: Assets & Actions */}
+                                                        <div className="space-y-6">
+                                                            {/* Assets */}
+                                                            <div className="bg-gray-50 rounded-lg p-5">
+                                                                <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-4">Project Assets</h4>
+                                                                
+                                                                <div className="space-y-4">
+                                                                    <div>
+                                                                        <p className="text-xs text-gray-500 mb-1">Best Previous Work</p>
+                                                                        <a
+                                                                            href={collab.pitchBestWorkUrl}
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            className="flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium"
+                                                                        >
+                                                                            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                                                                            View Link
+                                                                        </a>
+                                                                    </div>
+
+                                                                    {collab.pitchDemoUrl && (
+                                                                        <div>
+                                                                            <p className="text-xs text-gray-500 mb-1">Demo Track</p>
+                                                                            <audio
+                                                                                controls
+                                                                                className="w-full h-8 mb-2"
+                                                                                preload="metadata"
+                                                                            >
+                                                                                <source src={collab.pitchDemoUrl} type="audio/mpeg" />
+                                                                                <source src={collab.pitchDemoUrl} type="audio/wav" />
+                                                                            </audio>
+                                                                            <a
+                                                                                href={collab.pitchDemoUrl}
+                                                                                target="_blank"
+                                                                                rel="noopener noreferrer"
+                                                                                className="flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium"
+                                                                            >
+                                                                                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                                                                                Download File
+                                                                            </a>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+
+                                                            {/* Actions */}
+                                                            <div className="pt-2">
+                                                                {collab.status === 'pending_review' && (
+                                                                    <div className="grid grid-cols-1 gap-3">
+                                                                        <button
+                                                                            onClick={() => handleAcceptPitch(collab.id!)}
+                                                                            className="w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-bold shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5"
+                                                                        >
+                                                                            Accept Request
+                                                                        </button>
+                                                                        <button
+                                                                            onClick={() => handleDeclinePitch(collab.id!)}
+                                                                            className="w-full px-4 py-3 bg-white text-red-600 border border-red-200 rounded-lg hover:bg-red-50 font-medium transition-colors"
+                                                                        >
+                                                                            Decline Request
+                                                                        </button>
+                                                                    </div>
+                                                                )}
+
+                                                                {collab.status === 'in_progress' && (
+                                                                    <button
+                                                                        onClick={() => router.push(`/collaboration/${collab.id}`)}
+                                                                        className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 flex items-center justify-center"
+                                                                    >
+                                                                        Open Collaboration Hub
+                                                                        <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                                                                    </button>
+                                                                )}
+                                                                
+                                                                {collab.status === 'completed' && (
+                                                                    <button
+                                                                        onClick={() => router.push(`/collaboration/${collab.id}`)}
+                                                                        className="w-full px-4 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 font-bold shadow-md transition-all"
+                                                                    >
+                                                                        View Project
+                                                                    </button>
+                                                                )}
                                                             </div>
                                                         </div>
                                                     </div>
-                                                )}
 
-                                                {/* Pitch Details */}
-                                                <div className="space-y-4">
-                                                    {/* Best Work */}
-                                                    <div>
-                                                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Best Previous Work</h4>
-                                                        <a
-                                                            href={collab.pitchBestWorkUrl}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="text-blue-600 hover:text-blue-800 underline break-all"
-                                                        >
-                                                            {collab.pitchBestWorkUrl}
-                                                        </a>
-                                                    </div>
-
-                                                    {/* Demo Track */}
-                                                    {collab.pitchDemoUrl && (
-                                                        <div>
-                                                            <h4 className="text-sm font-semibold text-gray-700 mb-2">Demo Track</h4>
-                                                            <audio
-                                                                controls
-                                                                className="w-full"
-                                                                preload="metadata"
-                                                            >
-                                                                <source src={collab.pitchDemoUrl} type="audio/mpeg" />
-                                                                <source src={collab.pitchDemoUrl} type="audio/wav" />
-                                                                Your browser does not support the audio element.
-                                                            </audio>
-                                                            <a
-                                                                href={collab.pitchDemoUrl}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                className="text-sm text-blue-600 hover:text-blue-800 mt-2 inline-block"
-                                                            >
-                                                                Download Demo
-                                                            </a>
+                                                    {/* Status Messages */}
+                                                    {collab.status === 'pending_payment' && (
+                                                        <div className="mt-6 bg-blue-50 border border-blue-100 rounded-lg p-4 flex items-start">
+                                                            <svg className="w-5 h-5 text-blue-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                                            <p className="text-blue-800 text-sm">
+                                                                Request accepted! Waiting for the artist to complete payment. You'll be notified when funds are secured.
+                                                            </p>
                                                         </div>
                                                     )}
 
-                                                    {/* Message */}
-                                                    <div>
-                                                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Creative Concept</h4>
-                                                        <div className="bg-gray-50 rounded-lg p-4">
-                                                            <p className="text-gray-800 whitespace-pre-wrap">{collab.pitchMessage}</p>
+                                                    {collab.status === 'awaiting_contract' && (
+                                                        <div className="mt-6 bg-purple-50 border border-purple-100 rounded-lg p-4 flex items-start">
+                                                            <svg className="w-5 h-5 text-purple-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                                            <div>
+                                                                <p className="text-purple-800 font-medium text-sm mb-1">
+                                                                    Payment Received! Funds are held in escrow.
+                                                                </p>
+                                                                <p className="text-purple-700 text-sm">
+                                                                    {collab.docusignEnvelopeId 
+                                                                        ? "Contract sent for signature. Check your email to sign." 
+                                                                        : "Contract will be sent to you shortly for signature."}
+                                                                </p>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    )}
                                                 </div>
-
-                                                {/* Status-specific Actions/Info */}
-                                                {collab.status === 'pending_review' && (
-                                                    <div className="flex space-x-3 mt-6">
-                                                        <button
-                                                            onClick={() => handleAcceptPitch(collab.id!)}
-                                                            className="flex-1 px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium transition-colors"
-                                                        >
-                                                            Accept Request
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleDeclinePitch(collab.id!)}
-                                                            className="flex-1 px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium transition-colors"
-                                                        >
-                                                            Decline Request
-                                                        </button>
-                                                    </div>
-                                                )}
-
-                                                {collab.status === 'pending_payment' && (
-                                                    <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
-                                                        <p className="text-blue-800">
-                                                            ✓ Request accepted! Waiting for the artist to complete payment.
-                                                        </p>
-                                                    </div>
-                                                )}
-
-                                                {collab.status === 'awaiting_contract' && (
-                                                    <div className="mt-4 bg-purple-50 border border-purple-200 rounded-lg p-4">
-                                                        <p className="text-purple-800 mb-2">
-                                                            <strong>✓ Payment Received!</strong> Funds are held in escrow.
-                                                        </p>
-                                                        {collab.docusignEnvelopeId ? (
-                                                            <p className="text-purple-700 text-sm">
-                                                                Contract sent for signature. Check your email to sign.
-                                                            </p>
-                                                        ) : (
-                                                            <p className="text-purple-700 text-sm">
-                                                                Contract will be sent to you shortly for signature.
-                                                            </p>
-                                                        )}
-                                                    </div>
-                                                )}
-
-                                                {collab.status === 'in_progress' && (
-                                                    <div className="mt-4 space-y-3">
-                                                        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                                                            <p className="text-green-800 mb-2">
-                                                                <strong>✓ Contract Signed!</strong> You can now begin working on the project.
-                                                            </p>
-                                                            {collab.contractUrl && (
-                                                                <a
-                                                                    href={collab.contractUrl}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="text-green-700 underline text-sm"
-                                                                >
-                                                                    View Signed Contract
-                                                                </a>
-                                                            )}
-                                                        </div>
-                                                        <button
-                                                            onClick={() => router.push(`/collaboration/${collab.id}`)}
-                                                            className="w-full px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-semibold"
-                                                        >
-                                                            Open Collaboration Hub
-                                                        </button>
-                                                    </div>
-                                                )}
-
-                                                {collab.status === 'completed' && (
-                                                    <div className="mt-4 space-y-3">
-                                                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                                                            <p className="text-gray-800">
-                                                                ✓ Project completed. Payment released from escrow.
-                                                            </p>
-                                                        </div>
-                                                        <button
-                                                            onClick={() => router.push(`/collaboration/${collab.id}`)}
-                                                            className="w-full px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-semibold"
-                                                        >
-                                                            View Collaboration Hub
-                                                        </button>
-                                                    </div>
-                                                )}
-
-                                                {collab.status === 'declined' && (
-                                                    <div className="mt-4 bg-red-50 border border-red-200 rounded-lg p-4">
-                                                        <p className="text-red-800">
-                                                            This request was declined.
-                                                        </p>
-                                                    </div>
-                                                )}
                                             </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        )}
-                    </div>
-                )}
-            </div>
-        </div>
-    );
-}
-
-interface ServiceFormModalProps {
-    service: Service | null;
-    userId: string;
-    onClose: () => void;
-}
-
-function ServiceFormModal({ service, userId, onClose }: ServiceFormModalProps) {
-    const [title, setTitle] = useState(service?.title || '');
-    const [description, setDescription] = useState(service?.description || '');
-    const [price, setPrice] = useState(service?.price?.toString() || '');
-    const [deliverable, setDeliverable] = useState(service?.deliverable || '');
-    const [serviceType, setServiceType] = useState(service?.serviceType || '');
-    const [isActive, setIsActive] = useState(service?.isActive ?? true);
-    const [saving, setSaving] = useState(false);
-    const [error, setError] = useState('');
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError('');
-
-        const priceNum = parseFloat(price);
-        if (isNaN(priceNum) || priceNum <= 0) {
-            setError('Price must be greater than $0');
-            return;
-        }
-
-        setSaving(true);
-
-        try {
-            const serviceData = {
-                title,
-                description,
-                price: priceNum,
-                deliverable,
-                serviceType: serviceType || null,
-                isActive,
-                updatedAt: new Date(),
-            };
-
-            if (service?.id) {
-                // Update existing service
-                const serviceRef = doc(db, 'users', userId, 'services', service.id);
-                await updateDoc(serviceRef, serviceData);
-            } else {
-                // Create new service
-                const servicesRef = collection(db, 'users', userId, 'services');
-                const newServiceRef = doc(servicesRef);
-                await setDoc(newServiceRef, {
-                    ...serviceData,
-                    legendUid: userId,
-                    createdAt: new Date(),
-                });
-            }
-
-            onClose();
-        } catch (error) {
-            console.error('Error saving service:', error);
-            setError('Error saving service. Please try again.');
-        } finally {
-            setSaving(false);
-        }
-    };
-
-    return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-                <div className="p-6">
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-bold">
-                            {service ? 'Edit Service' : 'Create New Service'}
-                        </h2>
-                        <button
-                            onClick={onClose}
-                            className="text-gray-400 hover:text-gray-600"
-                        >
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div>
-                            <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-                                Service Title *
-                            </label>
-                            <input
-                                type="text"
-                                id="title"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                                required
-                                placeholder="e.g., 16-bar verse, Full song production"
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border"
-                            />
-                        </div>
-
-                        <div>
-                            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-                                Description *
-                            </label>
-                            <textarea
-                                id="description"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                required
-                                rows={4}
-                                placeholder="Describe what's included in this service..."
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border"
-                            />
-                        </div>
-
-                        <div>
-                            <label htmlFor="serviceType" className="block text-sm font-medium text-gray-700">
-                                Service Type
-                            </label>
-                            <select
-                                id="serviceType"
-                                value={serviceType}
-                                onChange={(e) => setServiceType(e.target.value)}
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border"
-                            >
-                                <option value="">Select a service type</option>
-                                <option value="Verse">Verse</option>
-                                <option value="Feature">Feature</option>
-                                <option value="Hook/Chorus">Hook/Chorus</option>
-                                <option value="Full Song">Full Song</option>
-                                <option value="Production">Production</option>
-                                <option value="Mixing">Mixing</option>
-                                <option value="Mastering">Mastering</option>
-                                <option value="Songwriting">Songwriting</option>
-                                <option value="Recording">Recording</option>
-                            </select>
-                            <p className="mt-1 text-sm text-gray-500">
-                                Helps buyers find your service in the marketplace
-                            </p>
-                        </div>
-
-                        <div>
-                            <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-                                Price (USD) *
-                            </label>
-                            <div className="mt-1 relative rounded-md shadow-sm">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <span className="text-gray-500 sm:text-sm">$</span>
+                                        );
+                                    })}
                                 </div>
-                                <input
-                                    type="number"
-                                    id="price"
-                                    value={price}
-                                    onChange={(e) => setPrice(e.target.value)}
-                                    required
-                                    min="0.01"
-                                    step="0.01"
-                                    placeholder="0.00"
-                                    className="block w-full pl-7 pr-12 rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border"
-                                />
-                            </div>
-                            <p className="mt-1 text-sm text-gray-500">Price must be greater than $0</p>
+                            )}
                         </div>
-
-                        <div>
-                            <label htmlFor="deliverable" className="block text-sm font-medium text-gray-700">
-                                Deliverable *
-                            </label>
-                            <input
-                                type="text"
-                                id="deliverable"
-                                value={deliverable}
-                                onChange={(e) => setDeliverable(e.target.value)}
-                                required
-                                placeholder="e.g., 1 WAV file, Stems + Mixed Master, 2 revisions included"
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border"
-                            />
-                        </div>
-
-                        <div className="flex items-center">
-                            <input
-                                type="checkbox"
-                                id="isActive"
-                                checked={isActive}
-                                onChange={(e) => setIsActive(e.target.checked)}
-                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                            />
-                            <label htmlFor="isActive" className="ml-2 block text-sm text-gray-900">
-                                Active (visible to buyers)
-                            </label>
-                        </div>
-
-                        {error && (
-                            <div className="p-3 rounded-md bg-red-50 text-red-800">
-                                {error}
-                            </div>
-                        )}
-
-                        <div className="flex justify-end space-x-3">
-                            <button
-                                type="button"
-                                onClick={onClose}
-                                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                type="submit"
-                                disabled={saving}
-                                className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                {saving ? 'Saving...' : service ? 'Update Service' : 'Create Service'}
-                            </button>
-                        </div>
-                    </form>
+                    )}
                 </div>
             </div>
         </div>
