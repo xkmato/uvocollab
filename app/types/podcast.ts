@@ -14,3 +14,17 @@ export interface Podcast {
   createdAt: Date; // Firestore Timestamp
   updatedAt: Date; // Firestore Timestamp
 }
+
+export type PodcastServiceType = 'guest_spot' | 'ad_read' | 'cross_promotion' | 'other';
+
+export interface PodcastService {
+  id: string;
+  podcastId: string;
+  title: string;
+  description: string;
+  price: number; // 0 for free/cross-promo
+  duration: string; // e.g. "30 mins", "60 mins"
+  type: PodcastServiceType;
+  createdAt: Date;
+  updatedAt: Date;
+}

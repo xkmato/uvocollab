@@ -7,6 +7,7 @@ import { Service } from '@/app/types/service';
 import { User } from '@/app/types/user';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -157,12 +158,12 @@ export default function Dashboard() {
                         </div>
                         <div className="flex gap-4">
                             {userData?.role === 'admin' && (
-                                <a
+                                <Link
                                     href="/admin/vetting"
                                     className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
                                 >
                                     Admin Panel
-                                </a>
+                                </Link>
                             )}
                             <button
                                 onClick={logout}
@@ -178,7 +179,7 @@ export default function Dashboard() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Quick Actions */}
                 <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <a
+                    <Link
                         href="/marketplace"
                         className="flex items-center gap-4 p-6 bg-white rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200"
                     >
@@ -191,9 +192,9 @@ export default function Dashboard() {
                             <h3 className="text-lg font-semibold text-gray-900">Browse Marketplace</h3>
                             <p className="text-sm text-gray-600">Find industry legends</p>
                         </div>
-                    </a>
+                    </Link>
 
-                    <a
+                    <Link
                         href="/apply"
                         className="flex items-center gap-4 p-6 bg-white rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200"
                     >
@@ -206,9 +207,41 @@ export default function Dashboard() {
                             <h3 className="text-lg font-semibold text-gray-900">Become a Legend</h3>
                             <p className="text-sm text-gray-600">Apply to offer services</p>
                         </div>
-                    </a>
+                    </Link>
 
-                    <a
+                    {userData?.hasPodcast ? (
+                        <Link
+                            href="/dashboard/podcast"
+                            className="flex items-center gap-4 p-6 bg-white rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200"
+                        >
+                            <div className="flex-shrink-0 w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                                <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-900">Manage Podcast</h3>
+                                <p className="text-sm text-gray-600">Edit listing & services</p>
+                            </div>
+                        </Link>
+                    ) : (
+                        <Link
+                            href="/podcasts/register"
+                            className="flex items-center gap-4 p-6 bg-white rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200"
+                        >
+                            <div className="flex-shrink-0 w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                                <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-900">List Your Podcast</h3>
+                                <p className="text-sm text-gray-600">Get sponsors & guests</p>
+                            </div>
+                        </Link>
+                    )}
+
+                    <Link
                         href="/"
                         className="flex items-center gap-4 p-6 bg-white rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200"
                     >
@@ -221,7 +254,7 @@ export default function Dashboard() {
                             <h3 className="text-lg font-semibold text-gray-900">Home</h3>
                             <p className="text-sm text-gray-600">Back to main page</p>
                         </div>
-                    </a>
+                    </Link>
                 </div>
 
                 <div className="mb-8">
@@ -242,12 +275,12 @@ export default function Dashboard() {
                         <p className="text-gray-600 mb-6">
                             Browse the marketplace to find and collaborate with verified legends.
                         </p>
-                        <a
+                        <Link
                             href="/marketplace"
                             className="inline-block px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                         >
                             Browse Marketplace
-                        </a>
+                        </Link>
                     </div>
                 ) : (
                     <div className="space-y-6">

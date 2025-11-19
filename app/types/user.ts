@@ -12,4 +12,5 @@ export interface User {
   flutterwaveAccountBank?: string; // Bank code for the connected account
   flutterwaveAccountNumber?: string; // Account number (last 4 digits only for security)
   bankAccountVerified?: boolean; // Whether the bank account has been verified
+  hasPodcast?: boolean; // Whether the user has registered a podcast
 }

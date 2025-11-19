@@ -55,18 +55,18 @@ Once a podcast is approved, the owner needs to define how others can collaborate
   - **Description:** Define schema for services offered by a podcast (e.g., "Guest Spot", "Ad Read", "Cross-Promotion").
   - **Dependencies:** Task 1.1
   - **Acceptance Criteria (AC):**
-    - [ ] A `services` subcollection under the `podcasts` document (or reuse existing structure linked to podcast).
-    - [ ] Fields: `title`, `description`, `price` (can be 0 for cross-promo), `duration`, `type`.
-  - **Status:** To Do
+    - [x] A `services` subcollection under the `podcasts` document (or reuse existing structure linked to podcast).
+    - [x] Fields: `title`, `description`, `price` (can be 0 for cross-promo), `duration`, `type`.
+  - **Status:** Done
 
 - **Task 2.2: Podcast Dashboard**
   - **Description:** A dashboard for Podcasters to manage their listing and services.
   - **Dependencies:** Task 1.4, Task 2.1
   - **Acceptance Criteria (AC):**
-    - [ ] Route `/dashboard/podcast` created.
-    - [ ] User can edit Podcast details.
-    - [ ] User can Add/Edit/Delete services (e.g., "Interview Slot - $50", "Shoutout - Free").
-  - **Status:** To Do
+    - [x] Route `/dashboard/podcast` created.
+    - [x] User can edit Podcast details.
+    - [x] User can Add/Edit/Delete services (e.g., "Interview Slot - $50", "Shoutout - Free").
+  - **Status:** Done
 
 ### **Epic 3: Podcast Marketplace & Discovery**
 
