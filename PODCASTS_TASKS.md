@@ -11,10 +11,10 @@ This epic covers the data structure and the flow for users to list their podcast
   - **Description:** Define the Firestore schema for a `podcasts` collection. Unlike "Legends" which are Users, a Podcast is an entity owned by a User.
   - **Dependencies:** Existing User Setup.
   - **Acceptance Criteria (AC):**
-    - [ ] A `podcasts` collection is created.
-    - [ ] Schema includes: `ownerId` (ref to users), `title`, `description`, `coverImageUrl`, `categories` (e.g., Tech, Music, Business), `avgListeners` (optional), `rssFeedUrl`, `websiteUrl`, `status` ('pending', 'approved', 'rejected').
-    - [ ] Indexes created for querying by category and status.
-  - **Status:** To Do
+    - [x] A `podcasts` collection is created.
+    - [x] Schema includes: `ownerId` (ref to users), `title`, `description`, `coverImageUrl`, `categories` (e.g., Tech, Music, Business), `avgListeners` (optional), `rssFeedUrl`, `websiteUrl`, `status` ('pending', 'approved', 'rejected').
+    - [x] Indexes created for querying by category and status.
+  - **Status:** Done
 
 - **Task 1.2: "List Your Podcast" Page & Form**
 
