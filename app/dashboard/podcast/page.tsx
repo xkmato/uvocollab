@@ -3,6 +3,7 @@
 import PodcastServiceForm from '@/app/components/PodcastServiceForm';
 import PodcastServiceList from '@/app/components/PodcastServiceList';
 import { useAuth } from '@/app/contexts/AuthContext';
+import { Collaboration } from '@/app/types/collaboration';
 import { Podcast, PodcastService } from '@/app/types/podcast';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -13,6 +14,7 @@ export default function PodcastDashboard() {
 
     const [podcast, setPodcast] = useState<Podcast | null>(null);
     const [services, setServices] = useState<PodcastService[]>([]);
+    const [pitches, setPitches] = useState<(Collaboration & { buyerName?: string; serviceTitle?: string })[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -67,6 +69,13 @@ export default function PodcastDashboard() {
                 });
                 const servicesData = await servicesRes.json();
                 setServices(servicesData.services || []);
+
+                // Fetch Pitches
+                const pitchesRes = await fetch('/api/podcasts/pitches', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const pitchesData = await pitchesRes.json();
+                setPitches(pitchesData.pitches || []);
             } else {
                 // No podcast found, redirect to register
                 router.push('/podcasts/register');
@@ -120,6 +129,35 @@ export default function PodcastDashboard() {
         } catch (err) {
             console.error('Error deleting service:', err);
             alert('Failed to delete service');
+        }
+    };
+
+    const handlePitchAction = async (collaborationId: string, action: 'accept' | 'decline') => {
+        if (!user) return;
+        if (!confirm(`Are you sure you want to ${action} this pitch?`)) return;
+
+        try {
+            const token = await user.getIdToken();
+            const res = await fetch('/api/respond-to-pitch', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({ collaborationId, action }),
+            });
+
+            if (!res.ok) {
+                const data = await res.json();
+                throw new Error(data.error || `Failed to ${action} pitch`);
+            }
+
+            // Refresh data
+            fetchPodcastData();
+            alert(`Pitch ${action}ed successfully`);
+        } catch (err) {
+            console.error(`Error ${action}ing pitch:`, err);
+            alert(err instanceof Error ? err.message : `Failed to ${action} pitch`);
         }
     };
 
@@ -235,6 +273,97 @@ export default function PodcastDashboard() {
                                         <img src={podcast.coverImageUrl} alt={podcast.title} className="w-full h-auto rounded-lg shadow-md object-cover" />
                                     )}
                                 </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Incoming Pitches Section */}
+                <div className="bg-white rounded-lg shadow mb-8 overflow-hidden">
+                    <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                        <h2 className="text-xl font-semibold text-gray-800">Incoming Pitches</h2>
+                    </div>
+                    <div className="p-6">
+                        {pitches.length === 0 ? (
+                            <p className="text-gray-500 text-center py-4">No pending pitches yet.</p>
+                        ) : (
+                            <div className="space-y-6">
+                                {pitches.map((pitch) => (
+                                    <div key={pitch.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                                        <div className="flex justify-between items-start mb-4">
+                                            <div>
+                                                <h3 className="font-bold text-lg text-gray-900">{pitch.buyerName || 'Guest'}</h3>
+                                                <p className="text-sm text-gray-600">Applying for: <span className="font-medium text-purple-600">{pitch.serviceTitle}</span></p>
+                                                <p className="text-xs text-gray-500 mt-1">Submitted: {new Date(pitch.createdAt as any).toLocaleDateString()}</p>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <span className={`px-2 py-1 text-xs font-medium rounded-full ${pitch.status === 'pending_review' ? 'bg-yellow-100 text-yellow-800' :
+                                                        pitch.status === 'pending_payment' ? 'bg-blue-100 text-blue-800' :
+                                                            pitch.status === 'in_progress' ? 'bg-green-100 text-green-800' :
+                                                                pitch.status === 'completed' ? 'bg-gray-100 text-gray-800' :
+                                                                    'bg-red-100 text-red-800'
+                                                    }`}>
+                                                    {pitch.status.replace('_', ' ')}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="bg-gray-50 p-4 rounded-md mb-4 space-y-3">
+                                            <div>
+                                                <h4 className="text-sm font-semibold text-gray-700">Topic Proposal:</h4>
+                                                <p className="text-gray-800 mt-1">{pitch.topicProposal}</p>
+                                            </div>
+                                            {pitch.guestBio && (
+                                                <div>
+                                                    <h4 className="text-sm font-semibold text-gray-700">Guest Bio:</h4>
+                                                    <p className="text-gray-800 mt-1 text-sm">{pitch.guestBio}</p>
+                                                </div>
+                                            )}
+                                            {pitch.pitchBestWorkUrl && (
+                                                <div>
+                                                    <h4 className="text-sm font-semibold text-gray-700">Previous Work / Links:</h4>
+                                                    <a href={pitch.pitchBestWorkUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm break-all">
+                                                        {pitch.pitchBestWorkUrl}
+                                                    </a>
+                                                </div>
+                                            )}
+                                            {pitch.proposedDates && (
+                                                <div>
+                                                    <h4 className="text-sm font-semibold text-gray-700">Proposed Dates:</h4>
+                                                    <p className="text-gray-800 mt-1 text-sm">{pitch.proposedDates}</p>
+                                                </div>
+                                            )}
+                                            {pitch.pressKitUrl && (
+                                                <div>
+                                                    <h4 className="text-sm font-semibold text-gray-700">Press Kit / Audio:</h4>
+                                                    <a href={pitch.pressKitUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm flex items-center gap-1">
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                        </svg>
+                                                        View File
+                                                    </a>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {pitch.status === 'pending_review' && (
+                                            <div className="flex gap-3 justify-end">
+                                                <button
+                                                    onClick={() => handlePitchAction(pitch.id!, 'decline')}
+                                                    className="px-4 py-2 border border-red-300 text-red-700 rounded-md hover:bg-red-50 text-sm font-medium"
+                                                >
+                                                    Decline
+                                                </button>
+                                                <button
+                                                    onClick={() => handlePitchAction(pitch.id!, 'accept')}
+                                                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm font-medium"
+                                                >
+                                                    Accept Pitch
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
                             </div>
                         )}
                     </div>

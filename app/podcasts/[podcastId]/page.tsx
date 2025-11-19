@@ -1,5 +1,6 @@
 'use client';
 
+import PodcastPitchForm from '@/app/components/PodcastPitchForm';
 import { Podcast, PodcastService } from '@/app/types/podcast';
 import { db } from '@/lib/firebase';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
@@ -14,6 +15,7 @@ export default function PodcastDetailPage() {
 
     const [podcast, setPodcast] = useState<Podcast | null>(null);
     const [services, setServices] = useState<PodcastService[]>([]);
+    const [selectedService, setSelectedService] = useState<PodcastService | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
@@ -69,10 +71,10 @@ export default function PodcastDetailPage() {
     }, [podcastId, loadPodcastData]);
 
     const handleRequestCollab = (serviceId: string) => {
-        // TODO: Implement collaboration request flow (Task 4.1)
-        console.log('Requesting collab for service:', serviceId);
-        alert('Collaboration request flow coming soon!');
-        // router.push(`/podcasts/${podcastId}/apply?serviceId=${serviceId}`);
+        const service = services.find(s => s.id === serviceId);
+        if (service) {
+            setSelectedService(service);
+        }
     };
 
     if (loading) {
@@ -217,6 +219,19 @@ export default function PodcastDetailPage() {
                     </div>
                 )}
             </div>
+
+            {/* Pitch Form Modal */}
+            {selectedService && podcast && (
+                <PodcastPitchForm
+                    podcast={podcast}
+                    service={selectedService}
+                    onClose={() => setSelectedService(null)}
+                    onSuccess={() => {
+                        setSelectedService(null);
+                        alert('Your pitch has been submitted successfully!');
+                    }}
+                />
+            )}
         </div>
     );
 }

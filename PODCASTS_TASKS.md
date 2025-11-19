@@ -110,28 +110,28 @@ The transaction loop for podcasting.
   - **Description:** Form for users to pitch themselves to a podcast.
   - **Dependencies:** Task 3.3
   - **Acceptance Criteria (AC):**
-    - [ ] When clicking "Request Collab", show form.
-    - [ ] Fields: "Topic Proposal", "Guest Bio", "Previous Media/Links", "Proposed Date(s)".
-    - [ ] Uploads: Press Kit or Audio Sample.
-  - **Status:** To Do
+    - [x] When clicking "Request Collab", show form.
+    - [x] Fields: "Topic Proposal", "Guest Bio", "Previous Media/Links", "Proposed Date(s)".
+    - [x] Uploads: Press Kit or Audio Sample.
+  - **Status:** Done
 
 - **Task 4.2: Backend: submitPodcastPitch**
 
   - **Description:** Creates a collaboration record.
   - **Dependencies:** Task 4.1
   - **Acceptance Criteria (AC):**
-    - [ ] Creates doc in `collaborations` collection.
-    - [ ] Distinguish from Legend collabs (add `type: 'podcast'` field).
-    - [ ] Status: `pending_review`.
-  - **Status:** To Do
+    - [x] Creates doc in `collaborations` collection.
+    - [x] Distinguish from Legend collabs (add `type: 'podcast'` field).
+    - [x] Status: `pending_review`.
+  - **Status:** Done
 
 - **Task 4.3: Podcast Owner Review**
   - **Description:** Allow Podcasters to accept/decline pitches.
   - **Dependencies:** Task 4.2
   - **Acceptance Criteria (AC):**
-    - [ ] Podcast Dashboard shows incoming pitches.
-    - [ ] Accept/Decline logic (reuse existing logic if possible).
-  - **Status:** To Do
+    - [x] Podcast Dashboard shows incoming pitches.
+    - [x] Accept/Decline logic (reuse existing logic if possible).
+  - **Status:** Done
 
 ### **Epic 5: Execution & Delivery**
 

@@ -16,14 +16,25 @@ export interface Deliverable {
 
 export interface Collaboration {
   id?: string;
+  type?: 'legend' | 'podcast'; // Type of collaboration
   buyerId: string; // UID of the "New Artist" requesting the collaboration
-  legendId: string; // UID of the "Legend" providing the service
+  legendId?: string; // UID of the "Legend" providing the service (optional for podcasts)
+  podcastId?: string; // ID of the Podcast (required for podcast collabs)
   serviceId: string; // ID of the specific service being purchased
   price: number; // Price of the service (copied from service doc at time of request)
   status: CollaborationStatus; // Current state of the collaboration
+  
+  // Legend Specific Fields
   pitchDemoUrl?: string; // Firebase Storage URL to the demo track uploaded by buyer
-  pitchMessage: string; // Message from the buyer about their creative concept
-  pitchBestWorkUrl: string; // Link to buyer's best previous work
+  pitchMessage?: string; // Message from the buyer about their creative concept
+  pitchBestWorkUrl?: string; // Link to buyer's best previous work
+
+  // Podcast Specific Fields
+  topicProposal?: string; // Topic proposal for the podcast
+  guestBio?: string; // Bio of the guest
+  proposedDates?: string; // Proposed dates for recording
+  pressKitUrl?: string; // URL to press kit or audio sample
+
   contractUrl?: string; // Firebase Storage URL to the signed contract PDF
   deliverables?: Deliverable[]; // Files uploaded by Legend as project deliverables
   createdAt: Date; // When the pitch was submitted
@@ -50,13 +61,23 @@ export interface Collaboration {
 }
 
 export interface CreateCollaborationData {
+  type?: 'legend' | 'podcast';
   buyerId: string;
-  legendId: string;
+  legendId?: string;
+  podcastId?: string;
   serviceId: string;
   price: number;
+  
+  // Legend
   pitchDemoUrl?: string;
-  pitchMessage: string;
-  pitchBestWorkUrl: string;
+  pitchMessage?: string;
+  pitchBestWorkUrl?: string;
+
+  // Podcast
+  topicProposal?: string;
+  guestBio?: string;
+  proposedDates?: string;
+  pressKitUrl?: string;
 }
 
 export interface UpdateCollaborationData {

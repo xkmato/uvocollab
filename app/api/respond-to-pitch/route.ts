@@ -55,7 +55,109 @@ export async function POST(request: NextRequest) {
 
         const collaborationData = collaborationDoc.data();
 
-        // Verify the legend owns this collaboration
+        // Check if this is a podcast collaboration
+        if (collaborationData?.type === 'podcast') {
+            const podcastId = collaborationData.podcastId;
+            const podcastDoc = await adminDb.collection('podcasts').doc(podcastId).get();
+            
+            if (!podcastDoc.exists) {
+                return NextResponse.json(
+                    { error: 'Podcast not found' },
+                    { status: 404 }
+                );
+            }
+
+            const podcastData = podcastDoc.data();
+            
+            // Verify the user owns this podcast
+            if (podcastData?.ownerId !== legendId) { // legendId here is actually the authenticated user ID
+                return NextResponse.json(
+                    { error: 'You do not have permission to respond to this pitch' },
+                    { status: 403 }
+                );
+            }
+
+            // Verify the collaboration is in pending_review status
+            if (collaborationData.status !== 'pending_review') {
+                return NextResponse.json(
+                    { error: `Cannot respond to pitch with status: ${collaborationData.status}` },
+                    { status: 400 }
+                );
+            }
+
+            // Get buyer information
+            const buyerDoc = await adminDb.collection('users').doc(collaborationData.buyerId).get();
+            if (!buyerDoc.exists) {
+                return NextResponse.json(
+                    { error: 'Buyer not found' },
+                    { status: 404 }
+                );
+            }
+            const buyerData = buyerDoc.data();
+
+            // Get service information
+            const serviceDoc = await adminDb
+                .collection('podcasts')
+                .doc(podcastId)
+                .collection('services')
+                .doc(collaborationData.serviceId)
+                .get();
+            const serviceData = serviceDoc.data();
+
+            if (action === 'decline') {
+                // Update collaboration status to declined
+                await collaborationRef.update({
+                    status: 'declined',
+                    updatedAt: new Date(),
+                });
+
+                // Send decline email to buyer
+                try {
+                    await sendPitchDeclinedEmail(
+                        buyerData?.email || '',
+                        buyerData?.displayName || 'Guest',
+                        podcastData?.title || 'Podcast',
+                        serviceData?.title || 'Service'
+                    );
+                } catch (emailError) {
+                    console.error('Failed to send decline email:', emailError);
+                }
+
+                return NextResponse.json({
+                    success: true,
+                    message: 'Pitch declined successfully',
+                });
+            } else {
+                // action === 'accept'
+                // Update collaboration status to pending_payment
+                await collaborationRef.update({
+                    status: 'pending_payment',
+                    acceptedAt: new Date(),
+                    updatedAt: new Date(),
+                });
+
+                // Send acceptance email to buyer
+                try {
+                    await sendPitchAcceptedEmail(
+                        buyerData?.email || '',
+                        buyerData?.displayName || 'Guest',
+                        podcastData?.title || 'Podcast',
+                        serviceData?.title || 'Service',
+                        collaborationData.price,
+                        collaborationId
+                    );
+                } catch (emailError) {
+                    console.error('Failed to send acceptance email:', emailError);
+                }
+
+                return NextResponse.json({
+                    success: true,
+                    message: 'Pitch accepted successfully',
+                });
+            }
+        }
+
+        // Verify the legend owns this collaboration (Legacy/Legend Logic)
         if (collaborationData?.legendId !== legendId) {
             return NextResponse.json(
                 { error: 'You do not have permission to respond to this pitch' },
