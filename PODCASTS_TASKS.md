@@ -77,29 +77,29 @@ Allow users to find podcasts to collaborate with.
   - **Description:** A public/protected page listing available podcasts.
   - **Dependencies:** Task 1.4
   - **Acceptance Criteria (AC):**
-    - [ ] Route `/marketplace/podcasts` created.
-    - [ ] Displays grid of approved podcasts (Cover Art, Title, Category).
-    - [ ] Search bar for keywords.
-  - **Status:** To Do
+    - [x] Route `/marketplace/podcasts` created.
+    - [x] Displays grid of approved podcasts (Cover Art, Title, Category).
+    - [x] Search bar for keywords.
+  - **Status:** Done
 
 - **Task 3.2: Filtering & Sorting**
 
   - **Description:** Advanced filtering for the marketplace.
   - **Dependencies:** Task 3.1
   - **Acceptance Criteria (AC):**
-    - [ ] Filter by Category/Genre.
-    - [ ] Filter by Audience Size.
-    - [ ] Filter by Price Range (Free vs Paid).
-  - **Status:** To Do
+    - [x] Filter by Category/Genre.
+    - [x] Filter by Audience Size.
+    - [x] Filter by Price Range (Free vs Paid).
+  - **Status:** Done
 
 - **Task 3.3: Podcast Detail Page**
   - **Description:** Detailed view of a specific podcast.
   - **Dependencies:** Task 3.1
   - **Acceptance Criteria (AC):**
-    - [ ] Route `/podcasts/[podcastId]` created.
-    - [ ] Displays full info, episodes (optional parsing of RSS), and list of available Services.
-    - [ ] "Request Collab" button for each service.
-  - **Status:** To Do
+    - [x] Route `/podcasts/[podcastId]` created.
+    - [x] Displays full info, episodes (optional parsing of RSS), and list of available Services.
+    - [x] "Request Collab" button for each service.
+  - **Status:** Done
 
 ### **Epic 4: Podcast Collaboration Flow**
 
