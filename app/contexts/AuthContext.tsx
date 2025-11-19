@@ -2,7 +2,7 @@
 
 import { User } from '@/app/types/user';
 import { auth, db } from '@/lib/firebase';
-import { User as FirebaseUser, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
+import { User as FirebaseUser, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { createContext, useContext, useEffect, useState } from 'react';
 
@@ -11,6 +11,8 @@ interface AuthContextType {
     userData: User | null;
     loading: boolean;
     signInWithGoogle: () => Promise<void>;
+    signUpWithEmail: (email: string, password: string) => Promise<void>;
+    signInWithEmail: (email: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
 }
 
@@ -90,6 +92,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         await signInWithPopup(auth, provider);
     };
 
+    const signUpWithEmail = async (email: string, password: string) => {
+        await createUserWithEmailAndPassword(auth, email, password);
+    };
+
+    const signInWithEmail = async (email: string, password: string) => {
+        await signInWithEmailAndPassword(auth, email, password);
+    };
+
     const logout = async () => {
         await signOut(auth);
     };
@@ -99,6 +109,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         userData,
         loading,
         signInWithGoogle,
+        signUpWithEmail,
+        signInWithEmail,
         logout,
     };
 

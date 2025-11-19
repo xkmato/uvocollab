@@ -16,9 +16,11 @@ service cloud.firestore {
       }
     }
 
-    // Legend applications - users can read their own applications
+    // Legend applications - users can read their own applications, admins can read all
     match /legend_applications/{applicationId} {
-      allow read: if request.auth != null && resource.data.applicantUid == request.auth.uid;
+      allow read: if request.auth != null && 
+        (resource.data.applicantUid == request.auth.uid || 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin');
       allow create: if false; // Only created via API
       allow update, delete: if false; // Only updated via admin API
     }

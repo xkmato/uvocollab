@@ -1,0 +1,54 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - heading "UvoCollab" [level=1] [ref=e11]
+      - paragraph [ref=e12]: Where Legends Are Made
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - heading "Start Your Journey" [level=2] [ref=e15]
+        - paragraph [ref=e16]: Join thousands of artists and legends on UvoCollab
+      - generic [ref=e17]: "Firebase: Error (auth/operation-not-allowed)."
+      - generic [ref=e18]:
+        - textbox "Email address" [ref=e20]: testuser_1763536399596@example.com
+        - textbox "Password" [ref=e22]: Password123!
+        - button "Sign Up with Email" [active] [ref=e23]
+      - generic [ref=e28]: Or continue with
+      - button "Google" [ref=e29]:
+        - generic [ref=e30]:
+          - img [ref=e31]
+          - generic [ref=e36]: Google
+      - generic [ref=e37]:
+        - generic [ref=e42]: Why join UvoCollab?
+        - generic [ref=e43]:
+          - generic [ref=e44]:
+            - generic [ref=e45]: 🎵
+            - generic [ref=e46]: Connect with verified industry legends
+          - generic [ref=e47]:
+            - generic [ref=e48]: 🔒
+            - generic [ref=e49]: Secure escrow payment protection
+          - generic [ref=e50]:
+            - generic [ref=e51]: 📄
+            - generic [ref=e52]: Automatic legal contracts
+      - paragraph [ref=e54]:
+        - text: Already have an account?
+        - link "Sign in" [ref=e55] [cursor=pointer]:
+          - /url: /auth/login
+    - generic [ref=e56]:
+      - paragraph [ref=e57]:
+        - text: By continuing, you agree to our
+        - link "Terms of Service" [ref=e58] [cursor=pointer]:
+          - /url: "#"
+        - text: and
+        - link "Privacy Policy" [ref=e59] [cursor=pointer]:
+          - /url: "#"
+      - link "Back to Home" [ref=e60] [cursor=pointer]:
+        - /url: /
+        - img [ref=e61]
+        - text: Back to Home
+  - button "Open Next.js Dev Tools" [ref=e68] [cursor=pointer]:
+    - img [ref=e69]
+  - alert [ref=e72]
+```

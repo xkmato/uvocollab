@@ -6,12 +6,24 @@ import { useState } from 'react';
 
 export default function SignUp() {
     const [error, setError] = useState('');
-    const { signInWithGoogle } = useAuth();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const { signInWithGoogle, signUpWithEmail } = useAuth();
     const router = useRouter();
 
     const handleGoogleSignIn = async () => {
         try {
             await signInWithGoogle();
+            router.push('/dashboard');
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : 'An error occurred');
+        }
+    };
+
+    const handleEmailSignUp = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            await signUpWithEmail(email, password);
             router.push('/dashboard');
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : 'An error occurred');
@@ -56,6 +68,46 @@ export default function SignUp() {
                         </div>
                     )}
 
+                    <form onSubmit={handleEmailSignUp} className="space-y-4 mb-6">
+                        <div>
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Email address"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                required
+                            />
+                        </div>
+                        <div>
+                            <input
+                                type="password"
+                                name="password"
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                required
+                            />
+                        </div>
+                        <button
+                            type="submit"
+                            className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+                        >
+                            Sign Up with Email
+                        </button>
+                    </form>
+
+                    <div className="relative mb-6">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-white/20"></div>
+                        </div>
+                        <div className="relative flex justify-center text-sm">
+                            <span className="px-4 bg-transparent text-white/60">Or continue with</span>
+                        </div>
+                    </div>
+
                     <button
                         onClick={handleGoogleSignIn}
                         className="w-full group relative overflow-hidden bg-white hover:bg-gray-50 text-gray-800 font-semibold py-4 px-6 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl"
@@ -79,7 +131,7 @@ export default function SignUp() {
                                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                                 />
                             </svg>
-                            <span className="text-lg">Continue with Google</span>
+                            <span className="text-lg">Google</span>
                         </div>
                     </button>
 
