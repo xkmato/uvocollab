@@ -8,7 +8,7 @@ import { useAuth } from './contexts/AuthContext';
 import { LegendApplication } from './types/legendApplication';
 
 export default function Home() {
-  const { user, loading } = useAuth();
+  const { user, userData, loading } = useAuth();
   const [legendApplication, setLegendApplication] = useState<LegendApplication | null>(null);
   const [checkingApplication, setCheckingApplication] = useState(true);
 
@@ -207,6 +207,32 @@ export default function Home() {
                 </Link>
 
                 <Link
+                  href={userData?.hasPodcast ? "/dashboard/podcast" : "/podcasts/register"}
+                  className="group relative p-8 bg-gradient-to-br from-indigo-500/20 to-violet-500/20 backdrop-blur-md border border-white/20 rounded-2xl hover:shadow-2xl hover:scale-105 transition-all duration-300 overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/0 to-violet-600/0 group-hover:from-indigo-600/20 group-hover:to-violet-600/20 transition-all duration-300"></div>
+                  <div className="relative z-10">
+                    <div className="w-16 h-16 bg-gradient-to-br from-indigo-400 to-violet-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-3">
+                      {userData?.hasPodcast ? "Manage Podcast" : "List Your Podcast"}
+                    </h3>
+                    <p className="text-white/70 mb-4">
+                      {userData?.hasPodcast ? "Update your podcast details" : "Get sponsors and guests"}
+                    </p>
+                    <div className="text-indigo-300 font-semibold group-hover:translate-x-2 transition-transform inline-flex items-center gap-2">
+                      {userData?.hasPodcast ? "Manage Now" : "Start Now"}
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </div>
+                  </div>
+                </Link>
+
+                <Link
                   href="/dashboard"
                   className="group relative p-8 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 backdrop-blur-md border border-white/20 rounded-2xl hover:shadow-2xl hover:scale-105 transition-all duration-300 overflow-hidden"
                 >
@@ -238,10 +264,10 @@ export default function Home() {
                   <div className="relative p-8 bg-gradient-to-br from-amber-500/20 to-orange-500/20 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden">
                     <div className="relative z-10">
                       <div className={`w-16 h-16 ${legendApplication.status === 'approved'
-                          ? 'bg-gradient-to-br from-green-400 to-emerald-400'
-                          : legendApplication.status === 'declined'
-                            ? 'bg-gradient-to-br from-red-400 to-rose-400'
-                            : 'bg-gradient-to-br from-amber-400 to-orange-400'
+                        ? 'bg-gradient-to-br from-green-400 to-emerald-400'
+                        : legendApplication.status === 'declined'
+                          ? 'bg-gradient-to-br from-red-400 to-rose-400'
+                          : 'bg-gradient-to-br from-amber-400 to-orange-400'
                         } rounded-2xl flex items-center justify-center mb-6`}>
                         {legendApplication.status === 'approved' ? (
                           <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -267,10 +293,10 @@ export default function Home() {
                       </p>
                       <div className="flex items-center gap-2">
                         <span className={`px-3 py-1 rounded-full text-sm font-semibold ${legendApplication.status === 'approved'
-                            ? 'bg-green-500/20 text-green-300'
-                            : legendApplication.status === 'declined'
-                              ? 'bg-red-500/20 text-red-300'
-                              : 'bg-amber-500/20 text-amber-300'
+                          ? 'bg-green-500/20 text-green-300'
+                          : legendApplication.status === 'declined'
+                            ? 'bg-red-500/20 text-red-300'
+                            : 'bg-amber-500/20 text-amber-300'
                           }`}>
                           {legendApplication.status.charAt(0).toUpperCase() + legendApplication.status.slice(1)}
                         </span>
@@ -303,6 +329,32 @@ export default function Home() {
               </div>
             </div>
           )}
+        </div>
+
+        {/* How It Works Section */}
+        <div className="py-20 bg-black/20 backdrop-blur-sm">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-4xl font-bold text-white text-center mb-16">How It Works</h2>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+              {/* Connecting Line (Desktop) */}
+              <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 -translate-y-1/2 opacity-30"></div>
+
+              {[
+                { step: '01', title: 'Discover', desc: 'Browse verified legends and podcasts.' },
+                { step: '02', title: 'Connect', desc: 'Send a pitch or booking request.' },
+                { step: '03', title: 'Collaborate', desc: 'Funds held securely in escrow.' },
+                { step: '04', title: 'Release', desc: 'Get your completed project & rights.' }
+              ].map((item, i) => (
+                <div key={i} className="relative z-10 bg-slate-900/80 border border-white/10 p-6 rounded-2xl text-center hover:transform hover:-translate-y-2 transition-all duration-300">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4 shadow-lg shadow-purple-500/20">
+                    {item.step}
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
+                  <p className="text-white/60">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Stats Section */}

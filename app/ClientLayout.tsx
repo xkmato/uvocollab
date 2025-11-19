@@ -1,5 +1,6 @@
 'use client';
 
+import Navbar from './components/Navbar';
 import { AuthProvider } from './contexts/AuthContext';
 
 export default function ClientLayout({
@@ -7,5 +8,10 @@ export default function ClientLayout({
 }: {
     children: React.ReactNode;
 }) {
-    return <AuthProvider>{children}</AuthProvider>;
+    return (
+        <AuthProvider>
+            <Navbar />
+            {children}
+        </AuthProvider>
+    );
 }
