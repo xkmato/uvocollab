@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { Service } from '@/app/types/service';
+import { useState } from 'react';
 
 interface ServiceWizardProps {
     initialData?: Service | null;
@@ -56,7 +56,7 @@ export default function ServiceWizard({ initialData, onSave, onCancel, isSaving 
             setError('Price must be greater than $0');
             return;
         }
-        
+
         onSave({
             ...formData,
             price: priceNum,
@@ -83,7 +83,7 @@ export default function ServiceWizard({ initialData, onSave, onCancel, isSaving 
 
                 {/* Progress Bar */}
                 <div className="w-full bg-gray-200 h-1">
-                    <div 
+                    <div
                         className="bg-gradient-to-r from-blue-500 to-purple-600 h-1 transition-all duration-300 ease-in-out"
                         style={{ width: `${(step / totalSteps) * 100}%` }}
                     ></div>
@@ -202,15 +202,14 @@ export default function ServiceWizard({ initialData, onSave, onCancel, isSaving 
                             type="button"
                             onClick={handleBack}
                             disabled={step === 1}
-                            className={`px-6 py-2.5 rounded-lg font-medium transition-all ${
-                                step === 1 
-                                    ? 'text-gray-300 cursor-not-allowed' 
+                            className={`px-6 py-2.5 rounded-lg font-medium transition-all ${step === 1
+                                    ? 'text-gray-300 cursor-not-allowed'
                                     : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                            }`}
+                                }`}
                         >
                             Back
                         </button>
-                        
+
                         {step < totalSteps ? (
                             <button
                                 type="button"

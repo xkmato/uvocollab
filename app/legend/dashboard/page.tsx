@@ -405,9 +405,8 @@ export default function LegendDashboard() {
                                 <span className="ml-2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
                             )}
                             {tab.count ? (
-                                <span className={`ml-2 px-2 py-0.5 text-xs rounded-full ${
-                                    activeTab === tab.id ? 'bg-white text-gray-900' : 'bg-gray-200 text-gray-600'
-                                }`}>
+                                <span className={`ml-2 px-2 py-0.5 text-xs rounded-full ${activeTab === tab.id ? 'bg-white text-gray-900' : 'bg-gray-200 text-gray-600'
+                                    }`}>
                                     {tab.count}
                                 </span>
                             ) : null}
@@ -424,24 +423,23 @@ export default function LegendDashboard() {
                                 <h2 className="text-2xl font-bold text-gray-900">Public Profile</h2>
                                 <p className="text-gray-500">Manage how you appear to artists and fans.</p>
                             </div>
-                            
+
                             {profileMessage && (
-                                <div className={`mb-6 p-4 rounded-lg flex items-center ${
-                                    profileMessage.includes('success') 
-                                        ? 'bg-green-50 text-green-800 border border-green-100' 
+                                <div className={`mb-6 p-4 rounded-lg flex items-center ${profileMessage.includes('success')
+                                        ? 'bg-green-50 text-green-800 border border-green-100'
                                         : 'bg-red-50 text-red-800 border border-red-100'
-                                }`}>
+                                    }`}>
                                     {profileMessage.includes('success') ? (
-                                        <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
+                                        <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
                                     ) : (
-                                        <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"/></svg>
+                                        <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
                                     )}
                                     {profileMessage}
                                 </div>
                             )}
 
-                            <ProfileWizard 
-                                initialData={userData} 
+                            <ProfileWizard
+                                initialData={userData}
                                 onSave={handleSaveProfile}
                                 isSaving={savingProfile}
                             />
@@ -526,7 +524,7 @@ export default function LegendDashboard() {
                                                     </span>
                                                 </div>
                                                 <p className="text-gray-600 text-sm mb-6 line-clamp-3 h-15">{service.description}</p>
-                                                
+
                                                 <div className="flex items-end justify-between mb-6">
                                                     <div>
                                                         <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold">Price</p>
@@ -684,7 +682,7 @@ export default function LegendDashboard() {
                                                             {/* Assets */}
                                                             <div className="bg-gray-50 rounded-lg p-5">
                                                                 <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-4">Project Assets</h4>
-                                                                
+
                                                                 <div className="space-y-4">
                                                                     <div>
                                                                         <p className="text-xs text-gray-500 mb-1">Best Previous Work</p>
@@ -752,7 +750,7 @@ export default function LegendDashboard() {
                                                                         <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                                                                     </button>
                                                                 )}
-                                                                
+
                                                                 {collab.status === 'completed' && (
                                                                     <button
                                                                         onClick={() => router.push(`/collaboration/${collab.id}`)}
@@ -783,8 +781,8 @@ export default function LegendDashboard() {
                                                                     Payment Received! Funds are held in escrow.
                                                                 </p>
                                                                 <p className="text-purple-700 text-sm">
-                                                                    {collab.docusignEnvelopeId 
-                                                                        ? "Contract sent for signature. Check your email to sign." 
+                                                                    {collab.docusignEnvelopeId
+                                                                        ? "Contract sent for signature. Check your email to sign."
                                                                         : "Contract will be sent to you shortly for signature."}
                                                                 </p>
                                                             </div>

@@ -1,8 +1,8 @@
 'use client';
 /* eslint-disable @next/next/no-img-element */
 
-import { useState } from 'react';
 import { User } from '@/app/types/user';
+import { useState } from 'react';
 
 interface ProfileWizardProps {
     initialData: Partial<User>;
@@ -71,7 +71,7 @@ export default function ProfileWizard({ initialData, onSave, isSaving }: Profile
                     <span className="text-sm font-medium text-blue-600">{Math.round((step / totalSteps) * 100)}% Completed</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
+                    <div
                         className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-300 ease-in-out"
                         style={{ width: `${(step / totalSteps) * 100}%` }}
                     ></div>
@@ -105,9 +105,9 @@ export default function ProfileWizard({ initialData, onSave, isSaving }: Profile
                                 />
                                 {formData.profileImageUrl && (
                                     <div className="mt-4 flex justify-center">
-                                        <img 
-                                            src={formData.profileImageUrl} 
-                                            alt="Profile Preview" 
+                                        <img
+                                            src={formData.profileImageUrl}
+                                            alt="Profile Preview"
                                             className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
                                         />
                                     </div>
@@ -189,15 +189,14 @@ export default function ProfileWizard({ initialData, onSave, isSaving }: Profile
                         type="button"
                         onClick={handleBack}
                         disabled={step === 1}
-                        className={`px-6 py-2.5 rounded-lg font-medium transition-all ${
-                            step === 1 
-                                ? 'text-gray-300 cursor-not-allowed' 
+                        className={`px-6 py-2.5 rounded-lg font-medium transition-all ${step === 1
+                                ? 'text-gray-300 cursor-not-allowed'
                                 : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                        }`}
+                            }`}
                     >
                         Back
                     </button>
-                    
+
                     {step < totalSteps ? (
                         <button
                             type="button"
