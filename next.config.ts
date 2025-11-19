@@ -25,7 +25,9 @@ const nextConfig: NextConfig = {
   // Optimize production builds
   poweredByHeader: false,
   // Improve performance with SWC minification
-  swcMinify: true,
+  // NOTE: `swcMinify` is no longer recognized in Next.js 16+ and
+  // will cause a build-time type error. Next now manages minification
+  // internally. We keep the comment to document intent.
   // Add security headers
   async headers() {
     return [
