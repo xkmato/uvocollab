@@ -57,12 +57,34 @@ export default function RegisterPodcast() {
                 throw new Error('Please fill in all required fields');
             }
 
-            // TODO: Implement actual submission logic (Task 1.3)
-            // For now, we'll simulate a successful submission
+            // Implement actual submission logic (Task 1.3)
             console.log('Submitting podcast data:', formData);
 
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            const token = await user.getIdToken();
+
+            const payload = {
+                title: formData.title,
+                description: formData.description,
+                rssFeedUrl: formData.rssFeedUrl,
+                categories: [formData.category],
+                coverImageUrl: formData.coverImageUrl || null,
+                avgListeners: formData.avgListeners ? Number(formData.avgListeners) : null,
+                websiteUrl: formData.websiteUrl || null,
+            };
+
+            const response = await fetch('/api/submit-podcast', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                const err = await response.json();
+                throw new Error(err?.error || 'Failed to submit podcast');
+            }
 
             setSuccess(true);
             // Redirect after a delay? Or just show success message.

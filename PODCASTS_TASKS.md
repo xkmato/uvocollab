@@ -31,9 +31,9 @@ This epic covers the data structure and the flow for users to list their podcast
   - **Description:** A server action/function to save the podcast data.
   - **Dependencies:** Task 1.2
   - **Acceptance Criteria (AC):**
-    - [ ] Creates a document in `podcasts` collection with `status: 'pending'`.
-    - [ ] Updates the user's document to indicate they are a "Podcaster" (e.g., add `roles: ['podcaster']` or `hasPodcast: true`).
-    - [ ] Sends a notification to Admins for vetting.
+    - [x] Creates a document in `podcasts` collection with `status: 'pending'`.
+    - [x] Updates the user's document to indicate they are a "Podcaster" (adds `hasPodcast: true` on users doc).
+    - [x] Sends a notification to Admins for vetting (sends email to `support@uvocollab.com` by default).
   - **Status:** To Do
 
 - **Task 1.4: Admin Vetting for Podcasts**
