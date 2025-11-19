@@ -140,14 +140,14 @@ The transaction loop for podcasting.
   - **Description:** Ensure the Collab Hub works for Podcasts.
   - **Dependencies:** Task 4.3
   - **Acceptance Criteria (AC):**
-    - [ ] Hub displays Podcast-specific milestones (e.g., "Recording Scheduled", "Episode Published").
-    - [ ] File sharing for assets (Headshots, Bios, Audio Files).
-  - **Status:** To Do
+    - [x] Hub displays Podcast-specific milestones (e.g., "Recording Scheduled", "Episode Published").
+    - [x] File sharing for assets (Headshots, Bios, Audio Files).
+  - **Status:** Done
 
 - **Task 5.2: Payment & Contract (If Paid)**
   - **Description:** Handle payments for paid slots.
   - **Dependencies:** Task 5.1
   - **Acceptance Criteria (AC):**
-    - [ ] Reuse Flutterwave integration for paid services.
-    - [ ] Generate appropriate contract (Guest Release Form instead of Work For Hire).
-  - **Status:** To Do
+    - [x] Reuse Flutterwave integration for paid services.
+    - [x] Generate appropriate contract (Guest Release Form instead of Work For Hire).
+  - **Status:** Done

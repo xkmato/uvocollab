@@ -167,6 +167,9 @@ export default function PaymentCheckout({
     const platformFee = collaboration.price * 0.2;
     const legendPayout = collaboration.price - platformFee;
 
+    const isPodcast = collaboration.type === 'podcast';
+    const providerLabel = isPodcast ? 'Podcaster' : 'Artist';
+
     return (
         <div className="bg-white rounded-lg shadow-md p-6">
             <div className="mb-6">
@@ -184,7 +187,7 @@ export default function PaymentCheckout({
                         <span className="font-medium">{service.title}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                        <span className="text-gray-700">Artist:</span>
+                        <span className="text-gray-700">{providerLabel}:</span>
                         <span className="font-medium">{legend.displayName}</span>
                     </div>
                     <div className="flex justify-between items-center">
@@ -205,7 +208,7 @@ export default function PaymentCheckout({
                 <h3 className="font-semibold text-blue-900 mb-2">Payment Breakdown</h3>
                 <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                        <span className="text-blue-800">Artist Payout:</span>
+                        <span className="text-blue-800">{providerLabel} Payout:</span>
                         <span className="font-medium text-blue-900">${legendPayout.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between">
@@ -234,7 +237,7 @@ export default function PaymentCheckout({
                     <div>
                         <h4 className="font-semibold text-green-900 text-sm">Secure Escrow Payment</h4>
                         <p className="text-sm text-green-800 mt-1">
-                            Your payment is held securely in escrow. The artist will only receive payment
+                            Your payment is held securely in escrow. The {providerLabel.toLowerCase()} will only receive payment
                             after you confirm the deliverables meet your expectations.
                         </p>
                     </div>

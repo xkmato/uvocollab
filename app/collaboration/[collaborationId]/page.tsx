@@ -133,6 +133,31 @@ export default function CollaborationHub() {
         label: string;
         completed: boolean;
     }[] => {
+        if (collab.type === 'podcast') {
+            return [
+                {
+                    icon: '🎙️',
+                    label: 'Pitch Accepted',
+                    completed: collab.status !== 'pending_review' && collab.status !== 'declined'
+                },
+                {
+                    icon: '📝',
+                    label: 'Guest Release Signed',
+                    completed: collab.status === 'in_progress' || collab.status === 'completed'
+                },
+                {
+                    icon: '🎧',
+                    label: 'Production',
+                    completed: collab.status === 'in_progress' || collab.status === 'completed'
+                },
+                {
+                    icon: '✅',
+                    label: 'Published',
+                    completed: collab.status === 'completed'
+                }
+            ];
+        }
+
         return [
             {
                 icon: '💰',
@@ -405,9 +430,15 @@ export default function CollaborationHub() {
                             {collaboration.status === 'in_progress' && (
                                 <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
                                     <p className="text-sm text-green-800">
-                                        <strong>Project Active!</strong> {isLegend
-                                            ? 'You can now begin working on this project. Upload deliverables when ready.'
-                                            : 'The Legend is working on your project. Files will appear here when delivered.'}
+                                        <strong>{collaboration.type === 'podcast' ? 'Production Active!' : 'Project Active!'}</strong> {
+                                            collaboration.type === 'podcast'
+                                                ? (isLegend
+                                                    ? 'You can now schedule recording or work on the episode.'
+                                                    : 'The Podcaster is working on the episode. Stay tuned for updates.')
+                                                : (isLegend
+                                                    ? 'You can now begin working on this project. Upload deliverables when ready.'
+                                                    : 'The Legend is working on your project. Files will appear here when delivered.')
+                                        }
                                     </p>
                                 </div>
                             )}
@@ -415,52 +446,98 @@ export default function CollaborationHub() {
                             {collaboration.status === 'completed' && (
                                 <div className="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
                                     <p className="text-sm text-gray-800">
-                                        <strong>Project Complete!</strong> Payment has been released from escrow. Thank you for using UvoCollab!
+                                        <strong>{collaboration.type === 'podcast' ? 'Episode Published!' : 'Project Complete!'}</strong> {
+                                            collaboration.type === 'podcast'
+                                                ? 'The episode has been marked as completed/published.'
+                                                : 'Payment has been released from escrow. Thank you for using UvoCollab!'
+                                        }
                                     </p>
                                 </div>
                             )}
                         </div>
 
                         {/* Pitch/Project Brief Card */}
-                        {collaboration.pitchMessage && (
+                        {(collaboration.pitchMessage || collaboration.topicProposal) && (
                             <div className="bg-white rounded-lg shadow p-6">
-                                <h2 className="text-xl font-bold text-gray-900 mb-4">Project Brief</h2>
+                                <h2 className="text-xl font-bold text-gray-900 mb-4">
+                                    {collaboration.type === 'podcast' ? 'Pitch Details' : 'Project Brief'}
+                                </h2>
 
                                 <div className="space-y-4">
-                                    <div>
-                                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Creative Concept</h4>
-                                        <div className="bg-gray-50 rounded-lg p-4">
-                                            <p className="text-gray-800 whitespace-pre-wrap">{collaboration.pitchMessage}</p>
-                                        </div>
-                                    </div>
+                                    {collaboration.type === 'podcast' ? (
+                                        <>
+                                            <div>
+                                                <h4 className="text-sm font-semibold text-gray-700 mb-2">Topic Proposal</h4>
+                                                <div className="bg-gray-50 rounded-lg p-4">
+                                                    <p className="text-gray-800 whitespace-pre-wrap">{collaboration.topicProposal}</p>
+                                                </div>
+                                            </div>
+                                            {collaboration.guestBio && (
+                                                <div>
+                                                    <h4 className="text-sm font-semibold text-gray-700 mb-2">Guest Bio</h4>
+                                                    <div className="bg-gray-50 rounded-lg p-4">
+                                                        <p className="text-gray-800 whitespace-pre-wrap">{collaboration.guestBio}</p>
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {collaboration.proposedDates && (
+                                                <div>
+                                                    <h4 className="text-sm font-semibold text-gray-700 mb-2">Proposed Dates</h4>
+                                                    <p className="text-gray-800">{collaboration.proposedDates}</p>
+                                                </div>
+                                            )}
+                                            {collaboration.pressKitUrl && (
+                                                <div>
+                                                    <h4 className="text-sm font-semibold text-gray-700 mb-2">Press Kit / Audio Sample</h4>
+                                                    <a
+                                                        href={collaboration.pressKitUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-blue-600 hover:text-blue-800 underline text-sm break-all"
+                                                    >
+                                                        {collaboration.pressKitUrl}
+                                                    </a>
+                                                </div>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div>
+                                                <h4 className="text-sm font-semibold text-gray-700 mb-2">Creative Concept</h4>
+                                                <div className="bg-gray-50 rounded-lg p-4">
+                                                    <p className="text-gray-800 whitespace-pre-wrap">{collaboration.pitchMessage}</p>
+                                                </div>
+                                            </div>
 
-                                    {collaboration.pitchBestWorkUrl && (
-                                        <div>
-                                            <h4 className="text-sm font-semibold text-gray-700 mb-2">Reference Work</h4>
-                                            <a
-                                                href={collaboration.pitchBestWorkUrl}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-blue-600 hover:text-blue-800 underline text-sm break-all"
-                                            >
-                                                {collaboration.pitchBestWorkUrl}
-                                            </a>
-                                        </div>
-                                    )}
+                                            {collaboration.pitchBestWorkUrl && (
+                                                <div>
+                                                    <h4 className="text-sm font-semibold text-gray-700 mb-2">Reference Work</h4>
+                                                    <a
+                                                        href={collaboration.pitchBestWorkUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-blue-600 hover:text-blue-800 underline text-sm break-all"
+                                                    >
+                                                        {collaboration.pitchBestWorkUrl}
+                                                    </a>
+                                                </div>
+                                            )}
 
-                                    {collaboration.pitchDemoUrl && (
-                                        <div>
-                                            <h4 className="text-sm font-semibold text-gray-700 mb-2">Demo Track</h4>
-                                            <audio
-                                                controls
-                                                className="w-full"
-                                                preload="metadata"
-                                            >
-                                                <source src={collaboration.pitchDemoUrl} type="audio/mpeg" />
-                                                <source src={collaboration.pitchDemoUrl} type="audio/wav" />
-                                                Your browser does not support the audio element.
-                                            </audio>
-                                        </div>
+                                            {collaboration.pitchDemoUrl && (
+                                                <div>
+                                                    <h4 className="text-sm font-semibold text-gray-700 mb-2">Demo Track</h4>
+                                                    <audio
+                                                        controls
+                                                        className="w-full"
+                                                        preload="metadata"
+                                                    >
+                                                        <source src={collaboration.pitchDemoUrl} type="audio/mpeg" />
+                                                        <source src={collaboration.pitchDemoUrl} type="audio/wav" />
+                                                        Your browser does not support the audio element.
+                                                    </audio>
+                                                </div>
+                                            )}
+                                        </>
                                     )}
                                 </div>
                             </div>
@@ -552,7 +629,10 @@ export default function CollaborationHub() {
                         {otherParty && (
                             <div className="bg-white rounded-lg shadow p-6">
                                 <h2 className="text-lg font-bold text-gray-900 mb-4">
-                                    {isBuyer ? 'Your Legend' : 'Artist'}
+                                    {isBuyer
+                                        ? (collaboration.type === 'podcast' ? 'Podcaster' : 'Your Legend')
+                                        : (collaboration.type === 'podcast' ? 'Guest' : 'Artist')
+                                    }
                                 </h2>
 
                                 <div className="flex items-center space-x-3 mb-4">
@@ -574,7 +654,7 @@ export default function CollaborationHub() {
                                         <h3 className="font-bold text-gray-900">{otherParty.displayName}</h3>
                                         {isLegend && (
                                             <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                ✓ Verified Legend
+                                                {collaboration.type === 'podcast' ? '✓ Verified Podcaster' : '✓ Verified Legend'}
                                             </span>
                                         )}
                                     </div>
@@ -589,10 +669,10 @@ export default function CollaborationHub() {
                                 {isBuyer && legend && (
                                     <div className="mt-4">
                                         <button
-                                            onClick={() => router.push(`/legend/${legend.uid}`)}
+                                            onClick={() => router.push(collaboration.type === 'podcast' ? `/podcasts/${collaboration.podcastId}` : `/legend/${legend.uid}`)}
                                             className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium"
                                         >
-                                            View Public Profile
+                                            {collaboration.type === 'podcast' ? 'View Podcast' : 'View Public Profile'}
                                         </button>
                                     </div>
                                 )}

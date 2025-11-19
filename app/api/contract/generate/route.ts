@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { generateContractPDF, uploadContractToStorage } from '@/lib/contract-generator';
+import { generateContractPDF, generateGuestReleasePDF, uploadContractToStorage } from '@/lib/contract-generator';
 import { adminAuth, adminDb } from '@/lib/firebase-admin';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -107,7 +107,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate contract PDF
-    const contractPdfBuffer = await generateContractPDF({
+    let contractPdfBuffer: Buffer;
+    let emailSubject: string;
+    let contractFileName: string;
+
+    const contractData = {
       buyerName: buyerData.displayName || buyerData.email,
       buyerEmail: buyerData.email,
       legendName: legendData.displayName || legendData.email,
@@ -120,7 +124,18 @@ export async function POST(request: NextRequest) {
         month: 'long',
         day: 'numeric',
       }),
-    });
+      type: collabData.type,
+    };
+
+    if (collabData.type === 'podcast') {
+      contractPdfBuffer = await generateGuestReleasePDF(contractData);
+      emailSubject = `UvoCollab Guest Release Form - ${serviceData.title}`;
+      contractFileName = `UvoCollab_Guest_Release_${collaborationId}.pdf`;
+    } else {
+      contractPdfBuffer = await generateContractPDF(contractData);
+      emailSubject = `UvoCollab Collaboration Agreement - ${serviceData.title}`;
+      contractFileName = `UvoCollab_Contract_${collaborationId}.pdf`;
+    }
 
     // Upload unsigned contract to Firebase Storage for record-keeping
     const unsignedContractUrl = await uploadContractToStorage(
@@ -131,8 +146,8 @@ export async function POST(request: NextRequest) {
     // Send contract to DocuSign for e-signature
     const envelopeId = await sendContractForSignature({
       contractPdfBuffer,
-      contractFileName: `UvoCollab_Contract_${collaborationId}.pdf`,
-      emailSubject: `UvoCollab Collaboration Agreement - ${serviceData.title}`,
+      contractFileName,
+      emailSubject,
       signers: [
         {
           name: buyerData.displayName || buyerData.email,

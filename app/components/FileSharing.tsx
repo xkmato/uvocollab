@@ -17,6 +17,10 @@ export default function FileSharing({ collaboration, isLegend, onUpdate }: FileS
     const [uploadProgress, setUploadProgress] = useState(0);
     const [error, setError] = useState<string | null>(null);
 
+    const isPodcast = collaboration.type === 'podcast';
+    const providerLabel = isPodcast ? 'Podcaster' : 'Legend';
+    const providerAction = isPodcast ? 'upload episode assets' : 'upload deliverables';
+
     const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (!file || !collaboration.id) return;
@@ -172,7 +176,7 @@ export default function FileSharing({ collaboration, isLegend, onUpdate }: FileS
                         />
                     </svg>
                     <p className="text-sm text-gray-600">
-                        No files have been uploaded yet. The Legend will upload deliverables here when ready.
+                        No files have been uploaded yet. The {providerLabel} will {providerAction} here when ready.
                     </p>
                 </div>
             )}
@@ -180,7 +184,7 @@ export default function FileSharing({ collaboration, isLegend, onUpdate }: FileS
             {isLegend && deliverables.length === 0 && collaboration.status === 'in_progress' && (
                 <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                     <p className="text-sm text-blue-800">
-                        <strong>Upload Your Deliverables:</strong> Upload the final files for this project.
+                        <strong>Upload Your Files:</strong> Upload the final files for this project.
                         Supported formats: audio files, videos, and compressed archives (.zip, .rar).
                     </p>
                 </div>
