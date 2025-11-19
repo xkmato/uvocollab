@@ -35,15 +35,16 @@ This epic covers the data structure and the flow for users to list their podcast
     - [x] Updates the user's document to indicate they are a "Podcaster" (adds `hasPodcast: true` on users doc).
     - [x] Sends a notification to Admins for vetting (sends email to `support@uvocollab.com` by default).
   - **Status:** To Do
+  - **Status:** Done
 
 - **Task 1.4: Admin Vetting for Podcasts**
   - **Description:** Update the Admin Dashboard to handle Podcast approvals.
   - **Dependencies:** Task 1.3
   - **Acceptance Criteria (AC):**
-    - [ ] Admin Dashboard lists pending podcast applications.
-    - [ ] Admin can "Approve" (sets status to `approved`) or "Decline".
-    - [ ] Approval triggers an email to the user.
-  - **Status:** To Do
+    - [x] Admin Dashboard lists pending podcast applications.
+    - [x] Admin can "Approve" (sets status to `approved`) or "Decline" (sets status to `rejected`).
+    - [x] Approval triggers an email to the user.
+  - **Status:** Done
 
 ### **Epic 2: Podcast Services & Management**
 

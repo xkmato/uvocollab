@@ -641,3 +641,59 @@ Questions? Reply to this email or contact us at support@uvocollab.com
 
   await sendEmail({ to: buyerEmail, subject, text, html });
 }
+
+/**
+ * Send podcast approval email
+ */
+export async function sendPodcastApprovalEmail(
+  recipientEmail: string,
+  podcastTitle: string
+): Promise<void> {
+  const subject = `🎉 Your podcast "${podcastTitle}" has been approved`;
+  const text = `Hello,
+
+Great news! Your podcast "${podcastTitle}" has been approved and is now visible on UvoCollab's marketplace.
+
+You can now manage your podcast listing and create collaboration services via your dashboard.
+
+Best regards,
+The UvoCollab Team
+
+---
+Questions? Reply to this email or contact us at support@uvocollab.com`;
+  const html = `<p>Hello,</p>
+<p>Great news! Your podcast <strong>${podcastTitle}</strong> has been approved and is now visible on UvoCollab's marketplace.</p>
+<p>You can now manage your podcast listing and create collaboration services via your dashboard.</p>
+<p>Best regards,<br>The UvoCollab Team</p>`;
+
+  await sendEmail({ to: recipientEmail, subject, text, html });
+}
+
+/**
+ * Send podcast decline email
+ */
+export async function sendPodcastDeclineEmail(
+  recipientEmail: string,
+  podcastTitle: string,
+  reason?: string
+): Promise<void> {
+  const subject = `Update on your podcast submission: "${podcastTitle}"`;
+  const text = `Hello,
+
+Thank you for submitting your podcast "${podcastTitle}" to UvoCollab. After a review, we couldn't approve the podcast at this time.${reason ? `\n\nFeedback: ${reason}` : ''}
+
+You may revise your submission and reapply.
+
+Best regards,
+The UvoCollab Team
+
+---
+Questions? Reply to this email or contact us at support@uvocollab.com`;
+  const html = `<p>Hello,</p>
+<p>Thank you for submitting your podcast <strong>${podcastTitle}</strong> to UvoCollab.</p>
+${reason ? `<div style="background:#FEF3C7;padding:10px;border-left:4px solid #F59E0B;">${reason}</div>` : ''}
+<p>You may revise your submission and reapply.</p>
+<p>Best regards,<br>The UvoCollab Team</p>`;
+
+  await sendEmail({ to: recipientEmail, subject, text, html });
+}

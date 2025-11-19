@@ -85,8 +85,15 @@ export default function AdminVettingPage() {
         <div className="min-h-screen bg-gray-50 p-8">
             <div className="mx-auto max-w-7xl">
                 <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900">Legend Applications</h1>
-                    <p className="mt-2 text-gray-600">Review and approve or decline Legend applications</p>
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h1 className="text-3xl font-bold text-gray-900">Legend Applications</h1>
+                            <p className="mt-2 text-gray-600">Review and approve or decline Legend applications</p>
+                        </div>
+                        <div className="flex gap-2">
+                            <a href="/admin/podcasts" className="px-3 py-2 bg-white border border-gray-200 rounded-md hover:bg-gray-50 text-sm">Podcasts</a>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Filter Tabs */}
