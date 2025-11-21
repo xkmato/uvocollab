@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import BankAccountForm from '@/app/components/BankAccountForm';
 import { useAuth } from '@/app/contexts/AuthContext';
@@ -8,6 +8,8 @@ import { User } from '@/app/types/user';
 import { db } from '@/lib/firebase';
 import { collection, deleteDoc, doc, getDocs, orderBy, query, setDoc, updateDoc, where, addDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import ProfileWizard from './components/ProfileWizard';
 import ServiceWizard from './components/ServiceWizard';
@@ -17,7 +19,8 @@ export default function LegendDashboard() {
     const router = useRouter();
     const [services, setServices] = useState<Service[]>([]);
     const [loadingServices, setLoadingServices] = useState(true);
-    const [activeTab, setActiveTab] = useState<'profile' | 'services' | 'requests' | 'payment'>('requests');
+    type TabId = 'profile' | 'services' | 'requests' | 'payment';
+    const [activeTab, setActiveTab] = useState<TabId>('requests');
     const [bankAccountConnected, setBankAccountConnected] = useState(false);
     const [checkingBankStatus, setCheckingBankStatus] = useState(true);
 
@@ -371,18 +374,18 @@ export default function LegendDashboard() {
                             </div>
                         </div>
                         <div className="flex gap-3">
-                            <a
+                            <Link
                                 href={`/legend/${user.uid}`}
                                 className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors"
                             >
                                 View Public Profile
-                            </a>
-                            <a
+                            </Link>
+                            <Link
                                 href="/"
                                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                             >
                                 Home
-                            </a>
+                            </Link>
                             <button
                                 onClick={logout}
                                 className="px-4 py-2 text-sm font-medium text-red-600 bg-white border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
@@ -425,22 +428,21 @@ export default function LegendDashboard() {
 
                 {/* Tab Navigation */}
                 <div className="flex space-x-1 bg-white p-1 rounded-xl shadow-sm mb-8 overflow-x-auto">
-                    {[
+                    {([
                         { id: 'requests', label: 'Collaboration Requests', count: collaborations.length },
                         { id: 'profile', label: 'Profile & Settings' },
                         { id: 'services', label: 'My Services' },
                         { id: 'payment', label: 'Payment Settings', alert: !bankAccountConnected && !checkingBankStatus }
-                    ].map((tab) => (
+                    ] as { id: TabId; label: string; count?: number; alert?: boolean }[]).map((tab) => (
                         <button
                             key={tab.id}
-                            onClick={() => setActiveTab(tab.id as any)}
+                            onClick={() => setActiveTab(tab.id)}
                             className={`
                                 flex-1 py-3 px-4 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap flex items-center justify-center
                                 ${activeTab === tab.id
                                     ? 'bg-purple-600 text-white shadow-md'
                                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                                }
-                            `}
+                                }`}
                         >
                             {tab.label}
                             {tab.alert && (
@@ -718,9 +720,11 @@ export default function LegendDashboard() {
                                                             {buyer && (
                                                                 <div className="flex items-center space-x-4 bg-gray-50 p-4 rounded-lg">
                                                                     {buyer.profileImageUrl ? (
-                                                                        <img
+                                                                        <Image
                                                                             src={buyer.profileImageUrl}
                                                                             alt={buyer.displayName}
+                                                                            width={48}
+                                                                            height={48}
                                                                             className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm"
                                                                         />
                                                                     ) : (
@@ -835,7 +839,7 @@ export default function LegendDashboard() {
                                                         <div className="mt-6 bg-blue-50 border border-blue-100 rounded-lg p-4 flex items-start">
                                                             <svg className="w-5 h-5 text-blue-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                                             <p className="text-blue-800 text-sm">
-                                                                Request accepted! Waiting for the artist to complete payment. You'll be notified when funds are secured.
+                                                                Request accepted! Waiting for the artist to complete payment. You will be notified when funds are secured.
                                                             </p>
                                                         </div>
                                                     )}
