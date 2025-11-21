@@ -201,10 +201,11 @@ export default function MarketplacePage() {
                         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
                             {/* Genre Filter */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label htmlFor="genre-select" className="block text-sm font-medium text-gray-700 mb-2">
                                     Genre
                                 </label>
                                 <select
+                                    id="genre-select"
                                     value={filters.genre}
                                     onChange={(e) => handleFilterChange('genre', e.target.value)}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -225,10 +226,11 @@ export default function MarketplacePage() {
 
                             {/* Price Range Filter */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label htmlFor="price-range-select" className="block text-sm font-medium text-gray-700 mb-2">
                                     Price Range
                                 </label>
                                 <select
+                                    id="price-range-select"
                                     value={filters.priceRange}
                                     onChange={(e) => handleFilterChange('priceRange', e.target.value)}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -242,10 +244,11 @@ export default function MarketplacePage() {
 
                             {/* Service Type Filter */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label htmlFor="service-type-select" className="block text-sm font-medium text-gray-700 mb-2">
                                     Service Type
                                 </label>
                                 <select
+                                    id="service-type-select"
                                     value={filters.serviceType}
                                     onChange={(e) => handleFilterChange('serviceType', e.target.value)}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
