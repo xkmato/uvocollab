@@ -13,4 +13,10 @@ export interface User {
   flutterwaveAccountNumber?: string; // Account number (last 4 digits only for security)
   bankAccountVerified?: boolean; // Whether the bank account has been verified
   hasPodcast?: boolean; // Whether the user has registered a podcast
+  paymentMethod?: 'bank' | 'mobile_money';
+  mobileMoneyProvider?: string;
+  businessName?: string;
+  businessEmail?: string;
+  businessContact?: string;
+  businessMobile?: string;
 }

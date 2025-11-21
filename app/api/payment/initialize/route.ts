@@ -63,12 +63,18 @@ export async function POST(request: NextRequest) {
 
     const legendData = legendDoc.data();
 
+    // NOTE: For manual payouts, we don't strictly require a subaccount anymore.
+    // If subaccount exists, we can use it (if we want automatic split), but for now we are moving to manual withdrawals.
+    // So we will allow payment even if no subaccount, and funds will go to platform.
+    
+    /*
     if (!legendData?.flutterwaveSubaccountId) {
       return NextResponse.json(
         { error: 'Legend has not connected their bank account' },
         { status: 400 }
       );
     }
+    */
 
     // Generate unique transaction reference
     const txRef = `UVOC-${collaborationId}-${uuidv4()}`;
@@ -83,23 +89,29 @@ export async function POST(request: NextRequest) {
       });
 
     // Calculate platform commission (20%)
-    const platformCommission = collabData.price * 0.2;
-    const legendAmount = collabData.price - platformCommission;
+    // const platformCommission = collabData.price * 0.2;
+    // const legendAmount = collabData.price - platformCommission;
 
-    // Return payment configuration with split payment setup
-    // The payment will be held in escrow until the project is completed
+    // Return payment configuration
+    // If subaccount exists, we could use it, but to be consistent with "manual withdrawal", 
+    // we might want to collect everything to platform account first.
+    // Let's just return the basic payment info.
+    
     return NextResponse.json({
       success: true,
       publicKey: process.env.FLUTTERWAVE_PUBLIC_KEY,
       txRef,
       amount: collabData.price,
-      legendSubaccountId: legendData.flutterwaveSubaccountId,
-      splitPayment: {
-        // Split payment configuration for escrow
-        // This holds the funds until manual payout is triggered
-        subaccountId: legendData.flutterwaveSubaccountId,
-        platformAmount: platformCommission,
-        legendAmount: legendAmount,
+      // legendSubaccountId: legendData.flutterwaveSubaccountId, // Optional now
+      // splitPayment: ... // Removed for manual flow
+      customer: {
+        email: decodedToken.email,
+        name: decodedToken.name || 'User',
+      },
+      customizations: {
+        title: `Collaboration with ${legendData?.displayName || 'Legend'}`,
+        description: `Payment for ${collabData.serviceTitle || 'Service'}`,
+        logo: 'https://uvocollab.com/logo.png', // Replace with actual logo URL
       },
     });
   } catch (error) {

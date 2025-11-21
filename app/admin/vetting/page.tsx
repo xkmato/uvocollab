@@ -71,7 +71,7 @@ export default function AdminVettingPage() {
 
     if (loading || loadingApplications) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div className="flex items-center justify-center h-64">
                 <div className="text-xl">Loading...</div>
             </div>
         );
@@ -82,21 +82,17 @@ export default function AdminVettingPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 p-8">
-            <div className="mx-auto max-w-7xl">
-                <div className="mb-8">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h1 className="text-3xl font-bold text-gray-900">Legend Applications</h1>
-                            <p className="mt-2 text-gray-600">Review and approve or decline Legend applications</p>
-                        </div>
-                        <div className="flex gap-2">
-                            <a href="/admin/podcasts" className="px-3 py-2 bg-white border border-gray-200 rounded-md hover:bg-gray-50 text-sm">Podcasts</a>
-                        </div>
+        <div>
+            <div className="mb-8">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-3xl font-bold text-gray-900">Legend Applications</h1>
+                        <p className="mt-2 text-gray-600">Review and approve or decline Legend applications</p>
                     </div>
                 </div>
+            </div>
 
-                {/* Filter Tabs */}
+            {/* Filter Tabs */}
                 <div className="mb-6 border-b border-gray-200">
                     <nav className="-mb-px flex space-x-8">
                         {(['pending', 'all', 'approved', 'declined'] as const).map((tab) => (

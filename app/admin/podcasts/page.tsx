@@ -55,7 +55,7 @@ export default function AdminPodcastVettingPage() {
 
     if (loading || loadingPodcasts) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div className="flex items-center justify-center h-64">
                 <div className="text-xl">Loading...</div>
             </div>
         );
@@ -66,14 +66,13 @@ export default function AdminPodcastVettingPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 p-8">
-            <div className="mx-auto max-w-7xl">
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900">Podcast Submissions</h1>
-                    <p className="mt-2 text-gray-600">Review and approve or reject Podcast listings</p>
-                </div>
+        <div>
+            <div className="mb-8">
+                <h1 className="text-3xl font-bold text-gray-900">Podcast Submissions</h1>
+                <p className="mt-2 text-gray-600">Review and approve or reject Podcast listings</p>
+            </div>
 
-                <div className="mb-6 border-b border-gray-200">
+            <div className="mb-6 border-b border-gray-200">
                     <nav className="-mb-px flex space-x-8">
                         {(['pending', 'all', 'approved', 'rejected'] as const).map((tab) => (
                             <button
@@ -105,7 +104,6 @@ export default function AdminPodcastVettingPage() {
                     </div>
                 )}
             </div>
-        </div>
     );
 }
 
