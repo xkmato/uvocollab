@@ -17,7 +17,7 @@ export default function LegendDashboard() {
     const router = useRouter();
     const [services, setServices] = useState<Service[]>([]);
     const [loadingServices, setLoadingServices] = useState(true);
-    const [activeTab, setActiveTab] = useState<'profile' | 'services' | 'requests' | 'payment'>('profile');
+    const [activeTab, setActiveTab] = useState<'profile' | 'services' | 'requests' | 'payment'>('requests');
     const [bankAccountConnected, setBankAccountConnected] = useState(false);
     const [checkingBankStatus, setCheckingBankStatus] = useState(true);
 
@@ -314,7 +314,7 @@ export default function LegendDashboard() {
     if (!user || !userData || userData.role !== 'legend') return null;
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/50 to-blue-50/50">
             {/* Header */}
             <div className="bg-white border-b sticky top-0 z-30 shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -384,10 +384,10 @@ export default function LegendDashboard() {
                 {/* Tab Navigation */}
                 <div className="flex space-x-1 bg-white p-1 rounded-xl shadow-sm mb-8 overflow-x-auto">
                     {[
+                        { id: 'requests', label: 'Collaboration Requests', count: collaborations.length },
                         { id: 'profile', label: 'Profile & Settings' },
                         { id: 'services', label: 'My Services' },
-                        { id: 'payment', label: 'Payment Settings', alert: !bankAccountConnected && !checkingBankStatus },
-                        { id: 'requests', label: 'Collaboration Requests', count: collaborations.length }
+                        { id: 'payment', label: 'Payment Settings', alert: !bankAccountConnected && !checkingBankStatus }
                     ].map((tab) => (
                         <button
                             key={tab.id}
@@ -395,7 +395,7 @@ export default function LegendDashboard() {
                             className={`
                                 flex-1 py-3 px-4 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap flex items-center justify-center
                                 ${activeTab === tab.id
-                                    ? 'bg-gray-900 text-white shadow-md'
+                                    ? 'bg-purple-600 text-white shadow-md'
                                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                                 }
                             `}
@@ -405,7 +405,7 @@ export default function LegendDashboard() {
                                 <span className="ml-2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
                             )}
                             {tab.count ? (
-                                <span className={`ml-2 px-2 py-0.5 text-xs rounded-full ${activeTab === tab.id ? 'bg-white text-gray-900' : 'bg-gray-200 text-gray-600'
+                                <span className={`ml-2 px-2 py-0.5 text-xs rounded-full ${activeTab === tab.id ? 'bg-white text-purple-600' : 'bg-gray-200 text-gray-600'
                                     }`}>
                                     {tab.count}
                                 </span>
@@ -421,7 +421,7 @@ export default function LegendDashboard() {
                         <div className="max-w-3xl mx-auto">
                             <div className="mb-6">
                                 <h2 className="text-2xl font-bold text-gray-900">Public Profile</h2>
-                                <p className="text-gray-500">Manage how you appear to artists and fans.</p>
+                                <p className="text-gray-700 font-medium">Manage how you appear to artists and fans.</p>
                             </div>
 
                             {profileMessage && (
@@ -451,7 +451,7 @@ export default function LegendDashboard() {
                         <div className="max-w-3xl mx-auto">
                             <div className="mb-6">
                                 <h2 className="text-2xl font-bold text-gray-900">Payment Settings</h2>
-                                <p className="text-gray-500">Manage your bank account and payout preferences.</p>
+                                <p className="text-gray-700 font-medium">Manage your bank account and payout preferences.</p>
                             </div>
                             <div className="bg-white rounded-2xl shadow-xl overflow-hidden p-8">
                                 <BankAccountForm onSuccess={() => {
@@ -467,7 +467,7 @@ export default function LegendDashboard() {
                             <div className="flex justify-between items-center mb-8">
                                 <div>
                                     <h2 className="text-2xl font-bold text-gray-900">My Services</h2>
-                                    <p className="text-gray-500">Manage the services you offer to artists.</p>
+                                    <p className="text-gray-700 font-medium">Manage the services you offer to artists.</p>
                                 </div>
                                 <button
                                     onClick={handleAddNewService}
@@ -573,7 +573,7 @@ export default function LegendDashboard() {
                         <div>
                             <div className="mb-8">
                                 <h2 className="text-2xl font-bold text-gray-900">Collaboration Requests</h2>
-                                <p className="text-gray-500">Review and manage pitches from artists.</p>
+                                <p className="text-gray-700 font-medium">Review and manage pitches from artists.</p>
                             </div>
 
                             {loadingCollaborations ? (

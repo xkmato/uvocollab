@@ -100,7 +100,7 @@ export default function ServiceWizard({ initialData, onSave, onCancel, isSaving 
                                         type="text"
                                         value={formData.title}
                                         onChange={(e) => handleChange('title', e.target.value)}
-                                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                        className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                         placeholder="e.g., 16-bar verse, Full song production"
                                     />
                                 </div>
@@ -110,7 +110,7 @@ export default function ServiceWizard({ initialData, onSave, onCancel, isSaving 
                                         value={formData.description}
                                         onChange={(e) => handleChange('description', e.target.value)}
                                         rows={4}
-                                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                        className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                         placeholder="Describe what's included in this service..."
                                     />
                                 </div>
@@ -125,7 +125,7 @@ export default function ServiceWizard({ initialData, onSave, onCancel, isSaving 
                                     <select
                                         value={formData.serviceType}
                                         onChange={(e) => handleChange('serviceType', e.target.value)}
-                                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                        className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                     >
                                         <option value="">Select a service type</option>
                                         <option value="Verse">Verse</option>
@@ -145,7 +145,7 @@ export default function ServiceWizard({ initialData, onSave, onCancel, isSaving 
                                         type="text"
                                         value={formData.deliverable}
                                         onChange={(e) => handleChange('deliverable', e.target.value)}
-                                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                        className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                         placeholder="e.g., 1 WAV file, Stems + Mixed Master"
                                     />
                                 </div>
@@ -167,7 +167,7 @@ export default function ServiceWizard({ initialData, onSave, onCancel, isSaving 
                                             onChange={(e) => handleChange('price', e.target.value)}
                                             min="0.01"
                                             step="0.01"
-                                            className="block w-full pl-7 pr-12 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                            className="block w-full pl-7 pr-12 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                             placeholder="0.00"
                                         />
                                     </div>

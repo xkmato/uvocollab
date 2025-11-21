@@ -90,7 +90,7 @@ export default function ProfileWizard({ initialData, onSave, isSaving }: Profile
                                     value={formData.displayName}
                                     onChange={(e) => handleChange('displayName', e.target.value)}
                                     required
-                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                     placeholder="Your stage name"
                                 />
                             </div>
@@ -100,7 +100,7 @@ export default function ProfileWizard({ initialData, onSave, isSaving }: Profile
                                     type="url"
                                     value={formData.profileImageUrl}
                                     onChange={(e) => handleChange('profileImageUrl', e.target.value)}
-                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                     placeholder="https://example.com/your-image.jpg"
                                 />
                                 {formData.profileImageUrl && (
@@ -125,7 +125,7 @@ export default function ProfileWizard({ initialData, onSave, isSaving }: Profile
                                     value={formData.bio}
                                     onChange={(e) => handleChange('bio', e.target.value)}
                                     rows={6}
-                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                     placeholder="Tell your story. What makes you unique?"
                                 />
                             </div>
@@ -135,7 +135,7 @@ export default function ProfileWizard({ initialData, onSave, isSaving }: Profile
                                     value={formData.managementInfo}
                                     onChange={(e) => handleChange('managementInfo', e.target.value)}
                                     rows={3}
-                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                     placeholder="Booking info or professional details"
                                 />
                             </div>
@@ -151,7 +151,7 @@ export default function ProfileWizard({ initialData, onSave, isSaving }: Profile
                                     <select
                                         value={formData.genre}
                                         onChange={(e) => handleChange('genre', e.target.value)}
-                                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                        className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                     >
                                         <option value="">Select a genre</option>
                                         <option value="Hip Hop">Hip Hop</option>
@@ -171,7 +171,7 @@ export default function ProfileWizard({ initialData, onSave, isSaving }: Profile
                                     <select
                                         value={formData.priceRange}
                                         onChange={(e) => handleChange('priceRange', e.target.value)}
-                                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                        className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                     >
                                         <option value="">Select a price range</option>
                                         <option value="budget">Budget ($0 - $500)</option>
