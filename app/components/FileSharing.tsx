@@ -63,7 +63,7 @@ export default function FileSharing({ collaboration, isLegend, onUpdate }: FileS
                             fileName: file.name,
                             fileUrl: downloadURL,
                             uploadedAt: new Date(),
-                            uploadedBy: collaboration.legendId,
+                            uploadedBy: isLegend ? collaboration.legendId! : collaboration.buyerId,
                             fileSize: file.size,
                         };
 

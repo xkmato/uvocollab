@@ -61,7 +61,7 @@ export default function Dashboard() {
             setCollaborations(collabsData);
 
             // Load legend and service information
-            const legendIds = [...new Set(collabsData.map(c => c.legendId))];
+            const legendIds = [...new Set(collabsData.map(c => c.legendId).filter((id): id is string => !!id))];
             const legendsData: Record<string, User> = {};
             const servicesData: Record<string, Service> = {};
 
@@ -285,7 +285,7 @@ export default function Dashboard() {
                 ) : (
                     <div className="space-y-6">
                         {collaborations.map((collab) => {
-                            const legend = legendsInfo[collab.legendId];
+                            const legend = collab.legendId ? legendsInfo[collab.legendId] : undefined;
                             const service = servicesInfo[collab.serviceId];
 
                             return (
@@ -317,15 +317,19 @@ export default function Dashboard() {
                                             <div className="mt-4">
                                                 {selectedCollab === collab.id ? (
                                                     <div className="border-t pt-4">
-                                                        <PaymentCheckout
-                                                            collaboration={collab}
-                                                            legend={legend}
-                                                            service={service}
-                                                            onSuccess={() => {
-                                                                loadCollaborations();
-                                                                setSelectedCollab(null);
-                                                            }}
-                                                        />
+                                                        {legend && service ? (
+                                                            <PaymentCheckout
+                                                                collaboration={collab}
+                                                                legend={legend}
+                                                                service={service}
+                                                                onSuccess={() => {
+                                                                    loadCollaborations();
+                                                                    setSelectedCollab(null);
+                                                                }}
+                                                            />
+                                                        ) : (
+                                                            <div className="p-4 text-sm text-gray-600">Loading payment details…</div>
+                                                        )}
                                                     </div>
                                                 ) : (
                                                     <button

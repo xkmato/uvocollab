@@ -92,16 +92,18 @@ export default function CollaborationHub() {
                 setBuyer(buyerSnap.docs[0].data() as User);
             }
 
-            // Load service information
-            const serviceRef = doc(db, 'users', collabData.legendId, 'services', collabData.serviceId);
-            const serviceSnap = await getDoc(serviceRef);
-            if (serviceSnap.exists()) {
-                setService({
-                    id: serviceSnap.id,
-                    ...serviceSnap.data(),
-                    createdAt: serviceSnap.data().createdAt?.toDate(),
-                    updatedAt: serviceSnap.data().updatedAt?.toDate(),
-                } as Service);
+            // Load service information (only if legendId is present)
+            if (collabData.legendId) {
+                const serviceRef = doc(db, 'users', collabData.legendId, 'services', collabData.serviceId);
+                const serviceSnap = await getDoc(serviceRef);
+                if (serviceSnap.exists()) {
+                    setService({
+                        id: serviceSnap.id,
+                        ...serviceSnap.data(),
+                        createdAt: serviceSnap.data().createdAt?.toDate(),
+                        updatedAt: serviceSnap.data().updatedAt?.toDate(),
+                    } as Service);
+                }
             }
         } catch (error) {
             console.error('Error loading collaboration:', error);

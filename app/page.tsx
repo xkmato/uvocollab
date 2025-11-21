@@ -73,7 +73,7 @@ export default function Home() {
             <div className="flex items-center justify-between mb-8 animate-fadeIn">
               <div>
                 <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
-                  Welcome Back{userData?.fullName ? `, ${userData.fullName.split(' ')[0]}` : ''}!
+                  Welcome Back{userData?.displayName ? `, ${userData.displayName.split(' ')[0]}` : ''}!
                 </h1>
                 <p className="text-white/60 text-lg">What would you like to do today?</p>
               </div>
@@ -91,7 +91,7 @@ export default function Home() {
                   href="/dashboard"
                   className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-lg hover:scale-110 transition-transform border-2 border-white/20"
                 >
-                  {userData?.fullName?.charAt(0).toUpperCase() || 'U'}
+                  {userData?.displayName?.charAt(0).toUpperCase() || 'U'}
                 </Link>
               </div>
             </div>

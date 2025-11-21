@@ -129,7 +129,6 @@ export default function AdminVettingPage() {
                         ))}
                     </div>
                 )}
-            </div>
         </div>
     );
 }
