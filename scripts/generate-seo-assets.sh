@@ -39,7 +39,7 @@ for size in "${sizes[@]}"; do
         -pointsize $((size/4)) \
         -fill white \
         -font "DejaVu-Sans-Bold" \
-        -annotate +0+0 "UV" \
+        -annotate +0+0 "Uc" \
         "$output_file"
     
     echo "✅ Created $output_file"
@@ -61,7 +61,7 @@ convert -size 400x400 \
     -pointsize 120 \
     -fill white \
     -font "DejaVu-Sans-Bold" \
-    -annotate +0-20 "UV" \
+    -annotate +0-20 "Uc" \
     -pointsize 40 \
     -annotate +0+60 "COLLAB" \
     public/logo.png
