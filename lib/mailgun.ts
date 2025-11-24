@@ -231,13 +231,12 @@ Questions? Reply to this email or contact us at support@uvocollab.com
 /**
  * Send pitch accepted email to buyer
  */
-export async function sendPitchAcceptedEmail(
+export async function sendCollaborationAcceptedEmail(
   buyerEmail: string,
   buyerName: string,
   legendName: string,
   serviceTitle: string,
-  price: number,
-  collaborationId: string
+  price: number
 ): Promise<void> {
   const subject = `🎉 ${legendName} Accepted Your Collaboration Request!`;
   

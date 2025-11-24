@@ -5,6 +5,7 @@ import PodcastServiceList from '@/app/components/PodcastServiceList';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { Collaboration } from '@/app/types/collaboration';
 import { Podcast, PodcastService } from '@/app/types/podcast';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -38,6 +39,7 @@ export default function PodcastDashboard() {
         } else if (user) {
             fetchPodcastData();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user, authLoading, router]);
 
     const fetchPodcastData = async () => {
@@ -270,7 +272,7 @@ export default function PodcastDashboard() {
                                 </div>
                                 <div>
                                     {podcast.coverImageUrl && (
-                                        <img src={podcast.coverImageUrl} alt={podcast.title} className="w-full h-auto rounded-lg shadow-md object-cover" />
+                                        <Image src={podcast.coverImageUrl} alt={podcast.title} className="w-full h-auto rounded-lg shadow-md object-cover" width={400} height={400} />
                                     )}
                                 </div>
                             </div>
@@ -294,7 +296,7 @@ export default function PodcastDashboard() {
                                             <div>
                                                 <h3 className="font-bold text-lg text-gray-900">{pitch.buyerName || 'Guest'}</h3>
                                                 <p className="text-sm text-gray-600">Applying for: <span className="font-medium text-purple-600">{pitch.serviceTitle}</span></p>
-                                                <p className="text-xs text-gray-500 mt-1">Submitted: {new Date(pitch.createdAt as any).toLocaleDateString()}</p>
+                                                <p className="text-xs text-gray-500 mt-1">Submitted: {new Date(typeof pitch.createdAt === 'object' && pitch.createdAt !== null && 'seconds' in pitch.createdAt ? (pitch.createdAt as { seconds: number }).seconds * 1000 : pitch.createdAt).toLocaleDateString()}</p>
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <span className={`px-2 py-1 text-xs font-medium rounded-full ${pitch.status === 'pending_review' ? 'bg-yellow-100 text-yellow-800' :

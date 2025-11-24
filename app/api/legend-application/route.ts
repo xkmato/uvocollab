@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     
     try {
       decodedToken = await adminAuth.verifyIdToken(token);
-    } catch (error) {
+    } catch {
       return NextResponse.json(
         { error: 'Unauthorized - Invalid authentication token' },
         { status: 401 }
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
 
     // Update authenticated user's role to 'legend_applicant'
     // Use set with merge to create the document if it doesn't exist
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       role: 'legend_applicant',
       displayName: applicationData.artistName,
       bio: applicationData.bio,

@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuth } from '@/app/contexts/AuthContext';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -153,12 +154,12 @@ export default function Login() {
                         {' '}and{' '}
                         <a href="#" className="text-purple-400 hover:text-purple-300 underline">Privacy Policy</a>
                     </p>
-                    <a href="/" className="text-white/70 hover:text-white text-sm inline-flex items-center gap-2 transition-colors">
+                    <Link href="/" className="text-white/70 hover:text-white text-sm inline-flex items-center gap-2 transition-colors">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                         </svg>
                         Back to Home
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>

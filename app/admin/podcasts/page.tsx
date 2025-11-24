@@ -6,10 +6,23 @@ import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+interface Podcast {
+    id: string;
+    title: string;
+    description: string;
+    rssFeedUrl: string;
+    websiteUrl?: string;
+    categories?: string[];
+    avgListeners?: number;
+    createdAt: { seconds: number } | string;
+    status: string;
+    [key: string]: unknown;
+}
+
 export default function AdminPodcastVettingPage() {
     const { user, userData, loading } = useAuth();
     const router = useRouter();
-    const [podcasts, setPodcasts] = useState<any[]>([]);
+    const [podcasts, setPodcasts] = useState<Podcast[]>([]);
     const [loadingPodcasts, setLoadingPodcasts] = useState(true);
     const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('pending');
 
@@ -37,7 +50,7 @@ export default function AdminPodcastVettingPage() {
             }
 
             const querySnapshot = await getDocs(q);
-            const items: any[] = [];
+            const items: Podcast[] = [];
 
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
@@ -107,7 +120,7 @@ export default function AdminPodcastVettingPage() {
     );
 }
 
-function PodcastCard({ podcast, onUpdate }: { podcast: any; onUpdate: () => void }) {
+function PodcastCard({ podcast, onUpdate }: { podcast: Podcast; onUpdate: () => void }) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
 

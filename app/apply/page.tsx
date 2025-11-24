@@ -125,7 +125,7 @@ export default function ApplyAsLegend() {
                             Thank you for applying to become a UvoCollab Legend.
                         </p>
                         <p className="text-white/60">
-                            We'll review your application and get back to you soon.
+                            We&apos;ll review your application and get back to you soon.
                         </p>
                     </div>
                     <div className="flex items-center justify-center gap-2 text-white/50">
@@ -205,7 +205,7 @@ export default function ApplyAsLegend() {
                     {/* Step 1: Contact Info */}
                     {currentStep === 1 && (
                         <div className="space-y-6 animate-fadeIn">
-                            <h2 className="text-3xl font-bold text-white mb-6">Let's start with your contact information</h2>
+                            <h2 className="text-3xl font-bold text-white mb-6">Let&apos;s start with your contact information</h2>
 
                             <div>
                                 <label className="block text-white font-semibold mb-2">Artist/Professional Name *</label>

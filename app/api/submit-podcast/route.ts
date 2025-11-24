@@ -32,7 +32,15 @@ export async function POST(request: NextRequest) {
       coverImageUrl,
       avgListeners,
       websiteUrl,
-    } = body as any;
+    } = body as {
+      title: string;
+      description?: string;
+      rssFeedUrl: string;
+      categories: string[];
+      coverImageUrl?: string;
+      avgListeners?: number;
+      websiteUrl?: string;
+    };
 
     // Validate required fields
     if (!title || !rssFeedUrl || !categories || !Array.isArray(categories) || categories.length === 0) {

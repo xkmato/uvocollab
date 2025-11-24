@@ -23,6 +23,7 @@ export default function PodcastDetailPage() {
         if (podcastId) {
             loadPodcastData();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [podcastId]);
 
     const loadPodcastData = useCallback(async () => {

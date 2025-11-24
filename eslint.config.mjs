@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Firebase build directory:
+    ".firebase/**",
+    // Test results and reports:
+    "test-results/**",
+    "playwright-report/**",
   ]),
 ]);
 

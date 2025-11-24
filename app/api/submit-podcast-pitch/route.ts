@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
             status: 'pending_review',
             createdAt: new Date() as unknown as Date, // Cast to satisfy type if needed, or just Date
             updatedAt: new Date() as unknown as Date,
-        } as any; // Cast the whole object to any to avoid strict type checking against CreateCollaborationData which might be missing these fields
+        };
 
         // Note: I'm using pitchBestWorkUrl to store previousMediaUrl to reuse some frontend logic if needed, 
         // but I also added specific fields to the type. 
