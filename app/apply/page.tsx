@@ -160,7 +160,7 @@ export default function ApplyAsLegend() {
                         Become a Legend
                     </h1>
                     <p className="text-xl text-white/80">
-                        Join an exclusive community of verified music industry professionals
+                        Join an exclusive community of verified music & podcast industry professionals
                     </p>
                 </div>
 

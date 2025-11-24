@@ -16,17 +16,19 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://uvocollab.com'),
   title: {
-    default: 'UvoCollab - Connect Rising Artists with Music Industry Legends',
+    default: 'UvoCollab - Connect Rising Artists & Podcasters with Industry Legends',
     template: '%s | UvoCollab'
   },
-  description: 'UvoCollab is a curated marketplace connecting emerging artists with verified music industry professionals. Secure collaborations with escrow payments, legal contracts, and project management for verses, features, production, mixing, and more.',
+  description: 'UvoCollab is a curated marketplace connecting emerging artists and podcasters with verified music and podcast industry professionals. Secure collaborations with escrow payments, legal contracts, and project management for production, guest bookings, sponsorships, and more.',
   keywords: [
     'music collaboration platform',
-    'music industry marketplace',
+    'podcast collaboration platform',
+    'music and podcast marketplace',
     'hire music producers',
     'artist collaboration',
     'music feature marketplace',
     'verified music professionals',
+    'verified podcast professionals',
     'music production services',
     'mixing and mastering services',
     'songwriting collaboration',
@@ -54,21 +56,21 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://uvocollab.com',
     siteName: 'UvoCollab',
-    title: 'UvoCollab - Connect Rising Artists with Music Industry Legends',
-    description: 'Secure music collaboration platform connecting emerging artists with verified industry professionals. Features, verses, production, and more with escrow payments and legal contracts.',
+    title: 'UvoCollab - Connect Rising Artists & Podcasters with Industry Legends',
+    description: 'Secure collaboration platform connecting emerging artists and podcasters with verified industry professionals. Features, verses, production, guest bookings, sponsorships, and more with escrow payments and legal contracts.',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'UvoCollab - Music Collaboration Platform',
+        alt: 'UvoCollab - Music & Podcast Collaboration Platform',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'UvoCollab - Connect Rising Artists with Music Industry Legends',
-    description: 'Secure music collaboration platform connecting emerging artists with verified industry professionals.',
+    title: 'UvoCollab - Connect Rising Artists & Podcasters with Industry Legends',
+    description: 'Secure collaboration platform connecting emerging artists and podcasters with verified industry professionals.',
     images: ['/twitter-image.png'],
     creator: '@uvocollab',
   },
@@ -96,7 +98,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://uvocollab.com',
   },
-  category: 'music',
+  category: 'music & podcasting',
 };
 
 export default function RootLayout({
@@ -115,7 +117,7 @@ export default function RootLayout({
               "@type": "WebSite",
               "name": "UvoCollab",
               "url": "https://uvocollab.com",
-              "description": "Connect rising artists with music industry legends",
+              "description": "Connect rising artists and podcasters with industry legends",
               "potentialAction": {
                 "@type": "SearchAction",
                 "target": "https://uvocollab.com/marketplace?search={search_term_string}",

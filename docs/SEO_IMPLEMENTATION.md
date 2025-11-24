@@ -21,7 +21,7 @@ This document outlines the comprehensive SEO implementation for UvoCollab, a mus
 
 #### Page-Specific Metadata
 
-- **Homepage**: Focus on "Connect Rising Artists with Music Industry Legends"
+- **Homepage**: Focus on "Connect Rising Artists & Podcasters with Industry Legends"
 - **Marketplace**: "Find Verified Professionals" - discovery-focused
 - **Apply Page**: "Become a Legend" - conversion-focused for professionals
 - **Auth Pages**: No-index to prevent crawling of login/signup pages

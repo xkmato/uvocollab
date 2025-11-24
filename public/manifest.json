@@ -1,7 +1,7 @@
 {
   "name": "UvoCollab",
   "short_name": "UvoCollab",
-  "description": "Connect rising artists with music industry legends. Secure collaborations with escrow payments and legal contracts.",
+  "description": "Connect rising artists and podcasters with industry legends. Secure collaborations with escrow payments and legal contracts.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",
@@ -63,7 +63,7 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["music", "entertainment", "business"],
+  "categories": ["music", "podcasts", "entertainment", "business"],
   "screenshots": [
     {
       "src": "/screenshot-mobile.png",
@@ -82,7 +82,7 @@
     {
       "name": "Marketplace",
       "short_name": "Browse",
-      "description": "Browse verified music industry legends",
+      "description": "Browse verified music & podcast industry legends",
       "url": "/marketplace",
       "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
     },

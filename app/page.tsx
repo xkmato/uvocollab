@@ -333,10 +333,10 @@ export default function Home() {
                 UvoCollab
               </h1>
               <p className="text-2xl md:text-3xl text-white/90 mb-4 max-w-3xl mx-auto font-light">
-                Where Rising Artists Meet Industry Legends
+                Where Rising Artists & Podcasters Meet Industry Legends
               </p>
               <p className="text-lg md:text-xl text-white/70 max-w-2xl mx-auto">
-                Connect, collaborate, and create magic with verified music industry professionals.
+                Connect, collaborate, and create magic with verified music and podcast professionals.
               </p>
             </div>
 

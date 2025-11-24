@@ -160,7 +160,7 @@ export function generateMarketplaceSchema() {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'UvoCollab Marketplace',
-    description: 'Verified music industry professionals offering collaboration services',
+    description: 'Verified music and podcast industry professionals offering collaboration services',
     url: 'https://uvocollab.com/marketplace',
   };
 }

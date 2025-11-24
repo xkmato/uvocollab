@@ -61,8 +61,8 @@ convert -size 400x400 \
     -pointsize 120 \
     -fill white \
     -font "DejaVu-Sans-Bold" \
-    -annotate +0-20 "Uc" \
-    -pointsize 40 \
+    -annotate +0+20 "Connect Rising Artists & Podcasters with" \
+    -annotate +0+80 "Industry Legends" \
     -annotate +0+60 "COLLAB" \
     public/logo.png
 echo "✅ Created public/logo.png"
@@ -77,8 +77,8 @@ convert -size 1200x630 \
     -font "DejaVu-Sans-Bold" \
     -annotate +0-80 "UvoCollab" \
     -pointsize 40 \
-    -annotate +0+20 "Connect Rising Artists with" \
-    -annotate +0+80 "Music Industry Legends" \
+    -annotate +0+20 "Connect Rising Artists & Podcasters with" \
+    -annotate +0+80 "Industry Legends" \
     public/og-image.png
 echo "✅ Created public/og-image.png"
 
@@ -92,8 +92,8 @@ convert -size 1200x675 \
     -font "DejaVu-Sans-Bold" \
     -annotate +0-60 "UvoCollab" \
     -pointsize 35 \
-    -annotate +0+30 "Connect Rising Artists with" \
-    -annotate +0+80 "Music Industry Legends" \
+    -annotate +0+30 "Connect Rising Artists & Podcasters with" \
+    -annotate +0+80 "Industry Legends" \
     public/twitter-image.png
 echo "✅ Created public/twitter-image.png"
 
@@ -126,7 +126,7 @@ convert -size 1920x1080 \
     -pointsize 45 \
     -annotate +0-40 "Desktop Experience" \
     -pointsize 30 \
-    -annotate +0+30 "Browse verified music industry professionals" \
+    -annotate +0+30 "Browse verified music & podcast industry professionals" \
     -annotate +0+75 "Secure collaborations with escrow payments" \
     -annotate +0+120 "Manage projects with integrated tools" \
     public/screenshot-desktop.png

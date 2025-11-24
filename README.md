@@ -1,8 +1,8 @@
 # UvoCollab
 
-**Connect with legends in the music industry.**
+**Connect with legends in the music and podcast industries.**
 
-UvoCollab is a curated marketplace and collaboration platform that bridges emerging artists ("New Artists") with verified music industry professionals ("Legends"). The platform provides secure transactions, legal contract generation, and a project management hub for music collaborations.
+UvoCollab is a curated marketplace and collaboration platform that bridges emerging artists ("New Artists") and podcasters with verified music and podcast industry professionals ("Legends"). The platform provides secure transactions, legal contract generation, and a project management hub for music and podcast collaborations.
 
 ## 🎵 What is UvoCollab?
 
@@ -10,7 +10,7 @@ UvoCollab solves a critical problem in the music industry: connecting talented e
 
 ### Key Features
 
-- **Curated Marketplace**: Browse verified music industry professionals offering services like verses, features, production, mixing, and more
+- **Curated Marketplace**: Browse verified music and podcast industry professionals offering services like verses, features, production, mixing, guest bookings, sponsorships, and more
 - **Pitch-Based System**: Artists submit project pitches with demos and creative concepts for Legends to review and approve
 - **Secure Payments & Escrow**: Integrated Flutterwave payment processing with escrow to protect both parties
 - **Automated Legal Contracts**: Dynamic "Work for Hire" contract generation with e-signature integration

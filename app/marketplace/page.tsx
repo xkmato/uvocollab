@@ -155,7 +155,7 @@ export default function MarketplacePage() {
                     <div className="text-center">
                         <h1 className="text-5xl font-bold mb-4">Marketplace</h1>
                         <p className="text-xl text-white/90 max-w-2xl mx-auto">
-                            Discover and collaborate with verified music industry legends
+                            Discover and collaborate with verified music & podcast industry legends
                         </p>
                     </div>
                 </div>
