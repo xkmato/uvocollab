@@ -208,9 +208,10 @@ export default function ApplyAsLegend() {
                             <h2 className="text-3xl font-bold text-white mb-6">Let&apos;s start with your contact information</h2>
 
                             <div>
-                                <label className="block text-white font-semibold mb-2">Artist/Professional Name *</label>
+                                <label htmlFor="artistName" className="block text-white font-semibold mb-2">Artist/Professional Name *</label>
                                 <input
                                     type="text"
+                                    id="artistName"
                                     name="artistName"
                                     value={formData.artistName}
                                     onChange={handleChange}
@@ -220,9 +221,10 @@ export default function ApplyAsLegend() {
                             </div>
 
                             <div>
-                                <label className="block text-white font-semibold mb-2">Email Address</label>
+                                <label htmlFor="email" className="block text-white font-semibold mb-2">Email Address</label>
                                 <input
                                     type="email"
+                                    id="email"
                                     value={user?.email || ''}
                                     disabled
                                     className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white/60 cursor-not-allowed"
@@ -231,9 +233,10 @@ export default function ApplyAsLegend() {
                             </div>
 
                             <div>
-                                <label className="block text-white font-semibold mb-2">Phone Number *</label>
+                                <label htmlFor="phone" className="block text-white font-semibold mb-2">Phone Number *</label>
                                 <input
                                     type="tel"
+                                    id="phone"
                                     name="phone"
                                     value={formData.phone}
                                     onChange={handleChange}
@@ -251,9 +254,10 @@ export default function ApplyAsLegend() {
                             <p className="text-white/60 mb-6">If you manage yourself, you can skip this step</p>
 
                             <div>
-                                <label className="block text-white font-semibold mb-2">Manager/Agency Name</label>
+                                <label htmlFor="managementName" className="block text-white font-semibold mb-2">Manager/Agency Name</label>
                                 <input
                                     type="text"
+                                    id="managementName"
                                     name="managementName"
                                     value={formData.managementName}
                                     onChange={handleChange}
@@ -263,9 +267,10 @@ export default function ApplyAsLegend() {
                             </div>
 
                             <div>
-                                <label className="block text-white font-semibold mb-2">Manager/Agency Email</label>
+                                <label htmlFor="managementEmail" className="block text-white font-semibold mb-2">Manager/Agency Email</label>
                                 <input
                                     type="email"
+                                    id="managementEmail"
                                     name="managementEmail"
                                     value={formData.managementEmail}
                                     onChange={handleChange}
@@ -283,9 +288,10 @@ export default function ApplyAsLegend() {
                             <p className="text-white/60 mb-6">Share your profiles and achievements to help us verify your credentials</p>
 
                             <div>
-                                <label className="block text-white font-semibold mb-2">Spotify Artist Profile *</label>
+                                <label htmlFor="spotifyLink" className="block text-white font-semibold mb-2">Spotify Artist Profile *</label>
                                 <input
                                     type="url"
+                                    id="spotifyLink"
                                     name="spotifyLink"
                                     value={formData.spotifyLink}
                                     onChange={handleChange}
@@ -295,9 +301,10 @@ export default function ApplyAsLegend() {
                             </div>
 
                             <div>
-                                <label className="block text-white font-semibold mb-2">Instagram Profile</label>
+                                <label htmlFor="instagramLink" className="block text-white font-semibold mb-2">Instagram Profile</label>
                                 <input
                                     type="url"
+                                    id="instagramLink"
                                     name="instagramLink"
                                     value={formData.instagramLink}
                                     onChange={handleChange}
@@ -307,9 +314,10 @@ export default function ApplyAsLegend() {
                             </div>
 
                             <div>
-                                <label className="block text-white font-semibold mb-2">Twitter/X Profile</label>
+                                <label htmlFor="twitterLink" className="block text-white font-semibold mb-2">Twitter/X Profile</label>
                                 <input
                                     type="url"
+                                    id="twitterLink"
                                     name="twitterLink"
                                     value={formData.twitterLink}
                                     onChange={handleChange}
@@ -319,8 +327,9 @@ export default function ApplyAsLegend() {
                             </div>
 
                             <div>
-                                <label className="block text-white font-semibold mb-2">Press Links or Notable Achievements</label>
+                                <label htmlFor="pressLinks" className="block text-white font-semibold mb-2">Press Links or Notable Achievements</label>
                                 <textarea
+                                    id="pressLinks"
                                     name="pressLinks"
                                     value={formData.pressLinks}
                                     onChange={handleChange}
@@ -339,8 +348,9 @@ export default function ApplyAsLegend() {
                             <p className="text-white/60 mb-6">Share your journey and what makes you a legend in your field</p>
 
                             <div>
-                                <label className="block text-white font-semibold mb-2">Professional Bio *</label>
+                                <label htmlFor="bio" className="block text-white font-semibold mb-2">Professional Bio *</label>
                                 <textarea
+                                    id="bio"
                                     name="bio"
                                     value={formData.bio}
                                     onChange={handleChange}
@@ -354,9 +364,10 @@ export default function ApplyAsLegend() {
                             </div>
 
                             <div>
-                                <label className="block text-white font-semibold mb-2">Referred by an existing Legend? (Optional)</label>
+                                <label htmlFor="referralFrom" className="block text-white font-semibold mb-2">Referred by an existing Legend? (Optional)</label>
                                 <input
                                     type="text"
+                                    id="referralFrom"
                                     name="referralFrom"
                                     value={formData.referralFrom}
                                     onChange={handleChange}
