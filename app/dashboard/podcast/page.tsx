@@ -199,40 +199,48 @@ export default function PodcastDashboard() {
                         {isEditingPodcast ? (
                             <form onSubmit={handlePodcastUpdate} className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Title</label>
+                                    <label htmlFor="podcast-title" className="block text-sm font-medium text-gray-700">Title</label>
                                     <input
+                                        id="podcast-title"
                                         type="text"
                                         value={podcastForm.title}
                                         onChange={(e) => setPodcastForm({ ...podcastForm, title: e.target.value })}
                                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                        aria-label="Podcast title"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Description</label>
+                                    <label htmlFor="podcast-description" className="block text-sm font-medium text-gray-700">Description</label>
                                     <textarea
+                                        id="podcast-description"
                                         value={podcastForm.description}
                                         onChange={(e) => setPodcastForm({ ...podcastForm, description: e.target.value })}
                                         rows={3}
                                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                        aria-label="Podcast description"
                                     />
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700">RSS Feed URL</label>
+                                        <label htmlFor="podcast-rss-feed" className="block text-sm font-medium text-gray-700">RSS Feed URL</label>
                                         <input
+                                            id="podcast-rss-feed"
                                             type="url"
                                             value={podcastForm.rssFeedUrl}
                                             onChange={(e) => setPodcastForm({ ...podcastForm, rssFeedUrl: e.target.value })}
                                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                            aria-label="RSS Feed URL"
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700">Website URL</label>
+                                        <label htmlFor="podcast-website" className="block text-sm font-medium text-gray-700">Website URL</label>
                                         <input
+                                            id="podcast-website"
                                             type="url"
                                             value={podcastForm.websiteUrl}
                                             onChange={(e) => setPodcastForm({ ...podcastForm, websiteUrl: e.target.value })}
                                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                            aria-label="Website URL"
                                         />
                                     </div>
                                 </div>
