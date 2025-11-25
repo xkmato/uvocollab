@@ -302,7 +302,7 @@ export default function BankAccountForm({ onSuccess }: BankAccountFormProps) {
                         value={formData.businessName}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                         placeholder="Your stage or business name"
                     />
                 </div>
@@ -321,7 +321,7 @@ export default function BankAccountForm({ onSuccess }: BankAccountFormProps) {
                         value={formData.businessEmail}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                         placeholder="business@example.com"
                     />
                 </div>
@@ -340,7 +340,7 @@ export default function BankAccountForm({ onSuccess }: BankAccountFormProps) {
                         value={formData.businessContact}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                         placeholder="Full name"
                     />
                 </div>
@@ -359,7 +359,7 @@ export default function BankAccountForm({ onSuccess }: BankAccountFormProps) {
                         value={formData.businessMobile}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                         placeholder="+234 XXX XXX XXXX"
                     />
                 </div>
@@ -380,7 +380,7 @@ export default function BankAccountForm({ onSuccess }: BankAccountFormProps) {
                                 onChange={handleChange}
                                 required
                                 disabled={loadingBanks}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                             >
                                 <option value="">
                                     {loadingBanks ? 'Loading banks...' : 'Select your bank'}
@@ -409,7 +409,7 @@ export default function BankAccountForm({ onSuccess }: BankAccountFormProps) {
                                 required
                                 maxLength={10}
                                 pattern="[0-9]{10}"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                                 placeholder="10-digit account number"
                             />
                             <p className="text-sm text-gray-500 mt-1">
@@ -432,7 +432,7 @@ export default function BankAccountForm({ onSuccess }: BankAccountFormProps) {
                                 value={mobileMoneyProvider}
                                 onChange={(e) => setMobileMoneyProvider(e.target.value)}
                                 required
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                                 placeholder="e.g. MTN, Airtel, Vodafone"
                             />
                         </div>
@@ -451,7 +451,7 @@ export default function BankAccountForm({ onSuccess }: BankAccountFormProps) {
                                 value={formData.accountNumber}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                                 placeholder="Mobile money number"
                             />
                         </div>
