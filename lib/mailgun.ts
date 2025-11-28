@@ -540,6 +540,109 @@ Questions? Reply to this email or contact us at support@uvocollab.com
 }
 
 /**
+ * Send pitch accepted email to buyer
+ */
+export async function sendPitchAcceptedEmail(
+  buyerEmail: string,
+  buyerName: string,
+  legendName: string,
+  serviceTitle: string,
+  price: number,
+  collaborationId: string
+): Promise<void> {
+  const subject = `🎉 Great News! ${legendName} Accepted Your Pitch!`;
+  
+  const paymentUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://uvocollab.com'}/collaboration/${collaborationId}`;
+  
+  const text = `
+Hello ${buyerName},
+
+Exciting news! ${legendName} has accepted your pitch for "${serviceTitle}"!
+
+Next Steps:
+1. Complete your payment of $${price}
+2. Review and sign the collaboration contract
+3. Start working with ${legendName} in your private Collaboration Hub
+
+Your payment will be held securely in escrow until the project is complete.
+
+Complete Payment and Sign Contract:
+${paymentUrl}
+
+We're excited to see what you and ${legendName} create together!
+
+Best regards,
+The UvoCollab Team
+
+---
+Questions? Reply to this email or contact us at support@uvocollab.com
+`;
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .header { background-color: #10B981; color: white; padding: 20px; text-align: center; }
+    .content { padding: 20px; }
+    .highlight { background-color: #D1FAE5; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #10B981; }
+    .next-steps { background-color: #EEF2FF; padding: 15px; border-radius: 5px; margin: 20px 0; }
+    .cta-button { 
+      display: inline-block; 
+      background-color: #4F46E5; 
+      color: white; 
+      padding: 12px 24px; 
+      text-decoration: none; 
+      border-radius: 5px; 
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #E5E7EB; font-size: 12px; color: #6B7280; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🎉 Pitch Accepted!</h1>
+  </div>
+  <div class="content">
+    <p>Hello <strong>${buyerName}</strong>,</p>
+    
+    <div class="highlight">
+      <h3>Exciting News!</h3>
+      <p><strong>${legendName}</strong> has accepted your pitch for "<strong>${serviceTitle}</strong>"!</p>
+    </div>
+    
+    <div class="next-steps">
+      <h3>Next Steps:</h3>
+      <ol>
+        <li>Complete your payment of <strong>$${price}</strong></li>
+        <li>Review and sign the collaboration contract</li>
+        <li>Start working with ${legendName} in your private Collaboration Hub</li>
+      </ol>
+    </div>
+    
+    <p>Your payment will be held securely in escrow until the project is complete.</p>
+    
+    <p style="text-align: center;">
+      <a href="${paymentUrl}" class="cta-button">Complete Payment &amp; Sign Contract</a>
+    </p>
+    
+    <p>We're excited to see what you and ${legendName} create together!</p>
+    
+    <p><strong>Best regards,</strong><br>The UvoCollab Team</p>
+  </div>
+  <div class="footer">
+    Questions? Reply to this email or contact us at support@uvocollab.com
+  </div>
+</body>
+</html>
+`;
+
+  await sendEmail({ to: buyerEmail, subject, text, html });
+}
+
+/**
  * Send pitch declined email to buyer
  */
 export async function sendPitchDeclinedEmail(

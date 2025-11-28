@@ -114,10 +114,6 @@ export async function POST(request: NextRequest) {
             pitchBestWorkUrl: previousMediaUrl.trim(), // Mapping previousMediaUrl to pitchBestWorkUrl for consistency or use a new field
             proposedDates: proposedDates.trim(),
             pressKitUrl: pressKitUrl || null,
-            // Initialize other fields
-            status: 'pending_review',
-            createdAt: new Date() as unknown as Date, // Cast to satisfy type if needed, or just Date
-            updatedAt: new Date() as unknown as Date,
         };
 
         // Note: I'm using pitchBestWorkUrl to store previousMediaUrl to reuse some frontend logic if needed, 
@@ -126,6 +122,9 @@ export async function POST(request: NextRequest) {
         const dbData = {
             ...collaborationData,
             previousMediaUrl: previousMediaUrl.trim(), // Explicitly save it if needed, though pitchBestWorkUrl might be enough
+            status: 'pending_review' as const,
+            createdAt: new Date(),
+            updatedAt: new Date(),
             contractUrl: null,
         };
 

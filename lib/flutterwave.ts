@@ -42,6 +42,7 @@ export async function createSubaccount(params: {
       business_email: params.businessEmail,
       business_contact: params.businessContact,
       business_mobile: params.businessMobile,
+      country: 'NG',
       split_type: params.splitType,
       split_value: params.splitValue,
     };

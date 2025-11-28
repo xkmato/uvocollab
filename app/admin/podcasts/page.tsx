@@ -54,7 +54,7 @@ export default function AdminPodcastVettingPage() {
 
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
-                items.push({ id: doc.id, ...data });
+                items.push({ id: doc.id, ...data } as Podcast);
             });
 
             setPodcasts(items);
@@ -214,7 +214,7 @@ function PodcastCard({ podcast, onUpdate }: { podcast: Podcast; onUpdate: () => 
                             <p><span className="font-medium">Categories:</span> {(categories || []).join(', ')}</p>
                             {typeof avgListeners === 'number' && <p><span className="font-medium">Avg listeners:</span> {avgListeners}</p>}
                             {createdAt && (
-                                <p><span className="font-medium">Submitted:</span> {new Date(createdAt.seconds ? createdAt.seconds * 1000 : createdAt).toLocaleDateString()}</p>
+                                <p><span className="font-medium">Submitted:</span> {new Date(typeof createdAt === 'object' && 'seconds' in createdAt ? createdAt.seconds * 1000 : createdAt).toLocaleDateString()}</p>
                             )}
                         </div>
                     </div>

@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
     // Verify transaction details
     if (
       transactionData.status !== 'successful' ||
-      parseFloat(transactionData.amount) !== collabData.price ||
+      parseFloat(String(transactionData.amount)) !== collabData.price ||
       transactionData.tx_ref !== txRef
     ) {
       return NextResponse.json(

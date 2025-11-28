@@ -1,7 +1,7 @@
 import { adminAuth, adminDb } from '@/lib/firebase-admin';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function PUT(request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
     const authHeader = request.headers.get('authorization');
     if (!authHeader?.startsWith('Bearer ')) {
