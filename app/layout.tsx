@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import ClientLayout from "./ClientLayout";
 import "./globals.css";
 
@@ -109,8 +110,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <script
+        <link rel="icon" href="/favicon.ico" />
+      </head>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <Script
+          id="structured-data"
           type="application/ld+json"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
@@ -126,11 +134,6 @@ export default function RootLayout({
             })
           }}
         />
-        <link rel="icon" href="/favicon.ico" />
-      </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
