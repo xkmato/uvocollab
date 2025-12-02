@@ -21,6 +21,9 @@ export default function CollaborationHub() {
     const [legend, setLegend] = useState<User | null>(null);
     const [buyer, setBuyer] = useState<User | null>(null);
     const [service, setService] = useState<Service | null>(null);
+    const [guest, setGuest] = useState<User | null>(null);
+    const [podcastOwner, setPodcastOwner] = useState<User | null>(null);
+    const [podcast, setPodcast] = useState<any | null>(null);
     const [loadingCollab, setLoadingCollab] = useState(true);
     const [accessDenied, setAccessDenied] = useState(false);
     const [markingComplete, setMarkingComplete] = useState(false);
@@ -66,10 +69,53 @@ export default function CollaborationHub() {
                 completedAt: collabSnap.data().completedAt?.toDate(),
                 contractSentAt: collabSnap.data().contractSentAt?.toDate(),
                 allPartiesSignedAt: collabSnap.data().allPartiesSignedAt?.toDate(),
+                recordingDate: collabSnap.data().recordingDate?.toDate(),
+                episodeReleaseDate: collabSnap.data().episodeReleaseDate?.toDate(),
+                schedulingDetails: collabSnap.data().schedulingDetails ? {
+                    ...collabSnap.data().schedulingDetails,
+                    date: collabSnap.data().schedulingDetails.date?.toDate(),
+                } : undefined,
             } as Collaboration;
 
-            // Check access: only buyer and legend can view
-            if (collabData.buyerId !== user.uid && collabData.legendId !== user.uid) {
+            // Check access based on collaboration type
+            let hasAccess = false;
+            if (collabData.type === 'guest_appearance') {
+                // For guest appearances, check if user is guest or podcast owner
+                hasAccess = collabData.guestId === user.uid || collabData.buyerId === user.uid;
+                
+                // Load guest and podcast data
+                if (collabData.guestId) {
+                    const guestQuery = query(collection(db, 'users'), where('uid', '==', collabData.guestId));
+                    const guestSnap = await getDocs(guestQuery);
+                    if (!guestSnap.empty) {
+                        setGuest(guestSnap.docs[0].data() as User);
+                    }
+                }
+                
+                if (collabData.podcastId) {
+                    const podcastDoc = await getDoc(doc(db, 'podcasts', collabData.podcastId));
+                    if (podcastDoc.exists()) {
+                        const podcastData = { id: podcastDoc.id, ...podcastDoc.data() };
+                        setPodcast(podcastData);
+                        
+                        if ((podcastData as any).userId) {
+                            const ownerQuery = query(collection(db, 'users'), where('uid', '==', (podcastData as any).userId));
+                            const ownerSnap = await getDocs(ownerQuery);
+                            if (!ownerSnap.empty) {
+                                setPodcastOwner(ownerSnap.docs[0].data() as User);
+                                if ((podcastData as any).userId === user.uid) {
+                                    hasAccess = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                // For legend/podcast types, check buyer and legend
+                hasAccess = collabData.buyerId === user.uid || collabData.legendId === user.uid;
+            }
+
+            if (!hasAccess) {
                 console.error('Access denied: User not associated with this collaboration');
                 setAccessDenied(true);
                 setLoadingCollab(false);
@@ -116,9 +162,13 @@ export default function CollaborationHub() {
     const getStatusBadge = (status: string) => {
         const badges: Record<string, { color: string; text: string }> = {
             pending_review: { color: 'bg-yellow-100 text-yellow-800', text: 'Pending Review' },
+            pending_agreement: { color: 'bg-yellow-100 text-yellow-800', text: 'Pending Agreement' },
             pending_payment: { color: 'bg-blue-100 text-blue-800', text: 'Payment Required' },
             awaiting_contract: { color: 'bg-purple-100 text-purple-800', text: 'Awaiting Contract' },
+            scheduling: { color: 'bg-indigo-100 text-indigo-800', text: 'Scheduling' },
+            scheduled: { color: 'bg-blue-100 text-blue-800', text: 'Scheduled' },
             in_progress: { color: 'bg-green-100 text-green-800', text: 'In Progress' },
+            post_production: { color: 'bg-purple-100 text-purple-800', text: 'Post-Production' },
             completed: { color: 'bg-gray-100 text-gray-800', text: 'Completed' },
             declined: { color: 'bg-red-100 text-red-800', text: 'Declined' },
         };
@@ -135,6 +185,36 @@ export default function CollaborationHub() {
         label: string;
         completed: boolean;
     }[] => {
+        if (collab.type === 'guest_appearance') {
+            return [
+                {
+                    icon: '🤝',
+                    label: 'Terms Agreed',
+                    completed: collab.status !== 'pending_agreement' && collab.status !== 'declined'
+                },
+                {
+                    icon: '💰',
+                    label: 'Payment Processed',
+                    completed: collab.price === 0 || (collab.status !== 'pending_agreement' && collab.status !== 'pending_payment' && collab.status !== 'declined')
+                },
+                {
+                    icon: '📅',
+                    label: 'Recording Scheduled',
+                    completed: collab.status === 'scheduled' || collab.status === 'in_progress' || collab.status === 'post_production' || collab.status === 'completed'
+                },
+                {
+                    icon: '🎙️',
+                    label: 'Recording Complete',
+                    completed: collab.status === 'post_production' || collab.status === 'completed'
+                },
+                {
+                    icon: '📻',
+                    label: 'Episode Released',
+                    completed: collab.status === 'completed'
+                }
+            ];
+        }
+        
         if (collab.type === 'podcast') {
             return [
                 {
@@ -224,7 +304,16 @@ export default function CollaborationHub() {
     // Determine user role in this collaboration
     const isBuyer = user?.uid === collaboration.buyerId;
     const isLegend = user?.uid === collaboration.legendId;
-    const otherParty = isBuyer ? legend : buyer;
+    const isGuest = collaboration.type === 'guest_appearance' && user?.uid === collaboration.guestId;
+    const isPodcastOwner = collaboration.type === 'guest_appearance' && podcast && user?.uid === podcast.userId;
+    
+    // Determine the other party based on collaboration type
+    let otherParty;
+    if (collaboration.type === 'guest_appearance') {
+        otherParty = isGuest ? podcastOwner : guest;
+    } else {
+        otherParty = isBuyer ? legend : buyer;
+    }
 
     // Check if the buyer can mark as complete
     const canMarkComplete = isBuyer &&
@@ -377,6 +466,133 @@ export default function CollaborationHub() {
                                 )}
                             </div>
                         </div>
+
+                        {/* Guest Appearance Specific Details */}
+                        {collaboration.type === 'guest_appearance' && (
+                            <div className="bg-white rounded-lg shadow p-6">
+                                <h2 className="text-xl font-bold text-gray-900 mb-4">Guest Appearance Details</h2>
+                                
+                                <div className="space-y-4">
+                                    {/* Topics */}
+                                    {collaboration.agreedTopics && collaboration.agreedTopics.length > 0 && (
+                                        <div>
+                                            <h3 className="text-sm font-semibold text-gray-700 mb-2">Discussion Topics</h3>
+                                            <div className="flex flex-wrap gap-2">
+                                                {collaboration.agreedTopics.map((topic, index) => (
+                                                    <span
+                                                        key={index}
+                                                        className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm"
+                                                    >
+                                                        {topic}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                    
+                                    {/* Recording Schedule */}
+                                    {collaboration.schedulingDetails && (
+                                        <div className="border-t pt-4">
+                                            <h3 className="text-sm font-semibold text-gray-700 mb-2">Recording Schedule</h3>
+                                            <div className="bg-blue-50 p-4 rounded-lg">
+                                                <p className="text-sm">
+                                                    <span className="font-medium">Date:</span>{' '}
+                                                    {collaboration.schedulingDetails.date?.toLocaleDateString('en-US', {
+                                                        weekday: 'long',
+                                                        year: 'numeric',
+                                                        month: 'long',
+                                                        day: 'numeric'
+                                                    })}
+                                                </p>
+                                                <p className="text-sm mt-1">
+                                                    <span className="font-medium">Time:</span>{' '}
+                                                    {collaboration.schedulingDetails.time} ({collaboration.schedulingDetails.timezone})
+                                                </p>
+                                                <p className="text-sm mt-1">
+                                                    <span className="font-medium">Duration:</span> {collaboration.schedulingDetails.duration}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )}
+                                    
+                                    {/* Recording Link */}
+                                    {collaboration.recordingUrl && (
+                                        <div className="border-t pt-4">
+                                            <h3 className="text-sm font-semibold text-gray-700 mb-2">Recording Link</h3>
+                                            <a
+                                                href={collaboration.recordingUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"
+                                            >
+                                                🎙️ Join Recording Session
+                                            </a>
+                                        </div>
+                                    )}
+                                    
+                                    {/* Prep Notes */}
+                                    {collaboration.prepNotes && (
+                                        <div className="border-t pt-4">
+                                            <h3 className="text-sm font-semibold text-gray-700 mb-2">Preparation Notes</h3>
+                                            <div className="bg-gray-50 p-4 rounded-lg">
+                                                <p className="text-sm text-gray-700 whitespace-pre-wrap">{collaboration.prepNotes}</p>
+                                            </div>
+                                        </div>
+                                    )}
+                                    
+                                    {/* Episode Release */}
+                                    {collaboration.episodeUrl && (
+                                        <div className="border-t pt-4">
+                                            <h3 className="text-sm font-semibold text-gray-700 mb-2">Published Episode</h3>
+                                            <a
+                                                href={collaboration.episodeUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium"
+                                            >
+                                                📻 Listen to Episode
+                                            </a>
+                                            {collaboration.episodeReleaseDate && (
+                                                <p className="text-xs text-gray-500 mt-2">
+                                                    Released on {collaboration.episodeReleaseDate.toLocaleDateString('en-US', {
+                                                        year: 'numeric',
+                                                        month: 'long',
+                                                        day: 'numeric'
+                                                    })}
+                                                </p>
+                                            )}
+                                        </div>
+                                    )}
+                                    
+                                    {/* Next Steps based on status */}
+                                    {collaboration.status === 'pending_agreement' && (
+                                        <div className="border-t pt-4">
+                                            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                                                <p className="text-sm text-yellow-800">
+                                                    ⏳ Waiting for both parties to agree on terms.{' '}
+                                                    <a
+                                                        href={`/collaboration/${collaborationId}/agreement`}
+                                                        className="font-medium underline hover:text-yellow-900"
+                                                    >
+                                                        Review Agreement
+                                                    </a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )}
+                                    
+                                    {collaboration.status === 'scheduling' && (
+                                        <div className="border-t pt-4">
+                                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                                <p className="text-sm text-blue-800">
+                                                    📅 Time to schedule the recording session! (Scheduling feature coming soon)
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
 
                         {/* Milestone Checklist Card */}
                         <div className="bg-white rounded-lg shadow p-6">

@@ -413,24 +413,24 @@ This epic covers the end-to-end collaboration process for guest appearances.
 - **Description:** Create flow to start a collaboration from a match or direct contact.
 - **Dependencies:** Task 6.1, Existing collaboration system
 - **Acceptance Criteria (AC):**
-  - [ ] Create `/api/collaboration/guest/initiate` endpoint
-  - [ ] Accepts: guestId, podcastId, serviceId, agreedPrice, proposedTopics, proposedDates
-  - [ ] Creates collaboration document with `type: 'guest_appearance'`
-  - [ ] Set initial status to 'pending_agreement'
-  - [ ] Notify both parties
-  - [ ] Support all three payment scenarios:
+  - [x] Create `/api/collaboration/guest/initiate` endpoint
+  - [x] Accepts: guestId, podcastId, serviceId, agreedPrice, proposedTopics, proposedDates
+  - [x] Creates collaboration document with `type: 'guest_appearance'`
+  - [x] Set initial status to 'pending_agreement'
+  - [x] Notify both parties
+  - [x] Support all three payment scenarios:
     - Podcast pays guest (price > 0, podcast is buyer)
     - Guest pays podcast (price > 0, guest is buyer)
     - Free appearance (price = 0)
-- **Status:** To Do
+- **Status:** ✅ Done
 
 ### **Task 7.2: Guest Collaboration Type Definition**
 
 - **Description:** Extend collaboration types to support guest appearances.
 - **Dependencies:** Existing collaboration.ts
 - **Acceptance Criteria (AC):**
-  - [ ] Add `'guest_appearance'` to collaboration type union
-  - [ ] Add guest-specific fields to Collaboration interface:
+  - [x] Add `'guest_appearance'` to collaboration type union
+  - [x] Add guest-specific fields to Collaboration interface:
     - `guestId?: string`
     - `agreedTopics?: string[]`
     - `recordingDate?: Date`
@@ -438,57 +438,57 @@ This epic covers the end-to-end collaboration process for guest appearances.
     - `recordingUrl?: string` (Zoom/Riverside link)
     - `prepNotes?: string`
     - `episodeReleaseDate?: Date`
-  - [ ] Update CreateCollaborationData interface
-- **Status:** To Do
+  - [x] Update CreateCollaborationData interface
+- **Status:** ✅ Done
 
 ### **Task 7.3: Guest Collaboration Agreement Page**
 
 - **Description:** Create page for both parties to agree on collaboration terms.
 - **Dependencies:** Task 7.1, Task 7.2
 - **Acceptance Criteria (AC):**
-  - [ ] Create `/collaboration/guest/:collaborationId/agreement` page
-  - [ ] Display proposed terms:
+  - [x] Create `/collaboration/guest/:collaborationId/agreement` page
+  - [x] Display proposed terms:
     - Topics, Dates, Payment details
-  - [ ] Allow negotiation (counter-offers on dates/topics/price)
-  - [ ] Show accept/decline buttons
-  - [ ] On acceptance by both parties:
+  - [x] Allow negotiation (counter-offers on dates/topics/price)
+  - [x] Show accept/decline buttons
+  - [x] On acceptance by both parties:
     - Update status to 'pending_payment' (if paid)
     - Update status to 'scheduling' (if free)
-  - [ ] Track negotiation history
-- **Status:** To Do
+  - [x] Track negotiation history
+- **Status:** ✅ Done
 
 ### **Task 7.4: Payment Flow for Guest Collaborations**
 
 - **Description:** Integrate payment for guest collaborations (both directions).
 - **Dependencies:** Task 7.3, Existing Flutterwave integration
 - **Acceptance Criteria (AC):**
-  - [ ] Reuse existing payment checkout component
-  - [ ] Determine correct buyer based on payment direction
-  - [ ] Support escrow for podcast-pays-guest scenario
-  - [ ] Support direct payment for guest-pays-podcast scenario
-  - [ ] Generate appropriate contracts (Guest Release Form)
-  - [ ] Update collaboration status after payment
-- **Status:** To Do
+  - [x] Reuse existing payment checkout component
+  - [x] Determine correct buyer based on payment direction
+  - [x] Support escrow for podcast-pays-guest scenario
+  - [x] Support direct payment for guest-pays-podcast scenario
+  - [ ] Generate appropriate contracts (Guest Release Form) (deferred to Epic 9)
+  - [x] Update collaboration status after payment
+- **Status:** ✅ Done (contract generation pending)
 
 ### **Task 7.5: Collaboration Hub for Guest Appearances**
 
 - **Description:** Adapt collaboration hub to support guest-specific workflows.
 - **Dependencies:** Task 7.4, Existing collaboration hub
 - **Acceptance Criteria (AC):**
-  - [ ] Extend `/collaboration/[collaborationId]/page.tsx` for guest type
-  - [ ] Display guest-specific information:
+  - [x] Extend `/collaboration/[collaborationId]/page.tsx` for guest type
+  - [x] Display guest-specific information:
     - Agreed topics
     - Recording schedule
     - Prep notes
-  - [ ] Show different milestones:
+  - [x] Show different milestones:
     - Agreement reached
     - Payment completed (if applicable)
     - Recording scheduled
     - Recording completed
     - Episode released
-  - [ ] Add file sharing for prep materials
-  - [ ] Allow both parties to communicate
-- **Status:** To Do
+  - [x] Add file sharing for prep materials (existing FileSharing component works)
+  - [x] Allow both parties to communicate (existing CommunicationThread component works)
+- **Status:** ✅ Done
 
 ---
 

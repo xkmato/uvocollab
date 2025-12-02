@@ -1,8 +1,12 @@
 export type CollaborationStatus =
   | 'pending_review'
+  | 'pending_agreement' // For guest collaborations awaiting terms agreement
   | 'pending_payment'
   | 'awaiting_contract'
+  | 'scheduling' // For guest collaborations after agreement, before recording
+  | 'scheduled' // Recording date confirmed
   | 'in_progress'
+  | 'post_production' // After recording, before release
   | 'completed'
   | 'declined';
 
@@ -16,7 +20,7 @@ export interface Deliverable {
 
 export interface Collaboration {
   id?: string;
-  type?: 'legend' | 'podcast'; // Type of collaboration
+  type?: 'legend' | 'podcast' | 'guest_appearance'; // Type of collaboration
   buyerId: string; // UID of the "New Artist" requesting the collaboration
   legendId?: string; // UID of the "Legend" providing the service (optional for podcasts)
   podcastId?: string; // ID of the Podcast (required for podcast collabs)
@@ -34,6 +38,30 @@ export interface Collaboration {
   guestBio?: string; // Bio of the guest
   proposedDates?: string; // Proposed dates for recording
   pressKitUrl?: string; // URL to press kit or audio sample
+
+  // Guest Appearance Specific Fields
+  guestId?: string; // UID of the guest (for guest_appearance type)
+  proposedTopics?: string[]; // Topics proposed during negotiation
+  agreedTopics?: string[]; // Topics agreed upon for the appearance
+  recordingDate?: Date; // Confirmed recording date
+  schedulingDetails?: {
+    date: Date; // Recording date
+    time: string; // Recording time
+    timezone: string; // Timezone for the recording
+    duration: string; // Expected duration (e.g., "60 minutes")
+  };
+  recordingUrl?: string; // Zoom/Riverside/StreamYard link for recording
+  prepNotes?: string; // Preparation notes for the guest
+  episodeReleaseDate?: Date; // When the episode was released
+  episodeUrl?: string; // URL to the released episode
+  negotiationHistory?: Array<{
+    proposedBy: string; // UID of user proposing changes
+    proposedPrice?: number;
+    proposedTopics?: string[];
+    proposedDates?: string;
+    message?: string;
+    timestamp: Date;
+  }>; // Track negotiation between parties
 
   contractUrl?: string; // Firebase Storage URL to the signed contract PDF
   deliverables?: Deliverable[]; // Files uploaded by Legend as project deliverables
@@ -61,7 +89,7 @@ export interface Collaboration {
 }
 
 export interface CreateCollaborationData {
-  type?: 'legend' | 'podcast';
+  type?: 'legend' | 'podcast' | 'guest_appearance';
   buyerId: string;
   legendId?: string;
   podcastId?: string;
@@ -78,6 +106,12 @@ export interface CreateCollaborationData {
   guestBio?: string;
   proposedDates?: string;
   pressKitUrl?: string;
+
+  // Guest Appearance
+  guestId?: string;
+  agreedTopics?: string[];
+  proposedTopics?: string[];
+  message?: string;
 }
 
 export interface UpdateCollaborationData {
