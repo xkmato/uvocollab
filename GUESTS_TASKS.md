@@ -649,47 +649,47 @@ This epic covers admin tools and analytics for the guest feature.
 - **Description:** Create admin interface for managing guest verification requests.
 - **Dependencies:** Task 2.4
 - **Acceptance Criteria (AC):**
-  - [ ] Create `/admin/guest-verification` page
-  - [ ] List all verification requests
-  - [ ] Display guest profile and information
-  - [ ] Add "Approve" button to set `isVerifiedGuest: true`
-  - [ ] Add "Decline" button with reason field
-  - [ ] Send email notification of decision
-  - [ ] Add notes field for admin records
-  - [ ] Track verification date and admin who approved
-- **Status:** To Do
+  - [x] Create `/admin/guest-verification` page
+  - [x] List all verification requests
+  - [x] Display guest profile and information
+  - [x] Add "Approve" button to set `isVerifiedGuest: true`
+  - [x] Add "Decline" button with reason field
+  - [x] Send email notification of decision
+  - [x] Add notes field for admin records
+  - [x] Track verification date and admin who approved
+- **Status:** ✅ Done
 
 ### **Task 10.2: Guest Analytics Dashboard**
 
 - **Description:** Create analytics page for tracking guest feature usage.
 - **Dependencies:** Task 7.1
 - **Acceptance Criteria (AC):**
-  - [ ] Create `/admin/guest-analytics` page
-  - [ ] Display metrics:
+  - [x] Create `/admin/guest-analytics` page
+  - [x] Display metrics:
     - Total guests (verified/unverified)
     - Total guest collaborations
     - Average guest rate
     - Match success rate
     - Conversion from invite to signup
-  - [ ] Show graphs for trends over time
-  - [ ] Export data as CSV
-- **Status:** To Do
+  - [x] Show graphs for trends over time
+  - [x] Export data as CSV
+- **Status:** ✅ Done
 
 ### **Task 10.3: Guest Feature Settings**
 
 - **Description:** Create admin settings for guest feature configuration.
 - **Dependencies:** None
 - **Acceptance Criteria (AC):**
-  - [ ] Create `/admin/settings/guests` page
-  - [ ] Configure:
+  - [x] Create `/admin/settings/guests` page
+  - [x] Configure:
     - Minimum/maximum guest rates
     - Invite expiration period
     - Auto-matching enabled/disabled
     - Verification requirements
     - Email templates
-  - [ ] Save settings to Firestore `platformSettings` collection
-  - [ ] Validate settings before saving
-- **Status:** To Do
+  - [x] Save settings to Firestore `platformSettings` collection
+  - [x] Validate settings before saving
+- **Status:** ✅ Done
 
 ---
 

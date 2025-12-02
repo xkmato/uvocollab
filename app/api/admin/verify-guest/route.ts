@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
         }
 
         // Parse request body
-        const { guestId, approve, reason } = await req.json();
+        const { guestId, approve, reason, adminNotes } = await req.json();
 
         if (!guestId) {
             return NextResponse.json(
@@ -49,12 +49,18 @@ export async function POST(req: NextRequest) {
 
         if (approve) {
             // Approve verification
-            await adminDb.collection('users').doc(guestId).update({
+            const updateData: any = {
                 isVerifiedGuest: true,
                 guestVerificationApprovedAt: new Date(),
                 guestVerificationApprovedBy: adminUid,
                 updatedAt: new Date(),
-            });
+            };
+            
+            if (adminNotes) {
+                updateData.guestVerificationNotes = adminNotes;
+            }
+            
+            await adminDb.collection('users').doc(guestId).update(updateData);
 
             // Send approval email
             try {
@@ -86,13 +92,19 @@ export async function POST(req: NextRequest) {
             );
         } else {
             // Decline verification
-            await adminDb.collection('users').doc(guestId).update({
+            const updateData: any = {
                 guestVerificationRequestedAt: null, // Allow them to request again
                 guestVerificationDeclinedAt: new Date(),
                 guestVerificationDeclinedBy: adminUid,
                 guestVerificationDeclineReason: reason || 'Not specified',
                 updatedAt: new Date(),
-            });
+            };
+            
+            if (adminNotes) {
+                updateData.guestVerificationNotes = adminNotes;
+            }
+            
+            await adminDb.collection('users').doc(guestId).update(updateData);
 
             // Send decline email
             try {

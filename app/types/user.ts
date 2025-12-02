@@ -28,6 +28,12 @@ export interface User {
   guestAvailability?: string; // Availability description
   isVerifiedGuest?: boolean; // Whether guest has been verified by platform
   guestVerificationRequestedAt?: Date; // When verification was requested
+  guestVerificationApprovedAt?: Date; // When verification was approved
+  guestVerificationApprovedBy?: string; // Admin UID who approved
+  guestVerificationDeclinedAt?: Date; // When verification was declined
+  guestVerificationDeclinedBy?: string; // Admin UID who declined
+  guestVerificationDeclineReason?: string; // Reason for decline
+  guestVerificationNotes?: string; // Admin notes about verification
   socialLinks?: { platform: string; url: string }[]; // Social media links
   previousAppearances?: string[]; // Links to previous podcast appearances
   

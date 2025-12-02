@@ -59,6 +59,36 @@ export default function AdminLayout({
                                     Podcasts
                                 </Link>
                                 <Link
+                                    href="/admin/guest-verification"
+                                    className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                                        isActive('/admin/guest-verification')
+                                            ? 'border-purple-500 text-gray-900'
+                                            : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                                    }`}
+                                >
+                                    Guest Verification
+                                </Link>
+                                <Link
+                                    href="/admin/guest-prospects"
+                                    className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                                        isActive('/admin/guest-prospects')
+                                            ? 'border-purple-500 text-gray-900'
+                                            : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                                    }`}
+                                >
+                                    Guest Prospects
+                                </Link>
+                                <Link
+                                    href="/admin/guest-analytics"
+                                    className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                                        isActive('/admin/guest-analytics')
+                                            ? 'border-purple-500 text-gray-900'
+                                            : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                                    }`}
+                                >
+                                    Guest Analytics
+                                </Link>
+                                <Link
                                     href="/admin/withdrawals"
                                     className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
                                         isActive('/admin/withdrawals')
@@ -70,7 +100,17 @@ export default function AdminLayout({
                                 </Link>
                             </div>
                         </div>
-                        <div className="flex items-center">
+                        <div className="flex items-center space-x-4">
+                            <Link
+                                href="/admin/settings/guests"
+                                className={`text-sm font-medium ${
+                                    pathname?.startsWith('/admin/settings')
+                                        ? 'text-purple-600'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                }`}
+                            >
+                                ⚙️ Settings
+                            </Link>
                             <Link
                                 href="/dashboard"
                                 className="text-sm font-medium text-gray-500 hover:text-gray-700"

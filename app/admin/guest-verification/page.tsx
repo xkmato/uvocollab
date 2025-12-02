@@ -60,7 +60,7 @@ export default function GuestVerificationPage() {
         }
     };
 
-    const handleVerify = async (guestId: string, approve: boolean, reason?: string) => {
+    const handleVerify = async (guestId: string, approve: boolean, reason?: string, adminNotes?: string) => {
         if (!user) return;
 
         setProcessingId(guestId);
@@ -72,7 +72,7 @@ export default function GuestVerificationPage() {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${idToken}`,
                 },
-                body: JSON.stringify({ guestId, approve, reason }),
+                body: JSON.stringify({ guestId, approve, reason, adminNotes }),
             });
 
             if (!response.ok) {
@@ -250,7 +250,10 @@ export default function GuestVerificationPage() {
                                     {/* Actions */}
                                     <div className="lg:w-48 flex flex-col gap-3">
                                         <button
-                                            onClick={() => handleVerify(guest.uid, true)}
+                                            onClick={() => {
+                                                const notes = prompt('Add admin notes (optional):');
+                                                handleVerify(guest.uid, true, undefined, notes || undefined);
+                                            }}
                                             disabled={processingId === guest.uid}
                                             className="w-full px-4 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
@@ -258,14 +261,23 @@ export default function GuestVerificationPage() {
                                         </button>
                                         <button
                                             onClick={() => {
-                                                const reason = prompt('Enter reason for decline (optional):');
-                                                handleVerify(guest.uid, false, reason || undefined);
+                                                const reason = prompt('Enter reason for decline (will be sent to guest):');
+                                                if (reason === null) return; // User cancelled
+                                                const notes = prompt('Add admin notes (internal only, optional):');
+                                                handleVerify(guest.uid, false, reason || 'Not specified', notes || undefined);
                                             }}
                                             disabled={processingId === guest.uid}
                                             className="w-full px-4 py-3 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
                                             Decline
                                         </button>
+                                        <Link
+                                            href={`/guest/${guest.uid}`}
+                                            target="_blank"
+                                            className="w-full px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-xl transition-colors text-center"
+                                        >
+                                            View Profile
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
