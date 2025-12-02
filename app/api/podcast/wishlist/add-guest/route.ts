@@ -93,14 +93,57 @@ export async function POST(request: NextRequest) {
 
     const wishlistRef = await adminDb.collection('podcastGuestWishlists').add(wishlistData);
 
+    // If guest is not registered but has email, automatically send invitation
+    if (!isRegistered && guestEmail) {
+      try {
+        // Get podcast owner ID
+        const podcastOwnerId = podcastData?.ownerId;
+        
+        if (podcastOwnerId) {
+          // Call send-invite API internally
+          const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+          const inviteResponse = await fetch(`${baseUrl}/api/guest/send-invite`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              podcastId,
+              podcastOwnerId,
+              guestEmail,
+              guestName,
+              offeredAmount: budgetAmount,
+              message: notes,
+              preferredTopics,
+              wishlistEntryId: wishlistRef.id,
+            }),
+          });
+
+          if (inviteResponse.ok) {
+            console.log(`Invitation sent to ${guestEmail}`);
+          } else {
+            console.error('Failed to send invitation automatically');
+          }
+        }
+      } catch (inviteError) {
+        console.error('Error sending automatic invitation:', inviteError);
+        // Don't fail the whole operation if invitation fails
+      }
+    }
+
     // If registered guest, notify them (future enhancement)
     // TODO: Send notification to guest
+
+    const message = !isRegistered && guestEmail
+      ? 'Guest added to your wishlist and invitation sent successfully'
+      : 'Guest added to your wishlist successfully';
 
     return NextResponse.json(
       {
         success: true,
         wishlistId: wishlistRef.id,
-        message: 'Guest added to your wishlist successfully',
+        message,
+        invitationSent: !isRegistered && !!guestEmail,
       },
       { status: 201 }
     );

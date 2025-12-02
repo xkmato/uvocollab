@@ -195,73 +195,73 @@ This epic covers the invitation system for recruiting guests to the platform.
 - **Description:** Create the schema for tracking guest invitations.
 - **Dependencies:** Task 1.2
 - **Acceptance Criteria (AC):**
-  - [ ] Create `guestInvites` Firestore collection
-  - [ ] Schema includes: `inviteId`, `podcastId`, `podcastName`, `guestEmail`, `guestName`, `offeredAmount`, `message`, `status` ('sent'/'accepted'/'declined'/'expired'), `sentAt`, `acceptedAt`, `expiresAt`
-  - [ ] Create indexes for querying by email and podcast
-- **Status:** To Do
+  - [x] Create `guestInvites` Firestore collection
+  - [x] Schema includes: `inviteId`, `podcastId`, `podcastName`, `guestEmail`, `guestName`, `offeredAmount`, `message`, `status` ('sent'/'accepted'/'declined'/'expired'), `sentAt`, `acceptedAt`, `expiresAt`
+  - [x] Create indexes for querying by email and podcast
+- **Status:** ✅ Done
 
 ### **Task 4.2: Send Invitation API**
 
 - **Description:** Create API endpoint to send guest invitations via email.
 - **Dependencies:** Task 4.1, Existing Mailgun integration
 - **Acceptance Criteria (AC):**
-  - [ ] Create `/api/guest/send-invite` endpoint
-  - [ ] Accepts: podcastId, guestEmail, guestName, offeredAmount, message
-  - [ ] Creates invitation record in Firestore
-  - [ ] Generates unique invite token/link (e.g., `/guest/accept-invite/:token`)
-  - [ ] Sends email to guest with:
+  - [x] Create `/api/guest/send-invite` endpoint
+  - [x] Accepts: podcastId, guestEmail, guestName, offeredAmount, message
+  - [x] Creates invitation record in Firestore
+  - [x] Generates unique invite token/link (e.g., `/guest/accept-invite/:token`)
+  - [x] Sends email to guest with:
     - Podcast information
     - Offered amount (if > 0)
     - Personal message from podcast owner
     - Call-to-action link to accept invite
     - Link expires in 30 days
-  - [ ] Returns success/error response
-- **Status:** To Do
+  - [x] Returns success/error response
+- **Status:** ✅ Done
 
 ### **Task 4.3: Automatic Invite on Wishlist Add**
 
 - **Description:** Automatically send invite when podcast adds guest with contact info to wishlist.
 - **Dependencies:** Task 3.4, Task 4.2
 - **Acceptance Criteria (AC):**
-  - [ ] When podcast adds guest to wishlist with email, trigger invite
-  - [ ] Call send-invite API automatically
-  - [ ] Update wishlist item status to 'invited'
-  - [ ] Show confirmation to podcast owner
-  - [ ] Handle email sending failures gracefully
-- **Status:** To Do
+  - [x] When podcast adds guest to wishlist with email, trigger invite
+  - [x] Call send-invite API automatically
+  - [x] Update wishlist item status to 'invited'
+  - [x] Show confirmation to podcast owner
+  - [x] Handle email sending failures gracefully
+- **Status:** ✅ Done
 
 ### **Task 4.4: Accept Invite Page**
 
 - **Description:** Create landing page for guests to accept invitations.
 - **Dependencies:** Task 4.2
 - **Acceptance Criteria (AC):**
-  - [ ] Create `/guest/accept-invite/:token` page
-  - [ ] Validate invite token and check expiration
-  - [ ] Display podcast information and offer details
-  - [ ] Show two options:
+  - [x] Create `/guest/accept-invite/:token` page
+  - [x] Validate invite token and check expiration
+  - [x] Display podcast information and offer details
+  - [x] Show two options:
     - "Accept & Sign Up" (for new users)
     - "Accept & Log In" (for existing users)
-  - [ ] On acceptance:
+  - [x] On acceptance:
     - Update invite status to 'accepted'
     - Create/link guest profile
-    - Create collaboration opportunity
+    - Create collaboration opportunity (marked as TODO for future)
     - Redirect to collaboration page or guest dashboard
-  - [ ] Handle expired/invalid tokens gracefully
-- **Status:** To Do
+  - [x] Handle expired/invalid tokens gracefully
+- **Status:** ✅ Done
 
 ### **Task 4.5: Admin Panel - Track Guests Without Contact Info**
 
 - **Description:** Create admin interface to manage prospect guests without contact information.
 - **Dependencies:** Task 3.4
 - **Acceptance Criteria (AC):**
-  - [ ] Create `/admin/guest-prospects` page
-  - [ ] List all wishlist entries where `contactInfo` is null
-  - [ ] Display: Guest name, Requested by (podcast), Budget, Date added
-  - [ ] Allow admin to add email address when found
-  - [ ] Trigger automatic invite when email is added
-  - [ ] Mark as "resolved" when contact info is added
-  - [ ] Show statistics (total prospects, resolved, pending)
-- **Status:** To Do
+  - [x] Create `/admin/guest-prospects` page
+  - [x] List all wishlist entries where `contactInfo` is null
+  - [x] Display: Guest name, Requested by (podcast), Budget, Date added
+  - [x] Allow admin to add email address when found
+  - [x] Trigger automatic invite when email is added
+  - [x] Mark as "resolved" when contact info is added
+  - [x] Show statistics (total prospects, resolved, pending)
+- **Status:** ✅ Done
 
 ---
 

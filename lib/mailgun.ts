@@ -799,3 +799,120 @@ ${reason ? `<div style="background:#FEF3C7;padding:10px;border-left:4px solid #F
 
   await sendEmail({ to: recipientEmail, subject, text, html });
 }
+
+/**
+ * Send guest invitation email
+ */
+export async function sendGuestInvitationEmail(
+  recipientEmail: string,
+  recipientName: string,
+  podcastName: string,
+  podcastOwnerName: string,
+  offeredAmount: number,
+  message: string,
+  topics: string[],
+  inviteLink: string,
+  expiresAt: Date
+): Promise<void> {
+  const subject = `🎙️ You're invited to be a guest on "${podcastName}"`;
+  
+  const paymentInfo = offeredAmount > 0 
+    ? `\n\n💰 Offered Amount: $${offeredAmount}` 
+    : '\n\n✨ This is a free collaboration opportunity';
+  
+  const topicsText = topics.length > 0 
+    ? `\n\n📋 Proposed Topics:\n${topics.map(t => `  • ${t}`).join('\n')}` 
+    : '';
+  
+  const expiryDate = expiresAt.toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
+
+  const text = `Hi ${recipientName},
+
+Great news! ${podcastOwnerName} from "${podcastName}" would like to invite you to be a guest on their podcast.${paymentInfo}${topicsText}
+
+Personal Message:
+"${message}"
+
+To accept this invitation and get started, click the link below:
+${inviteLink}
+
+This invitation expires on ${expiryDate}.
+
+If you're not already a member of UvoCollab, you'll be guided through a quick signup process where you can create your guest profile and start collaborating with podcasters.
+
+Looking forward to seeing you on the platform!
+
+Best regards,
+The UvoCollab Team
+
+---
+Questions? Reply to this email or contact us at support@uvocollab.com`;
+
+  const paymentHtml = offeredAmount > 0 
+    ? `<div style="background:#D1FAE5;padding:15px;border-radius:5px;margin:20px 0;">
+         <strong>💰 Offered Amount:</strong> $${offeredAmount}
+       </div>` 
+    : `<div style="background:#DBEAFE;padding:15px;border-radius:5px;margin:20px 0;">
+         <strong>✨ This is a free collaboration opportunity</strong>
+       </div>`;
+  
+  const topicsHtml = topics.length > 0 
+    ? `<div style="margin:20px 0;">
+         <strong>📋 Proposed Topics:</strong>
+         <ul>${topics.map(t => `<li>${t}</li>`).join('')}</ul>
+       </div>` 
+    : '';
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; }
+    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px 20px; text-align: center; border-radius: 10px 10px 0 0; }
+    .content { padding: 30px 20px; background: #ffffff; }
+    .message-box { background: #F9FAFB; padding: 20px; border-left: 4px solid #667eea; border-radius: 4px; margin: 20px 0; font-style: italic; }
+    .cta-button { display: inline-block; background: #667eea; color: white; padding: 15px 40px; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 20px 0; }
+    .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #E5E7EB; font-size: 12px; color: #6B7280; text-align: center; }
+    .expiry { color: #DC2626; font-weight: bold; margin: 15px 0; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🎙️ Podcast Guest Invitation</h1>
+  </div>
+  <div class="content">
+    <p>Hi ${recipientName},</p>
+    <p>Great news! <strong>${podcastOwnerName}</strong> from <strong>"${podcastName}"</strong> would like to invite you to be a guest on their podcast.</p>
+    
+    ${paymentHtml}
+    ${topicsHtml}
+    
+    <div class="message-box">
+      <strong>Personal Message from ${podcastOwnerName}:</strong><br><br>
+      "${message}"
+    </div>
+    
+    <div style="text-align: center;">
+      <a href="${inviteLink}" class="cta-button">Accept Invitation</a>
+    </div>
+    
+    <p class="expiry">⏰ This invitation expires on ${expiryDate}</p>
+    
+    <p>If you're not already a member of UvoCollab, you'll be guided through a quick signup process where you can create your guest profile and start collaborating with podcasters.</p>
+    
+    <p>Looking forward to seeing you on the platform!</p>
+    
+    <p>Best regards,<br><strong>The UvoCollab Team</strong></p>
+  </div>
+  <div class="footer">
+    Questions? Reply to this email or contact us at support@uvocollab.com
+  </div>
+</body>
+</html>`;
+
+  await sendEmail({ to: recipientEmail, subject, text, html });
+}
