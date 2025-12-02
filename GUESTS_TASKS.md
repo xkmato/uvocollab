@@ -13,8 +13,8 @@ This epic covers the foundational data structures and user role setup for guests
 - **Description:** Extend the User type to support guests and add guest-specific fields.
 - **Dependencies:** Existing User Setup
 - **Acceptance Criteria (AC):**
-  - [ ] Update `app/types/user.ts` to add `'guest'` to the role union type
-  - [ ] Add optional guest fields to User interface:
+  - [x] Update `app/types/user.ts` to add `'guest'` to the role union type
+  - [x] Add optional guest fields to User interface:
     - `isGuest?: boolean` - Flag indicating user is a guest
     - `guestRate?: number` - Fixed price they charge to appear
     - `guestBio?: string` - Guest-specific bio/expertise description
@@ -24,24 +24,24 @@ This epic covers the foundational data structures and user role setup for guests
     - `guestVerificationRequestedAt?: Date` - When verification was requested
     - `socialLinks?: { platform: string; url: string }[]` - Social media links
     - `previousAppearances?: string[]` - Links to previous podcast appearances
-  - [ ] Update Firestore rules to allow guest field updates
-- **Status:** To Do
+  - [x] Update Firestore rules to allow guest field updates
+- **Status:** ✅ Done
 
 ### **Task 1.2: Guest Data Model (Firestore)**
 
 - **Description:** Define the Firestore schema for guest-related collections.
 - **Dependencies:** Task 1.1
 - **Acceptance Criteria (AC):**
-  - [ ] Create `app/types/guest.ts` with interfaces for:
+  - [x] Create `app/types/guest.ts` with interfaces for:
     - `GuestWishlist` - Guests' wishlist of podcasts they want to appear on
     - `PodcastGuestWishlist` - Podcasts' wishlist of guests they want to host
     - `GuestInvite` - Invitations sent to potential guests
-  - [ ] Schema includes:
+  - [x] Schema includes:
     - **GuestWishlist:** `guestId`, `podcastId`, `offerAmount` (what guest will pay), `topics`, `message`, `status`, `createdAt`
     - **PodcastGuestWishlist:** `podcastId`, `guestId`, `guestName`, `guestEmail`, `budgetAmount` (what podcast will pay), `contactInfo`, `notes`, `status`, `createdAt`
     - **GuestInvite:** `inviteId`, `podcastId`, `guestEmail`, `guestName`, `offeredAmount`, `message`, `status`, `sentAt`, `acceptedAt`, `expiresAt`
-  - [ ] Create Firestore indexes for efficient querying
-- **Status:** To Do
+  - [x] Create Firestore indexes for efficient querying
+- **Status:** ✅ Done
 
 ---
 
