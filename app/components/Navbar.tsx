@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import NotificationBell from './NotificationBell';
 
 export default function Navbar() {
     const { user, userData, logout } = useAuth();
@@ -51,6 +52,7 @@ export default function Navbar() {
                                 >
                                     Dashboard
                                 </Link>
+                                <NotificationBell />
                                 <div className="h-6 w-px bg-white/10"></div>
                                 <div className="flex items-center gap-3">
                                     <span className="text-sm text-white/90">

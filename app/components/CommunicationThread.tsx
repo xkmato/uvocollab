@@ -10,13 +10,24 @@ interface CommunicationThreadProps {
     collaborationId: string;
     otherPartyName: string;
     isCompleted?: boolean;
+    collaborationType?: string;
+    recordingUrl?: string;
+    scheduledDate?: Date;
 }
 
-export default function CommunicationThread({ collaborationId, otherPartyName, isCompleted = false }: CommunicationThreadProps) {
+export default function CommunicationThread({ 
+    collaborationId, 
+    otherPartyName, 
+    isCompleted = false,
+    collaborationType,
+    recordingUrl,
+    scheduledDate
+}: CommunicationThreadProps) {
     const { user } = useAuth();
     const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [sending, setSending] = useState(false);
+    const [showQuickActions, setShowQuickActions] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     // Scroll to bottom when messages change
@@ -83,6 +94,26 @@ export default function CommunicationThread({ collaborationId, otherPartyName, i
             setSending(false);
         }
     };
+
+    const insertQuickMessage = (template: string) => {
+        setNewMessage(template);
+        setShowQuickActions(false);
+    };
+
+    const quickMessageTemplates = collaborationType === 'guest_appearance' ? [
+        "Looking forward to our recording session!",
+        "Can we discuss the topics we'll cover?",
+        "What prep materials would be helpful?",
+        "Should I send over some talking points?",
+        "Let me know if you need anything before we record.",
+        "Thanks for having me on your show!",
+    ] : [
+        "Thanks for your interest!",
+        "Let's schedule a call to discuss details.",
+        "I've uploaded the files you requested.",
+        "Looking forward to working with you!",
+        "Please review the milestone and let me know your thoughts.",
+    ];
 
     const formatTimestamp = (date: Date) => {
         const now = new Date();
@@ -188,6 +219,67 @@ export default function CommunicationThread({ collaborationId, otherPartyName, i
                 )}
             </div>
 
+            {/* Quick Actions for Guest Collaborations */}
+            {collaborationType === 'guest_appearance' && !isCompleted && (
+                <div className="px-4 py-3 bg-purple-50 border-b border-purple-100">
+                    <div className="flex flex-wrap gap-2">
+                        {recordingUrl && (
+                            <a
+                                href={recordingUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors"
+                            >
+                                <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                                Join Recording
+                            </a>
+                        )}
+                        {scheduledDate && (
+                            <div className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-purple-700 bg-purple-100 rounded-lg">
+                                <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                {new Date(scheduledDate).toLocaleDateString('en-US', {
+                                    month: 'short',
+                                    day: 'numeric',
+                                    hour: 'numeric',
+                                    minute: '2-digit'
+                                })}
+                            </div>
+                        )}
+                        <button
+                            onClick={() => setShowQuickActions(!showQuickActions)}
+                            className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-purple-700 bg-white border border-purple-300 rounded-lg hover:bg-purple-50 transition-colors"
+                        >
+                            <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                            Quick Messages
+                        </button>
+                    </div>
+
+                    {/* Quick Message Templates */}
+                    {showQuickActions && (
+                        <div className="mt-3 p-3 bg-white rounded-lg border border-purple-200">
+                            <p className="text-xs font-medium text-gray-700 mb-2">Select a quick message:</p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                {quickMessageTemplates.map((template, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => insertQuickMessage(template)}
+                                        className="text-left px-3 py-2 text-sm text-gray-700 bg-gray-50 hover:bg-purple-50 rounded-lg transition-colors border border-gray-200 hover:border-purple-300"
+                                    >
+                                        {template}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )}
+
             {/* Message Input */}
             <div className="p-4 border-t bg-white">
                 {isCompleted ? (
@@ -197,44 +289,46 @@ export default function CommunicationThread({ collaborationId, otherPartyName, i
                         </p>
                     </div>
                 ) : (
-                    <form onSubmit={handleSendMessage} className="flex space-x-2">
-                        <textarea
-                            value={newMessage}
-                            onChange={(e) => setNewMessage(e.target.value)}
-                            placeholder="Type your message..."
-                            rows={2}
-                            disabled={sending}
-                            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none disabled:bg-gray-100 disabled:cursor-not-allowed"
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter' && !e.shiftKey) {
-                                    e.preventDefault();
-                                    handleSendMessage(e);
-                                }
-                            }}
-                        />
-                        <button
-                            type="submit"
-                            disabled={sending || !newMessage.trim()}
-                            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium flex items-center"
-                        >
-                            {sending ? (
-                                <>
-                                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                    Sending...
-                                </>
-                            ) : (
-                                <>
-                                    <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                                    </svg>
-                                    Send
-                                </>
-                            )}
-                        </button>
-                        <p className="text-xs text-gray-500 mt-2">
+                    <form onSubmit={handleSendMessage} className="space-y-2">
+                        <div className="flex space-x-2">
+                            <textarea
+                                value={newMessage}
+                                onChange={(e) => setNewMessage(e.target.value)}
+                                placeholder="Type your message..."
+                                rows={2}
+                                disabled={sending}
+                                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' && !e.shiftKey) {
+                                        e.preventDefault();
+                                        handleSendMessage(e);
+                                    }
+                                }}
+                            />
+                            <button
+                                type="submit"
+                                disabled={sending || !newMessage.trim()}
+                                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium flex items-center self-start"
+                            >
+                                {sending ? (
+                                    <>
+                                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        Sending...
+                                    </>
+                                ) : (
+                                    <>
+                                        <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                        </svg>
+                                        Send
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                        <p className="text-xs text-gray-500">
                             Press Enter to send, Shift+Enter for new line
                         </p>
                     </form>

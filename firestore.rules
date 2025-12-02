@@ -78,6 +78,12 @@ service cloud.firestore {
       allow write: if false; // Only managed via API/cron
     }
 
+    // Notifications - users can read their own notifications, write via API only
+    match /notifications/{notificationId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow write: if false; // Only managed via API
+    }
+
     // Podcasts - publicly readable (or auth only), managed via API
     match /podcasts/{podcastId} {
       allow read: if request.auth != null;

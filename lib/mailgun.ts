@@ -916,3 +916,672 @@ Questions? Reply to this email or contact us at support@uvocollab.com`;
 
   await sendEmail({ to: recipientEmail, subject, text, html });
 }
+
+/**
+ * Send match notification email
+ */
+export async function sendMatchNotificationEmail(
+  recipientEmail: string,
+  recipientName: string,
+  matchedName: string,
+  matchedType: 'guest' | 'podcast',
+  recipientOffer: number,
+  matchedOffer: number,
+  topics: string[],
+  matchLink: string
+): Promise<void> {
+  const isGuestRecipient = matchedType === 'podcast';
+  const subject = `🎉 You've matched with ${matchedName}!`;
+  
+  const paymentDetails = recipientOffer === 0 && matchedOffer === 0
+    ? 'This is a free collaboration opportunity'
+    : isGuestRecipient
+      ? `You offered $${recipientOffer} • ${matchedName} is willing to pay $${matchedOffer}`
+      : `${matchedName} offered $${matchedOffer} • You're willing to pay $${recipientOffer}`;
+  
+  const topicsText = topics.length > 0 
+    ? `\n\n📋 Shared Topics of Interest:\n${topics.map(t => `  • ${t}`).join('\n')}` 
+    : '';
+
+  const text = `Hi ${recipientName},
+
+Exciting news! You've been matched with ${matchedName} on UvoCollab!
+
+Both of you have expressed interest in collaborating, and this match indicates strong potential for a great partnership.
+
+💰 Payment Details:
+${paymentDetails}${topicsText}
+
+What's Next?
+Click the link below to view your match details and start a collaboration:
+${matchLink}
+
+In the collaboration hub, you can:
+• Discuss and finalize terms
+• Propose recording schedules
+• Share preparation materials
+• Coordinate all collaboration details
+
+Don't miss this opportunity to create something amazing together!
+
+Best regards,
+The UvoCollab Team
+
+---
+Questions? Reply to this email or contact us at support@uvocollab.com`;
+
+  const paymentHtml = recipientOffer === 0 && matchedOffer === 0
+    ? `<div style="background:#DBEAFE;padding:15px;border-radius:5px;margin:20px 0;">
+         <strong>✨ This is a free collaboration opportunity</strong>
+       </div>`
+    : `<div style="background:#D1FAE5;padding:15px;border-radius:5px;margin:20px 0;">
+         <strong>💰 Payment Details:</strong><br>
+         ${isGuestRecipient 
+           ? `You offered <strong>$${recipientOffer}</strong> • ${matchedName} is willing to pay <strong>$${matchedOffer}</strong>`
+           : `${matchedName} offered <strong>$${matchedOffer}</strong> • You're willing to pay <strong>$${recipientOffer}</strong>`
+         }
+       </div>`;
+  
+  const topicsHtml = topics.length > 0 
+    ? `<div style="margin:20px 0;">
+         <strong>📋 Shared Topics of Interest:</strong>
+         <ul>${topics.map(t => `<li>${t}</li>`).join('')}</ul>
+       </div>` 
+    : '';
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; }
+    .header { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; padding: 30px 20px; text-align: center; border-radius: 10px 10px 0 0; }
+    .content { padding: 30px 20px; background: #ffffff; }
+    .highlight-box { background: #FEF3C7; padding: 20px; border-left: 4px solid #F59E0B; border-radius: 4px; margin: 20px 0; }
+    .cta-button { display: inline-block; background: #10B981; color: white; padding: 15px 40px; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 20px 0; }
+    .next-steps { background: #EEF2FF; padding: 20px; border-radius: 5px; margin: 20px 0; }
+    .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #E5E7EB; font-size: 12px; color: #6B7280; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🎉 It's a Match!</h1>
+  </div>
+  <div class="content">
+    <p>Hi ${recipientName},</p>
+    <p>Exciting news! You've been matched with <strong>${matchedName}</strong> on UvoCollab!</p>
+    
+    <p>Both of you have expressed interest in collaborating, and this match indicates strong potential for a great partnership.</p>
+    
+    ${paymentHtml}
+    ${topicsHtml}
+    
+    <div class="next-steps">
+      <strong>What's Next?</strong>
+      <p>In the collaboration hub, you can:</p>
+      <ul>
+        <li>Discuss and finalize terms</li>
+        <li>Propose recording schedules</li>
+        <li>Share preparation materials</li>
+        <li>Coordinate all collaboration details</li>
+      </ul>
+    </div>
+    
+    <div style="text-align: center;">
+      <a href="${matchLink}" class="cta-button">View Match & Start Collaboration</a>
+    </div>
+    
+    <p>Don't miss this opportunity to create something amazing together!</p>
+    
+    <p>Best regards,<br><strong>The UvoCollab Team</strong></p>
+  </div>
+  <div class="footer">
+    Questions? Reply to this email or contact us at support@uvocollab.com
+  </div>
+</body>
+</html>`;
+
+  await sendEmail({ to: recipientEmail, subject, text, html });
+}
+
+/**
+ * Send collaboration proposal email
+ */
+export async function sendCollaborationProposalEmail(
+  recipientEmail: string,
+  recipientName: string,
+  senderName: string,
+  senderType: 'guest' | 'podcast',
+  proposedPrice: number,
+  proposedTopics: string[],
+  proposedDates: string[],
+  message: string,
+  collaborationLink: string
+): Promise<void> {
+  const subject = `🎙️ ${senderName} sent you a collaboration proposal`;
+  
+  const paymentText = proposedPrice === 0
+    ? '\n\n💰 This is a free collaboration opportunity'
+    : senderType === 'guest'
+      ? `\n\n💰 Guest Fee: $${proposedPrice} (guest pays podcast)`
+      : `\n\n💰 Guest Fee: $${proposedPrice} (podcast pays guest)`;
+  
+  const topicsText = proposedTopics.length > 0 
+    ? `\n\n📋 Proposed Topics:\n${proposedTopics.map(t => `  • ${t}`).join('\n')}` 
+    : '';
+  
+  const datesText = proposedDates.length > 0
+    ? `\n\n📅 Proposed Recording Dates:\n${proposedDates.map(d => `  • ${d}`).join('\n')}`
+    : '';
+
+  const text = `Hi ${recipientName},
+
+${senderName} has sent you a collaboration proposal for a guest appearance!${paymentText}${topicsText}${datesText}
+
+Personal Message:
+"${message}"
+
+To review and respond to this proposal, click the link below:
+${collaborationLink}
+
+You can accept the proposal, suggest changes, or start a conversation to finalize the details.
+
+Looking forward to your response!
+
+Best regards,
+The UvoCollab Team
+
+---
+Questions? Reply to this email or contact us at support@uvocollab.com`;
+
+  const paymentHtml = proposedPrice === 0
+    ? `<div style="background:#DBEAFE;padding:15px;border-radius:5px;margin:20px 0;">
+         <strong>✨ This is a free collaboration opportunity</strong>
+       </div>`
+    : `<div style="background:#D1FAE5;padding:15px;border-radius:5px;margin:20px 0;">
+         <strong>💰 Guest Fee:</strong> $${proposedPrice}<br>
+         <small>${senderType === 'guest' ? '(guest pays podcast)' : '(podcast pays guest)'}</small>
+       </div>`;
+  
+  const topicsHtml = proposedTopics.length > 0 
+    ? `<div style="margin:20px 0;">
+         <strong>📋 Proposed Topics:</strong>
+         <ul>${proposedTopics.map(t => `<li>${t}</li>`).join('')}</ul>
+       </div>` 
+    : '';
+  
+  const datesHtml = proposedDates.length > 0
+    ? `<div style="margin:20px 0;">
+         <strong>📅 Proposed Recording Dates:</strong>
+         <ul>${proposedDates.map(d => `<li>${d}</li>`).join('')}</ul>
+       </div>`
+    : '';
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; }
+    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px 20px; text-align: center; border-radius: 10px 10px 0 0; }
+    .content { padding: 30px 20px; background: #ffffff; }
+    .message-box { background: #F9FAFB; padding: 20px; border-left: 4px solid #667eea; border-radius: 4px; margin: 20px 0; font-style: italic; }
+    .cta-button { display: inline-block; background: #667eea; color: white; padding: 15px 40px; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 20px 0; }
+    .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #E5E7EB; font-size: 12px; color: #6B7280; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🎙️ Collaboration Proposal</h1>
+  </div>
+  <div class="content">
+    <p>Hi ${recipientName},</p>
+    <p><strong>${senderName}</strong> has sent you a collaboration proposal for a guest appearance!</p>
+    
+    ${paymentHtml}
+    ${topicsHtml}
+    ${datesHtml}
+    
+    <div class="message-box">
+      <strong>Personal Message from ${senderName}:</strong><br><br>
+      "${message}"
+    </div>
+    
+    <div style="text-align: center;">
+      <a href="${collaborationLink}" class="cta-button">Review Proposal</a>
+    </div>
+    
+    <p>You can accept the proposal, suggest changes, or start a conversation to finalize the details.</p>
+    
+    <p>Looking forward to your response!</p>
+    
+    <p>Best regards,<br><strong>The UvoCollab Team</strong></p>
+  </div>
+  <div class="footer">
+    Questions? Reply to this email or contact us at support@uvocollab.com
+  </div>
+</body>
+</html>`;
+
+  await sendEmail({ to: recipientEmail, subject, text, html });
+}
+
+/**
+ * Send recording reminder email
+ */
+export async function sendRecordingReminderEmail(
+  recipientEmail: string,
+  recipientName: string,
+  otherPartyName: string,
+  recordingDate: string,
+  recordingTime: string,
+  timezone: string,
+  duration: string,
+  recordingUrl: string,
+  prepNotes: string,
+  topics: string[],
+  hoursUntilRecording: number
+): Promise<void> {
+  const urgency = hoursUntilRecording <= 1 ? '⏰ STARTING SOON' : '📅 UPCOMING';
+  const subject = `${urgency}: Recording with ${otherPartyName}`;
+  
+  const topicsText = topics.length > 0 
+    ? `\n\n📋 Topics:\n${topics.map(t => `  • ${t}`).join('\n')}` 
+    : '';
+  
+  const prepNotesText = prepNotes 
+    ? `\n\nPreparation Notes:\n${prepNotes}` 
+    : '';
+
+  const text = `Hi ${recipientName},
+
+${hoursUntilRecording <= 1 
+  ? `Your recording with ${otherPartyName} is starting in ${hoursUntilRecording} hour(s)!` 
+  : `This is a reminder about your upcoming recording with ${otherPartyName}.`
+}
+
+📅 Recording Details:
+• Date: ${recordingDate}
+• Time: ${recordingTime} ${timezone}
+• Duration: ${duration}${topicsText}${prepNotesText}
+
+🎙️ Join Recording:
+${recordingUrl}
+
+Make sure you're in a quiet environment with good internet connection. Test your audio and video equipment before joining.
+
+Good luck with the recording!
+
+Best regards,
+The UvoCollab Team
+
+---
+Questions? Reply to this email or contact us at support@uvocollab.com`;
+
+  const topicsHtml = topics.length > 0 
+    ? `<div style="margin:20px 0;">
+         <strong>📋 Topics:</strong>
+         <ul>${topics.map(t => `<li>${t}</li>`).join('')}</ul>
+       </div>` 
+    : '';
+  
+  const prepNotesHtml = prepNotes
+    ? `<div style="background:#FEF3C7;padding:15px;border-radius:5px;margin:20px 0;border-left:4px solid #F59E0B;">
+         <strong>Preparation Notes:</strong><br><br>
+         ${prepNotes.replace(/\n/g, '<br>')}
+       </div>`
+    : '';
+
+  const urgencyColor = hoursUntilRecording <= 1 ? '#DC2626' : '#667eea';
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; }
+    .header { background: linear-gradient(135deg, ${urgencyColor} 0%, #764ba2 100%); color: white; padding: 30px 20px; text-align: center; border-radius: 10px 10px 0 0; }
+    .content { padding: 30px 20px; background: #ffffff; }
+    .details-box { background: #F3F4F6; padding: 20px; border-radius: 5px; margin: 20px 0; }
+    .cta-button { display: inline-block; background: #10B981; color: white; padding: 15px 40px; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 20px 0; }
+    .checklist { background: #EEF2FF; padding: 20px; border-radius: 5px; margin: 20px 0; }
+    .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #E5E7EB; font-size: 12px; color: #6B7280; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>${hoursUntilRecording <= 1 ? '⏰ Recording Starting Soon!' : '📅 Recording Reminder'}</h1>
+  </div>
+  <div class="content">
+    <p>Hi ${recipientName},</p>
+    <p>${hoursUntilRecording <= 1 
+      ? `Your recording with <strong>${otherPartyName}</strong> is starting in <strong>${hoursUntilRecording} hour(s)</strong>!` 
+      : `This is a reminder about your upcoming recording with <strong>${otherPartyName}</strong>.`
+    }</p>
+    
+    <div class="details-box">
+      <strong>📅 Recording Details:</strong>
+      <ul style="margin:10px 0;padding-left:20px;">
+        <li><strong>Date:</strong> ${recordingDate}</li>
+        <li><strong>Time:</strong> ${recordingTime} ${timezone}</li>
+        <li><strong>Duration:</strong> ${duration}</li>
+      </ul>
+    </div>
+    
+    ${topicsHtml}
+    ${prepNotesHtml}
+    
+    <div style="text-align: center;">
+      <a href="${recordingUrl}" class="cta-button">🎙️ Join Recording</a>
+    </div>
+    
+    <div class="checklist">
+      <strong>✅ Pre-Recording Checklist:</strong>
+      <ul style="margin:10px 0;padding-left:20px;">
+        <li>Find a quiet environment</li>
+        <li>Test your audio and video equipment</li>
+        <li>Check your internet connection</li>
+        <li>Have water nearby</li>
+        <li>Review the discussion topics</li>
+      </ul>
+    </div>
+    
+    <p>Good luck with the recording!</p>
+    
+    <p>Best regards,<br><strong>The UvoCollab Team</strong></p>
+  </div>
+  <div class="footer">
+    Questions? Reply to this email or contact us at support@uvocollab.com
+  </div>
+</body>
+</html>`;
+
+  await sendEmail({ to: recipientEmail, subject, text, html });
+}
+
+/**
+ * Send episode release notification email
+ */
+export async function sendEpisodeReleaseEmail(
+  recipientEmail: string,
+  recipientName: string,
+  podcastName: string,
+  episodeTitle: string,
+  episodeUrl: string,
+  releaseDate: string,
+  paymentReleased: boolean,
+  paymentAmount?: number
+): Promise<void> {
+  const subject = `🎉 Your episode on "${podcastName}" is live!`;
+  
+  const paymentText = paymentReleased && paymentAmount
+    ? `\n\n💰 Payment Released:\nYour payment of $${paymentAmount} has been released from escrow and will be transferred to your account shortly.`
+    : '';
+
+  const text = `Hi ${recipientName},
+
+Great news! Your guest appearance on "${podcastName}" has been released!
+
+📻 Episode Details:
+• Title: ${episodeTitle}
+• Release Date: ${releaseDate}
+• Listen: ${episodeUrl}${paymentText}
+
+Share It With Your Audience:
+Now is a great time to share this episode with your followers! Here are some ideas:
+• Post on your social media channels
+• Add it to your "Previous Appearances" on your UvoCollab profile
+• Include it in your newsletter
+• Share in relevant communities
+
+Thank you for being part of the UvoCollab community. We hope this collaboration was a success and leads to more opportunities!
+
+Best regards,
+The UvoCollab Team
+
+---
+Questions? Reply to this email or contact us at support@uvocollab.com`;
+
+  const paymentHtml = paymentReleased && paymentAmount
+    ? `<div style="background:#D1FAE5;padding:20px;border-radius:5px;margin:20px 0;border-left:4px solid #10B981;">
+         <strong>💰 Payment Released:</strong><br><br>
+         Your payment of <strong>$${paymentAmount}</strong> has been released from escrow and will be transferred to your account shortly.
+       </div>`
+    : '';
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; }
+    .header { background: linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%); color: white; padding: 30px 20px; text-align: center; border-radius: 10px 10px 0 0; }
+    .content { padding: 30px 20px; background: #ffffff; }
+    .episode-box { background: #F3F4F6; padding: 20px; border-radius: 5px; margin: 20px 0; }
+    .cta-button { display: inline-block; background: #EC4899; color: white; padding: 15px 40px; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 20px 0; }
+    .share-section { background: #EEF2FF; padding: 20px; border-radius: 5px; margin: 20px 0; }
+    .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #E5E7EB; font-size: 12px; color: #6B7280; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🎉 Your Episode is Live!</h1>
+  </div>
+  <div class="content">
+    <p>Hi ${recipientName},</p>
+    <p>Great news! Your guest appearance on <strong>"${podcastName}"</strong> has been released!</p>
+    
+    <div class="episode-box">
+      <strong>📻 Episode Details:</strong>
+      <ul style="margin:10px 0;padding-left:20px;">
+        <li><strong>Title:</strong> ${episodeTitle}</li>
+        <li><strong>Release Date:</strong> ${releaseDate}</li>
+      </ul>
+    </div>
+    
+    ${paymentHtml}
+    
+    <div style="text-align: center;">
+      <a href="${episodeUrl}" class="cta-button">🎧 Listen to Episode</a>
+    </div>
+    
+    <div class="share-section">
+      <strong>📢 Share It With Your Audience:</strong>
+      <p>Now is a great time to share this episode with your followers! Here are some ideas:</p>
+      <ul style="margin:10px 0;padding-left:20px;">
+        <li>Post on your social media channels</li>
+        <li>Add it to your "Previous Appearances" on your UvoCollab profile</li>
+        <li>Include it in your newsletter</li>
+        <li>Share in relevant communities</li>
+      </ul>
+    </div>
+    
+    <p>Thank you for being part of the UvoCollab community. We hope this collaboration was a success and leads to more opportunities!</p>
+    
+    <p>Best regards,<br><strong>The UvoCollab Team</strong></p>
+  </div>
+  <div class="footer">
+    Questions? Reply to this email or contact us at support@uvocollab.com
+  </div>
+</body>
+</html>`;
+
+  await sendEmail({ to: recipientEmail, subject, text, html });
+}
+
+/**
+ * Send guest verification approval email
+ */
+export async function sendGuestVerificationApprovalEmail(
+  recipientEmail: string,
+  recipientName: string,
+  verificationBenefits: string[]
+): Promise<void> {
+  const subject = '✅ Your Guest Profile Has Been Verified!';
+  
+  const benefitsText = verificationBenefits.length > 0
+    ? `\n\nAs a verified guest, you now enjoy:\n${verificationBenefits.map(b => `  • ${b}`).join('\n')}`
+    : '';
+
+  const text = `Hi ${recipientName},
+
+Congratulations! Your guest profile on UvoCollab has been verified.
+
+Your profile will now display a verification badge, helping you stand out to podcast hosts and increasing your credibility on the platform.${benefitsText}
+
+What This Means:
+• Enhanced visibility in guest discovery
+• Verified badge on your profile
+• Priority consideration for collaborations
+• Increased trust from podcast hosts
+
+Keep your profile updated with your latest appearances and expertise to maximize your opportunities!
+
+Best regards,
+The UvoCollab Team
+
+---
+Questions? Reply to this email or contact us at support@uvocollab.com`;
+
+  const benefitsHtml = verificationBenefits.length > 0
+    ? `<div style="margin:20px 0;">
+         <strong>✨ As a verified guest, you now enjoy:</strong>
+         <ul>${verificationBenefits.map(b => `<li>${b}</li>`).join('')}</ul>
+       </div>`
+    : '';
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; }
+    .header { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; padding: 30px 20px; text-align: center; border-radius: 10px 10px 0 0; }
+    .content { padding: 30px 20px; background: #ffffff; }
+    .badge { display: inline-block; background: #10B981; color: white; padding: 10px 20px; border-radius: 20px; font-weight: bold; margin: 20px 0; }
+    .benefits-box { background: #D1FAE5; padding: 20px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #10B981; }
+    .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #E5E7EB; font-size: 12px; color: #6B7280; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>✅ Profile Verified!</h1>
+  </div>
+  <div class="content">
+    <p>Hi ${recipientName},</p>
+    <p><strong>Congratulations!</strong> Your guest profile on UvoCollab has been verified.</p>
+    
+    <div style="text-align: center;">
+      <span class="badge">✓ VERIFIED GUEST</span>
+    </div>
+    
+    <p>Your profile will now display a verification badge, helping you stand out to podcast hosts and increasing your credibility on the platform.</p>
+    
+    ${benefitsHtml}
+    
+    <div class="benefits-box">
+      <strong>What This Means:</strong>
+      <ul style="margin:10px 0;padding-left:20px;">
+        <li>Enhanced visibility in guest discovery</li>
+        <li>Verified badge on your profile</li>
+        <li>Priority consideration for collaborations</li>
+        <li>Increased trust from podcast hosts</li>
+      </ul>
+    </div>
+    
+    <p>Keep your profile updated with your latest appearances and expertise to maximize your opportunities!</p>
+    
+    <p>Best regards,<br><strong>The UvoCollab Team</strong></p>
+  </div>
+  <div class="footer">
+    Questions? Reply to this email or contact us at support@uvocollab.com
+  </div>
+</body>
+</html>`;
+
+  await sendEmail({ to: recipientEmail, subject, text, html });
+}
+
+/**
+ * Send guest verification decline email
+ */
+export async function sendGuestVerificationDeclineEmail(
+  recipientEmail: string,
+  recipientName: string,
+  reason: string,
+  improvementSuggestions: string[]
+): Promise<void> {
+  const subject = 'UvoCollab Guest Verification Update';
+  
+  const suggestionsText = improvementSuggestions.length > 0
+    ? `\n\nTo improve your chances of verification:\n${improvementSuggestions.map(s => `  • ${s}`).join('\n')}`
+    : '';
+
+  const text = `Hi ${recipientName},
+
+Thank you for requesting verification for your guest profile on UvoCollab.
+
+After careful review, we are unable to verify your profile at this time.
+
+Reason:
+${reason}${suggestionsText}
+
+What You Can Do:
+You can still use UvoCollab as a guest and apply for collaborations. Once you've addressed the feedback above, you're welcome to request verification again.
+
+We appreciate your interest in becoming a verified guest and look forward to seeing your profile grow!
+
+Best regards,
+The UvoCollab Team
+
+---
+Questions? Reply to this email or contact us at support@uvocollab.com`;
+
+  const suggestionsHtml = improvementSuggestions.length > 0
+    ? `<div style="background:#EEF2FF;padding:20px;border-radius:5px;margin:20px 0;border-left:4px solid #667eea;">
+         <strong>To improve your chances of verification:</strong>
+         <ul>${improvementSuggestions.map(s => `<li>${s}</li>`).join('')}</ul>
+       </div>`
+    : '';
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; }
+    .header { background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%); color: white; padding: 30px 20px; text-align: center; border-radius: 10px 10px 0 0; }
+    .content { padding: 30px 20px; background: #ffffff; }
+    .reason-box { background: #FEF3C7; padding: 20px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #F59E0B; }
+    .next-steps { background: #F3F4F6; padding: 20px; border-radius: 5px; margin: 20px 0; }
+    .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #E5E7EB; font-size: 12px; color: #6B7280; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Verification Update</h1>
+  </div>
+  <div class="content">
+    <p>Hi ${recipientName},</p>
+    <p>Thank you for requesting verification for your guest profile on UvoCollab.</p>
+    
+    <p>After careful review, we are unable to verify your profile at this time.</p>
+    
+    <div class="reason-box">
+      <strong>Reason:</strong><br><br>
+      ${reason}
+    </div>
+    
+    ${suggestionsHtml}
+    
+    <div class="next-steps">
+      <strong>What You Can Do:</strong>
+      <p>You can still use UvoCollab as a guest and apply for collaborations. Once you've addressed the feedback above, you're welcome to request verification again.</p>
+    </div>
+    
+    <p>We appreciate your interest in becoming a verified guest and look forward to seeing your profile grow!</p>
+    
+    <p>Best regards,<br><strong>The UvoCollab Team</strong></p>
+  </div>
+  <div class="footer">
+    Questions? Reply to this email or contact us at support@uvocollab.com
+  </div>
+</body>
+</html>`;
+
+  await sendEmail({ to: recipientEmail, subject, text, html });
+}
