@@ -29,6 +29,7 @@ export default function PodcastGuestWishlistPage() {
     if (!authLoading && userData?.uid) {
       loadPodcast();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData, authLoading]);
 
   const loadPodcast = async () => {
@@ -504,6 +505,7 @@ function AddProspectGuestModal({
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
             disabled={loading}
+            aria-label="Close modal"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -704,6 +706,7 @@ function EditGuestWishlistModal({
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
             disabled={loading}
+            aria-label="Close modal"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

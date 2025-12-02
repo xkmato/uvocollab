@@ -84,6 +84,7 @@ export default function AddPodcastToWishlistModal({
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
             disabled={loading}
+            aria-label="Close modal"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -133,7 +134,7 @@ export default function AddPodcastToWishlistModal({
           {/* Topics */}
           <div>
             <label htmlFor="topics" className="block text-sm font-semibold text-gray-700 mb-2">
-              Topics You'd Like to Discuss <span className="text-red-500">*</span>
+              Topics You&apos;d Like to Discuss <span className="text-red-500">*</span>
             </label>
             <input
               type="text"

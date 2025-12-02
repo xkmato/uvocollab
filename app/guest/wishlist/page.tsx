@@ -5,7 +5,7 @@ import { GuestWishlist } from '@/app/types/guest';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export default function GuestWishlistPage() {
   const { userData, loading: authLoading } = useAuth();
@@ -23,14 +23,7 @@ export default function GuestWishlistPage() {
     }
   }, [userData, authLoading, router]);
 
-  // Load wishlist
-  useEffect(() => {
-    if (userData?.uid && userData?.isGuest) {
-      loadWishlist();
-    }
-  }, [userData]);
-
-  const loadWishlist = async () => {
+  const loadWishlist = useCallback(async () => {
     if (!userData?.uid) return;
 
     try {
@@ -51,7 +44,14 @@ export default function GuestWishlistPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userData?.uid]);
+
+  // Load wishlist
+  useEffect(() => {
+    if (userData?.uid && userData?.isGuest) {
+      loadWishlist();
+    }
+  }, [userData, loadWishlist]);
 
   const handleRemove = async (wishlistId: string) => {
     if (!confirm('Are you sure you want to remove this podcast from your wishlist?')) {
@@ -150,7 +150,7 @@ export default function GuestWishlistPage() {
               Your wishlist is empty
             </h3>
             <p className="text-gray-600 mb-6">
-              Browse podcasts and add the ones you'd like to appear on
+              Browse podcasts and add the ones you&apos;d like to appear on
             </p>
             <Link
               href="/marketplace/podcasts"
@@ -360,6 +360,7 @@ function EditWishlistModal({
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
             disabled={loading}
+            aria-label="Close modal"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

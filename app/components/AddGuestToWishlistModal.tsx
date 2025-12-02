@@ -81,6 +81,7 @@ export default function AddGuestToWishlistModal({
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
             disabled={loading}
+            aria-label="Close modal"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -112,7 +113,7 @@ export default function AddGuestToWishlistModal({
           <div>
             <label htmlFor="budgetAmount" className="block text-sm font-semibold text-gray-700 mb-2">
               Your Budget Amount (USD)
-              <span className="text-gray-500 font-normal ml-2">What you're willing to pay</span>
+              <span className="text-gray-500 font-normal ml-2">What you&apos;re willing to pay</span>
             </label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
@@ -134,7 +135,7 @@ export default function AddGuestToWishlistModal({
             </p>
             {guest.guestRate && budgetAmount < guest.guestRate && (
               <p className="mt-1 text-xs text-orange-600">
-                ⚠️ Your budget is below the guest's listed rate
+                ⚠️ Your budget is below the guest&apos;s listed rate
               </p>
             )}
           </div>
@@ -156,7 +157,7 @@ export default function AddGuestToWishlistModal({
             <p className="mt-1 text-xs text-gray-500">Separate multiple topics with commas</p>
             {guest.guestTopics && guest.guestTopics.length > 0 && (
               <div className="mt-2">
-                <p className="text-xs text-gray-600 mb-1">Guest's expertise:</p>
+                <p className="text-xs text-gray-600 mb-1">Guest&apos;s expertise:</p>
                 <div className="flex flex-wrap gap-1">
                   {guest.guestTopics.map((topic, idx) => (
                     <span
