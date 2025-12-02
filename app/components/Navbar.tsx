@@ -88,6 +88,7 @@ export default function Navbar() {
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                         className="md:hidden p-2 text-white/70 hover:text-white"
+                        aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                     >
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             {isMenuOpen ? (

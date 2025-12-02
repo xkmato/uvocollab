@@ -6,6 +6,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
+import ProgressBar from '@/app/components/ProgressBar';
 
 interface AnalyticsData {
     totalGuests: number;
@@ -366,20 +367,19 @@ export default function GuestAnalyticsPage() {
                     <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
                         <h3 className="text-xl font-bold text-white mb-4">Guest Signups (Last 12 Months)</h3>
                         <div className="space-y-2">
-                            {analytics.guestsByMonth.map(({ month, count }) => (
-                                <div key={month} className="flex items-center gap-3">
-                                    <div className="text-white/70 text-sm w-20">{month}</div>
-                                    <div className="flex-1 bg-slate-700 rounded-full h-6 overflow-hidden">
-                                        <div
-                                            className="bg-purple-500 h-full rounded-full transition-all"
-                                            style={{
-                                                width: `${Math.max((count / Math.max(...analytics.guestsByMonth.map(g => g.count))) * 100, 5)}%`
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="text-white font-semibold w-8 text-right">{count}</div>
-                                </div>
-                            ))}
+                            {(() => {
+                                const maxCount = Math.max(...analytics.guestsByMonth.map(g => g.count));
+                                return analytics.guestsByMonth.map(({ month, count }) => {
+                                    const widthPercent = Math.max((count / maxCount) * 100, 5);
+                                    return (
+                                        <div key={month} className="flex items-center gap-3">
+                                            <div className="text-white/70 text-sm w-20">{month}</div>
+                                            <ProgressBar percentage={widthPercent} color="purple" />
+                                            <div className="text-white font-semibold w-8 text-right">{count}</div>
+                                        </div>
+                                    );
+                                });
+                            })()}
                         </div>
                     </div>
 
@@ -387,20 +387,19 @@ export default function GuestAnalyticsPage() {
                     <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
                         <h3 className="text-xl font-bold text-white mb-4">Guest Collaborations (Last 12 Months)</h3>
                         <div className="space-y-2">
-                            {analytics.collaborationsByMonth.map(({ month, count }) => (
-                                <div key={month} className="flex items-center gap-3">
-                                    <div className="text-white/70 text-sm w-20">{month}</div>
-                                    <div className="flex-1 bg-slate-700 rounded-full h-6 overflow-hidden">
-                                        <div
-                                            className="bg-cyan-500 h-full rounded-full transition-all"
-                                            style={{
-                                                width: `${Math.max((count / Math.max(...analytics.collaborationsByMonth.map(c => c.count))) * 100, 5)}%`
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="text-white font-semibold w-8 text-right">{count}</div>
-                                </div>
-                            ))}
+                            {(() => {
+                                const maxCount = Math.max(...analytics.collaborationsByMonth.map(c => c.count));
+                                return analytics.collaborationsByMonth.map(({ month, count }) => {
+                                    const widthPercent = Math.max((count / maxCount) * 100, 5);
+                                    return (
+                                        <div key={month} className="flex items-center gap-3">
+                                            <div className="text-white/70 text-sm w-20">{month}</div>
+                                            <ProgressBar percentage={widthPercent} color="cyan" />
+                                            <div className="text-white font-semibold w-8 text-right">{count}</div>
+                                        </div>
+                                    );
+                                });
+                            })()}
                         </div>
                     </div>
                 </div>
