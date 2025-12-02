@@ -215,7 +215,7 @@ export default function GuestProfile() {
                                     <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-500/20 text-yellow-300 border border-yellow-500/30">
                                         ⏳ Verification Pending
                                     </span>
-                                    <p className="text-white/60 text-sm">We're reviewing your verification request</p>
+                                    <p className="text-white/60 text-sm mt-2">We&apos;re reviewing your verification request</p>
                                 </div>
                             ) : (
                                 <div>
@@ -257,8 +257,9 @@ export default function GuestProfile() {
                             <h3 className="text-xl font-bold text-white mb-4">Basic Information</h3>
                             <div className="space-y-4">
                                 <div>
-                                    <label className="block text-white/70 text-sm mb-2">Display Name</label>
+                                    <label htmlFor="displayName" className="block text-white/70 text-sm mb-2">Display Name</label>
                                     <input
+                                        id="displayName"
                                         type="text"
                                         value={formData.displayName}
                                         onChange={(e) => handleInputChange('displayName', e.target.value)}
@@ -267,8 +268,9 @@ export default function GuestProfile() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-white/70 text-sm mb-2">Profile Image URL</label>
+                                    <label htmlFor="profileImageUrl" className="block text-white/70 text-sm mb-2">Profile Image URL</label>
                                     <input
+                                        id="profileImageUrl"
                                         type="url"
                                         value={formData.profileImageUrl}
                                         onChange={(e) => handleInputChange('profileImageUrl', e.target.value)}
@@ -284,8 +286,9 @@ export default function GuestProfile() {
                             <h3 className="text-xl font-bold text-white mb-4">Guest Information</h3>
                             <div className="space-y-4">
                                 <div>
-                                    <label className="block text-white/70 text-sm mb-2">Bio / Expertise</label>
+                                    <label htmlFor="guestBio" className="block text-white/70 text-sm mb-2">Bio / Expertise</label>
                                     <textarea
+                                        id="guestBio"
                                         value={formData.guestBio}
                                         onChange={(e) => handleInputChange('guestBio', e.target.value)}
                                         className="w-full bg-slate-700/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500 min-h-[120px]"
@@ -293,8 +296,9 @@ export default function GuestProfile() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-white/70 text-sm mb-2">Guest Rate (USD)</label>
+                                    <label htmlFor="guestRate" className="block text-white/70 text-sm mb-2">Guest Rate (USD)</label>
                                     <input
+                                        id="guestRate"
                                         type="number"
                                         value={formData.guestRate}
                                         onChange={(e) => handleInputChange('guestRate', e.target.value)}
@@ -305,8 +309,9 @@ export default function GuestProfile() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-white/70 text-sm mb-2">Topics / Expertise Areas</label>
+                                    <label htmlFor="guestTopics" className="block text-white/70 text-sm mb-2">Topics / Expertise Areas</label>
                                     <input
+                                        id="guestTopics"
                                         type="text"
                                         value={formData.guestTopics}
                                         onChange={(e) => handleInputChange('guestTopics', e.target.value)}
@@ -316,8 +321,9 @@ export default function GuestProfile() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-white/70 text-sm mb-2">Availability</label>
+                                    <label htmlFor="guestAvailability" className="block text-white/70 text-sm mb-2">Availability</label>
                                     <input
+                                        id="guestAvailability"
                                         type="text"
                                         value={formData.guestAvailability}
                                         onChange={(e) => handleInputChange('guestAvailability', e.target.value)}

@@ -134,8 +134,10 @@ export default function BecomeGuestModal({ isOpen, onClose, onSuccess, userId }:
                         <p className="text-white/70 text-sm mt-1">Enable guest features on your account</p>
                     </div>
                     <button
+                        type="button"
                         onClick={onClose}
                         className="text-white/70 hover:text-white transition-colors"
+                        aria-label="Close modal"
                     >
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
