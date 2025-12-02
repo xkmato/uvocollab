@@ -152,11 +152,13 @@ export default function GuestSettingsPage() {
                                 </div>
                                 <input
                                     type="checkbox"
+                                    id="guestFeatureEnabled"
                                     checked={settings.guestFeatureEnabled}
                                     onChange={(e) =>
                                         setSettings({ ...settings, guestFeatureEnabled: e.target.checked })
                                     }
                                     className="w-6 h-6 rounded bg-slate-700 border-white/20"
+                                    aria-label="Guest Feature Enabled"
                                 />
                             </label>
                             <label className="flex items-center justify-between">
@@ -168,11 +170,13 @@ export default function GuestSettingsPage() {
                                 </div>
                                 <input
                                     type="checkbox"
+                                    id="publicGuestDiscoveryEnabled"
                                     checked={settings.publicGuestDiscoveryEnabled}
                                     onChange={(e) =>
                                         setSettings({ ...settings, publicGuestDiscoveryEnabled: e.target.checked })
                                     }
                                     className="w-6 h-6 rounded bg-slate-700 border-white/20"
+                                    aria-label="Public Guest Discovery"
                                 />
                             </label>
                         </div>
@@ -183,9 +187,10 @@ export default function GuestSettingsPage() {
                         <h2 className="text-2xl font-bold text-white mb-4">Rate Settings</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-white/70 text-sm mb-2">Minimum Guest Rate (USD)</label>
+                                <label htmlFor="minGuestRate" className="block text-white/70 text-sm mb-2">Minimum Guest Rate (USD)</label>
                                 <input
                                     type="number"
+                                    id="minGuestRate"
                                     min="0"
                                     value={settings.minGuestRate}
                                     onChange={(e) =>
@@ -195,9 +200,10 @@ export default function GuestSettingsPage() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-white/70 text-sm mb-2">Maximum Guest Rate (USD)</label>
+                                <label htmlFor="maxGuestRate" className="block text-white/70 text-sm mb-2">Maximum Guest Rate (USD)</label>
                                 <input
                                     type="number"
+                                    id="maxGuestRate"
                                     min="0"
                                     value={settings.maxGuestRate}
                                     onChange={(e) =>
@@ -213,11 +219,12 @@ export default function GuestSettingsPage() {
                     <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
                         <h2 className="text-2xl font-bold text-white mb-4">Invitation Settings</h2>
                         <div>
-                            <label className="block text-white/70 text-sm mb-2">
+                            <label htmlFor="inviteExpirationDays" className="block text-white/70 text-sm mb-2">
                                 Invite Expiration (Days)
                             </label>
                             <input
                                 type="number"
+                                id="inviteExpirationDays"
                                 min="1"
                                 max="365"
                                 value={settings.inviteExpirationDays}
@@ -245,19 +252,22 @@ export default function GuestSettingsPage() {
                                 </div>
                                 <input
                                     type="checkbox"
+                                    id="autoMatchingEnabled"
                                     checked={settings.autoMatchingEnabled}
                                     onChange={(e) =>
                                         setSettings({ ...settings, autoMatchingEnabled: e.target.checked })
                                     }
                                     className="w-6 h-6 rounded bg-slate-700 border-white/20"
+                                    aria-label="Auto-Matching Enabled"
                                 />
                             </label>
                             <div>
-                                <label className="block text-white/70 text-sm mb-2">
+                                <label htmlFor="minimumMatchScore" className="block text-white/70 text-sm mb-2">
                                     Minimum Match Score (0-100)
                                 </label>
                                 <input
                                     type="number"
+                                    id="minimumMatchScore"
                                     min="0"
                                     max="100"
                                     value={settings.minimumMatchScore}
@@ -286,19 +296,22 @@ export default function GuestSettingsPage() {
                                 </div>
                                 <input
                                     type="checkbox"
+                                    id="verificationRequired"
                                     checked={settings.verificationRequired}
                                     onChange={(e) =>
                                         setSettings({ ...settings, verificationRequired: e.target.checked })
                                     }
                                     className="w-6 h-6 rounded bg-slate-700 border-white/20"
+                                    aria-label="Verification Required"
                                 />
                             </label>
                             <div>
-                                <label className="block text-white/70 text-sm mb-2">
+                                <label htmlFor="autoVerifyThreshold" className="block text-white/70 text-sm mb-2">
                                     Auto-Verify Threshold
                                 </label>
                                 <input
                                     type="number"
+                                    id="autoVerifyThreshold"
                                     min="0"
                                     value={settings.autoVerifyThreshold}
                                     onChange={(e) =>
@@ -318,9 +331,10 @@ export default function GuestSettingsPage() {
                         <h2 className="text-2xl font-bold text-white mb-4">Email Templates</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-white/70 text-sm mb-2">Invite Email Template</label>
+                                <label htmlFor="inviteEmailTemplate" className="block text-white/70 text-sm mb-2">Invite Email Template</label>
                                 <input
                                     type="text"
+                                    id="inviteEmailTemplate"
                                     value={settings.inviteEmailTemplate}
                                     onChange={(e) =>
                                         setSettings({ ...settings, inviteEmailTemplate: e.target.value })
@@ -329,9 +343,10 @@ export default function GuestSettingsPage() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-white/70 text-sm mb-2">Match Notification Template</label>
+                                <label htmlFor="matchNotificationTemplate" className="block text-white/70 text-sm mb-2">Match Notification Template</label>
                                 <input
                                     type="text"
+                                    id="matchNotificationTemplate"
                                     value={settings.matchNotificationTemplate}
                                     onChange={(e) =>
                                         setSettings({ ...settings, matchNotificationTemplate: e.target.value })
@@ -340,9 +355,10 @@ export default function GuestSettingsPage() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-white/70 text-sm mb-2">Verification Approval Template</label>
+                                <label htmlFor="verificationApprovalTemplate" className="block text-white/70 text-sm mb-2">Verification Approval Template</label>
                                 <input
                                     type="text"
+                                    id="verificationApprovalTemplate"
                                     value={settings.verificationApprovalTemplate}
                                     onChange={(e) =>
                                         setSettings({ ...settings, verificationApprovalTemplate: e.target.value })
@@ -351,9 +367,10 @@ export default function GuestSettingsPage() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-white/70 text-sm mb-2">Verification Decline Template</label>
+                                <label htmlFor="verificationDeclineTemplate" className="block text-white/70 text-sm mb-2">Verification Decline Template</label>
                                 <input
                                     type="text"
+                                    id="verificationDeclineTemplate"
                                     value={settings.verificationDeclineTemplate}
                                     onChange={(e) =>
                                         setSettings({ ...settings, verificationDeclineTemplate: e.target.value })
