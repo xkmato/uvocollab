@@ -2,7 +2,7 @@ export interface User {
   uid: string;
   email: string;
   displayName: string;
-  role: 'new_artist' | 'legend_applicant' | 'legend' | 'admin';
+  role: 'new_artist' | 'legend_applicant' | 'legend' | 'admin' | 'guest';
   profileImageUrl?: string;
   bio?: string;
   managementInfo?: string;
@@ -19,4 +19,15 @@ export interface User {
   businessEmail?: string;
   businessContact?: string;
   businessMobile?: string;
+  
+  // Guest-specific fields
+  isGuest?: boolean; // Flag indicating user is a guest
+  guestRate?: number; // Fixed price they charge to appear (in USD)
+  guestBio?: string; // Guest-specific bio/expertise description
+  guestTopics?: string[]; // Array of topics/expertise areas
+  guestAvailability?: string; // Availability description
+  isVerifiedGuest?: boolean; // Whether guest has been verified by platform
+  guestVerificationRequestedAt?: Date; // When verification was requested
+  socialLinks?: { platform: string; url: string }[]; // Social media links
+  previousAppearances?: string[]; // Links to previous podcast appearances
 }
