@@ -54,55 +54,55 @@ This epic covers guest signup, profile management, and optional verification.
 - **Description:** Create a dedicated signup flow for users who want to join as guests.
 - **Dependencies:** Task 1.1
 - **Acceptance Criteria (AC):**
-  - [ ] Create `/auth/signup/guest` page with guest-specific signup form
-  - [ ] Form collects:
+  - [x] Create `/auth/signup/guest` page with guest-specific signup form
+  - [x] Form collects:
     - Basic info: Name, Email, Password
     - Guest info: Bio, Rate, Topics/Expertise, Availability
     - Social links (optional)
     - Previous appearances (optional)
-  - [ ] On successful signup, set `role: 'guest'` and `isGuest: true`
-  - [ ] Redirect to guest dashboard after signup
-  - [ ] Add "Sign up as a Guest" option on main signup page
-- **Status:** To Do
+  - [x] On successful signup, set `role: 'guest'` and `isGuest: true`
+  - [x] Redirect to guest dashboard after signup
+  - [x] Add "Sign up as a Guest" option on main signup page
+- **Status:** ✅ Done
 
 ### **Task 2.2: Guest Profile Management**
 
 - **Description:** Create a profile page where guests can manage their information.
 - **Dependencies:** Task 2.1
 - **Acceptance Criteria (AC):**
-  - [ ] Create `/guest/profile` page with editable form
-  - [ ] Allow guests to update:
+  - [x] Create `/guest/profile` page with editable form
+  - [x] Allow guests to update:
     - Bio, Rate, Topics, Availability
     - Profile image, Social links
     - Previous appearances
-  - [ ] Display verification status (unverified/pending/verified)
-  - [ ] Show "Request Verification" button if not verified
-  - [ ] Save changes to Firestore `users` collection
-- **Status:** To Do
+  - [x] Display verification status (unverified/pending/verified)
+  - [x] Show "Request Verification" button if not verified
+  - [x] Save changes to Firestore `users` collection
+- **Status:** ✅ Done
 
 ### **Task 2.3: Allow Existing Users to Become Guests**
 
 - **Description:** Enable any existing user to also act as a guest.
 - **Dependencies:** Task 1.1
 - **Acceptance Criteria (AC):**
-  - [ ] Add "Become a Guest" option in user dashboard
-  - [ ] Create a modal/form to collect guest-specific information
-  - [ ] Update user document with `isGuest: true` and guest fields
-  - [ ] Show guest-specific features in dashboard after enabling
-- **Status:** To Do
+  - [x] Add "Become a Guest" option in user dashboard
+  - [x] Create a modal/form to collect guest-specific information
+  - [x] Update user document with `isGuest: true` and guest fields
+  - [x] Show guest-specific features in dashboard after enabling
+- **Status:** ✅ Done
 
 ### **Task 2.4: Guest Verification Request**
 
 - **Description:** Allow guests to request verification from the platform.
 - **Dependencies:** Task 2.2
 - **Acceptance Criteria (AC):**
-  - [ ] Create API endpoint `/api/guest/request-verification`
-  - [ ] Update user document with `guestVerificationRequestedAt` timestamp
-  - [ ] Send notification email to admin team
-  - [ ] Create admin panel section to view verification requests
-  - [ ] Show "Verification Requested" badge in guest profile
-  - [ ] Note: Actual verification happens off-platform
-- **Status:** To Do
+  - [x] Create API endpoint `/api/guest/request-verification`
+  - [x] Update user document with `guestVerificationRequestedAt` timestamp
+  - [x] Send notification email to admin team
+  - [x] Create admin panel section to view verification requests
+  - [x] Show "Verification Requested" badge in guest profile
+  - [x] Note: Actual verification happens off-platform
+- **Status:** ✅ Done
 
 ---
 
