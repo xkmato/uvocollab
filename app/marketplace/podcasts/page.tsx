@@ -6,16 +6,20 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useAuth } from '@/app/contexts/AuthContext';
+import AddPodcastToWishlistModal from '@/app/components/AddPodcastToWishlistModal';
 
 // Filter types
 interface Filters {
     category: string;
     audienceSize: string;
     priceRange: string;
+    seekingGuests: string;
 }
 
 export default function PodcastMarketplacePage() {
     const router = useRouter();
+    const { userData } = useAuth();
     const [allPodcasts, setAllPodcasts] = useState<Podcast[]>([]);
     const [filteredPodcasts, setFilteredPodcasts] = useState<Podcast[]>([]);
     const [podcastServices, setPodcastServices] = useState<Record<string, PodcastService[]>>({});
@@ -25,9 +29,12 @@ export default function PodcastMarketplacePage() {
         category: 'all',
         audienceSize: 'all',
         priceRange: 'all',
+        seekingGuests: 'all',
     });
     const [showFilters, setShowFilters] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [selectedPodcast, setSelectedPodcast] = useState<Podcast | null>(null);
+    const [showWishlistModal, setShowWishlistModal] = useState(false);
 
     useEffect(() => {
         loadPodcasts();
@@ -122,6 +129,19 @@ export default function PodcastMarketplacePage() {
             });
         }
 
+        // Filter by seeking guests
+        if (filters.seekingGuests !== 'all') {
+            filtered = filtered.filter((podcast) => {
+                const services = podcastServices[podcast.id] || [];
+                const hasGuestService = services.some(
+                    s => s.title.toLowerCase().includes('guest') || 
+                         s.title.toLowerCase().includes('interview') ||
+                         s.description.toLowerCase().includes('guest')
+                );
+                return hasGuestService;
+            });
+        }
+
         setFilteredPodcasts(filtered);
     };
 
@@ -134,8 +154,19 @@ export default function PodcastMarketplacePage() {
             category: 'all',
             audienceSize: 'all',
             priceRange: 'all',
+            seekingGuests: 'all',
         });
         setSearchQuery('');
+    };
+
+    const handleAddToWishlist = (podcast: Podcast, e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (!userData || !userData.isGuest) {
+            alert('You need to be registered as a guest to add podcasts to your wishlist.');
+            return;
+        }
+        setSelectedPodcast(podcast);
+        setShowWishlistModal(true);
     };
 
     const activeFilterCount = Object.values(filters).filter((v) => v !== 'all').length + (searchQuery ? 1 : 0);
@@ -239,13 +270,14 @@ export default function PodcastMarketplacePage() {
                     </div>
 
                     {showFilters && (
-                        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
+                        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-gray-50 rounded-lg">
                             {/* Category Filter */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label htmlFor="category-filter" className="block text-sm font-medium text-gray-700 mb-2">
                                     Category
                                 </label>
                                 <select
+                                    id="category-filter"
                                     value={filters.category}
                                     onChange={(e) => handleFilterChange('category', e.target.value)}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -264,10 +296,11 @@ export default function PodcastMarketplacePage() {
 
                             {/* Audience Size Filter */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label htmlFor="audience-size-filter" className="block text-sm font-medium text-gray-700 mb-2">
                                     Audience Size (Avg. Listeners)
                                 </label>
                                 <select
+                                    id="audience-size-filter"
                                     value={filters.audienceSize}
                                     onChange={(e) => handleFilterChange('audienceSize', e.target.value)}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -282,10 +315,11 @@ export default function PodcastMarketplacePage() {
 
                             {/* Price Range Filter */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label htmlFor="price-range-filter" className="block text-sm font-medium text-gray-700 mb-2">
                                     Price Range
                                 </label>
                                 <select
+                                    id="price-range-filter"
                                     value={filters.priceRange}
                                     onChange={(e) => handleFilterChange('priceRange', e.target.value)}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -293,6 +327,22 @@ export default function PodcastMarketplacePage() {
                                     <option value="all">All Prices</option>
                                     <option value="free">Free / Cross-Promo</option>
                                     <option value="paid">Paid Opportunities</option>
+                                </select>
+                            </div>
+
+                            {/* Seeking Guests Filter */}
+                            <div>
+                                <label htmlFor="seeking-guests-filter" className="block text-sm font-medium text-gray-700 mb-2">
+                                    Guest Opportunities
+                                </label>
+                                <select
+                                    id="seeking-guests-filter"
+                                    value={filters.seekingGuests}
+                                    onChange={(e) => handleFilterChange('seekingGuests', e.target.value)}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                >
+                                    <option value="all">All Podcasts</option>
+                                    <option value="seeking">Seeking Guests</option>
                                 </select>
                             </div>
                         </div>
@@ -420,15 +470,36 @@ export default function PodcastMarketplacePage() {
                                                 )}
                                             </div>
 
-                                            <button
-                                                className="w-full px-4 py-2 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700 transition-colors duration-200"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleCardClick(podcast.id);
-                                                }}
-                                            >
-                                                View Podcast
-                                            </button>
+                                            {/* Action Buttons */}
+                                            {userData?.isGuest ? (
+                                                <div className="flex flex-col gap-2">
+                                                    <button
+                                                        className="w-full px-4 py-2 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700 transition-colors duration-200"
+                                                        onClick={(e) => handleAddToWishlist(podcast, e)}
+                                                    >
+                                                        Add to Wishlist
+                                                    </button>
+                                                    <button
+                                                        className="w-full px-4 py-2 bg-white text-purple-600 font-semibold rounded-md border border-purple-600 hover:bg-purple-50 transition-colors duration-200"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleCardClick(podcast.id);
+                                                        }}
+                                                    >
+                                                        View Details
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <button
+                                                    className="w-full px-4 py-2 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700 transition-colors duration-200"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleCardClick(podcast.id);
+                                                    }}
+                                                >
+                                                    View Podcast
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -437,6 +508,22 @@ export default function PodcastMarketplacePage() {
                     </>
                 )}
             </div>
+
+            {/* Add to Wishlist Modal */}
+            {showWishlistModal && selectedPodcast && userData?.uid && (
+                <AddPodcastToWishlistModal
+                    podcast={selectedPodcast}
+                    guestId={userData.uid}
+                    onClose={() => {
+                        setShowWishlistModal(false);
+                        setSelectedPodcast(null);
+                    }}
+                    onSuccess={() => {
+                        setShowWishlistModal(false);
+                        setSelectedPodcast(null);
+                    }}
+                />
+            )}
         </div>
     );
 }

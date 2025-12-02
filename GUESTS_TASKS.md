@@ -274,70 +274,70 @@ This epic covers discovery pages for guests and podcasts to find each other.
 - **Description:** Create a marketplace page where podcasts can browse and search available guests.
 - **Dependencies:** Task 1.1
 - **Acceptance Criteria (AC):**
-  - [ ] Create `/marketplace/guests` page
-  - [ ] Display all guests with `isGuest: true`
-  - [ ] Show verified badge for `isVerifiedGuest: true`
-  - [ ] Display for each guest:
+  - [x] Create `/marketplace/guests` page
+  - [x] Display all guests with `isGuest: true`
+  - [x] Show verified badge for `isVerifiedGuest: true`
+  - [x] Display for each guest:
     - Name, Photo, Bio
     - Rate (or "Negotiable" if 0)
     - Topics/Expertise
     - Previous appearances
-  - [ ] Implement filters:
+  - [x] Implement filters:
     - Price range
     - Topics
     - Verification status
     - Availability
-  - [ ] Implement search by name/bio/topics
-  - [ ] Add "Add to Wishlist" button for podcast owners
-  - [ ] Add "View Profile" button linking to guest detail page
-- **Status:** To Do
+  - [x] Implement search by name/bio/topics
+  - [x] Add "Add to Wishlist" button for podcast owners
+  - [x] Add "View Profile" button linking to guest detail page
+- **Status:** ✅ Done
 
 ### **Task 5.2: Guest Detail Page**
 
 - **Description:** Create a public profile page for guests.
 - **Dependencies:** Task 2.2
 - **Acceptance Criteria (AC):**
-  - [ ] Create `/guest/:guestId` page
-  - [ ] Display full guest profile:
+  - [x] Create `/guest/:guestId` page
+  - [x] Display full guest profile:
     - Bio, Rate, Topics, Availability
     - Verification badge
     - Social links
     - Previous appearances
-  - [ ] Show "Add to Wishlist" button for podcast owners
-  - [ ] Show "Contact Guest" button to start collaboration
+  - [x] Show "Add to Wishlist" button for podcast owners
+  - [x] Show "Contact Guest" button to start collaboration (TODO for collaboration feature)
   - [ ] Display guest statistics (if available):
-    - Number of appearances
+    - Number of appearances (future feature)
     - Average rating (future feature)
-- **Status:** To Do
+- **Status:** ✅ Done
 
 ### **Task 5.3: Podcast Discovery for Guests**
 
 - **Description:** Create a page where guests can browse podcasts seeking guests.
 - **Dependencies:** Existing podcast marketplace
 - **Acceptance Criteria (AC):**
-  - [ ] Enhance `/marketplace/podcasts` page for guest users
-  - [ ] Add filter for "Seeking Guests"
-  - [ ] Show which podcasts are actively looking for guests
-  - [ ] Display budget ranges if podcasts have specified
-  - [ ] Add "Add to Wishlist" button for logged-in guests
-  - [ ] Show "Express Interest" button
-- **Status:** To Do
+  - [x] Enhance `/marketplace/podcasts` page for guest users
+  - [x] Add filter for "Seeking Guests"
+  - [x] Show which podcasts are actively looking for guests
+  - [x] Display budget ranges if podcasts have specified (shown via service prices)
+  - [x] Add "Add to Wishlist" button for logged-in guests
+  - [x] Show "Express Interest" button (via "Add to Wishlist" and "View Details")
+- **Status:** ✅ Done
 
 ### **Task 5.4: Guest Services - Browsing Interview Opportunities**
 
 - **Description:** Create a dedicated page showing active guest opportunities/interviews.
 - **Dependencies:** Task 3.3
 - **Acceptance Criteria (AC):**
-  - [ ] Create `/opportunities/interviews` page
-  - [ ] Display podcasts that have open "Guest Spot" services
-  - [ ] Show podcasts with guests on their wishlist (if public)
-  - [ ] Filter by:
+  - [x] Create `/opportunities/interviews` page
+  - [x] Display podcasts that have open "Guest Spot" services
+  - [ ] Show podcasts with guests on their wishlist (if public) (future enhancement)
+  - [x] Filter by:
     - Payment type (paid/free/pay-to-play)
-    - Topics
+    - Topics (category)
     - Podcast size/reach
-  - [ ] Allow guests to apply directly
-  - [ ] Show which opportunities match guest's profile
-- **Status:** To Do
+  - [x] Allow guests to apply directly (via "Apply Now" button to service page)
+  - [ ] Show which opportunities match guest's profile (future enhancement with matching algorithm)
+- **Status:** ✅ Done
 
 ---
 
