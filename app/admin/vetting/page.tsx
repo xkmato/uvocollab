@@ -86,10 +86,25 @@ export default function AdminVettingPage() {
             <div className="mb-8">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900">Legend Applications</h1>
-                        <p className="mt-2 text-gray-600">Review and approve or decline Legend applications</p>
+                        <h1 className="text-3xl font-bold text-gray-900">Admin Panel</h1>
+                        <p className="mt-2 text-gray-600">Review and manage applications</p>
+                    </div>
+                    <div className="flex gap-3">
+                        <a
+                            href="/admin/guest-verification"
+                            className="px-4 py-2 bg-cyan-600 text-white rounded-md hover:bg-cyan-700 font-medium"
+                        >
+                            Guest Verification
+                        </a>
+                        <a
+                            href="/dashboard"
+                            className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 font-medium"
+                        >
+                            Dashboard
+                        </a>
                     </div>
                 </div>
+                <h2 className="text-2xl font-bold text-gray-900 mt-6">Legend Applications</h2>
             </div>
 
             {/* Filter Tabs */}

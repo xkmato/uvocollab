@@ -160,7 +160,13 @@ export default function SignUp() {
                         </div>
                     </div>
 
-                    <div className="mt-8 text-center">
+                    <div className="mt-8 text-center space-y-3">
+                        <p className="text-white/60 text-sm">
+                            Want to appear on podcasts as a guest?{' '}
+                            <Link href="/auth/signup/guest" className="text-cyan-400 hover:text-cyan-300 font-semibold underline">
+                                Sign up as a Guest
+                            </Link>
+                        </p>
                         <p className="text-white/60 text-sm">
                             Already have an account?{' '}
                             <a href="/auth/login" className="text-purple-400 hover:text-purple-300 font-semibold underline">

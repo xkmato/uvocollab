@@ -1,5 +1,6 @@
 'use client';
 
+import BecomeGuestModal from '@/app/components/BecomeGuestModal';
 import PaymentCheckout from '@/app/components/PaymentCheckout';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { Collaboration } from '@/app/types/collaboration';
@@ -20,6 +21,7 @@ export default function Dashboard() {
     const [servicesInfo, setServicesInfo] = useState<Record<string, Service>>({});
     const [selectedCollab, setSelectedCollab] = useState<string | null>(null);
     const [generatingContract, setGeneratingContract] = useState<string | null>(null);
+    const [showBecomeGuestModal, setShowBecomeGuestModal] = useState(false);
 
     useEffect(() => {
         if (!loading && !user) {
@@ -241,6 +243,38 @@ export default function Dashboard() {
                         </Link>
                     )}
 
+                    {userData?.isGuest ? (
+                        <Link
+                            href="/guest/profile"
+                            className="flex items-center gap-4 p-6 bg-white rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200"
+                        >
+                            <div className="flex-shrink-0 w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center">
+                                <svg className="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-900">Guest Profile</h3>
+                                <p className="text-sm text-gray-600">Manage guest settings</p>
+                            </div>
+                        </Link>
+                    ) : (
+                        <button
+                            onClick={() => setShowBecomeGuestModal(true)}
+                            className="flex items-center gap-4 p-6 bg-white rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200 w-full text-left"
+                        >
+                            <div className="flex-shrink-0 w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center">
+                                <svg className="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-900">Become a Guest</h3>
+                                <p className="text-sm text-gray-600">Appear on podcasts</p>
+                            </div>
+                        </button>
+                    )}
+
                     <Link
                         href="/"
                         className="flex items-center gap-4 p-6 bg-white rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200"
@@ -424,6 +458,17 @@ export default function Dashboard() {
                     </div>
                 )}
             </div>
+
+            {/* Become Guest Modal */}
+            <BecomeGuestModal
+                isOpen={showBecomeGuestModal}
+                onClose={() => setShowBecomeGuestModal(false)}
+                onSuccess={() => {
+                    setShowBecomeGuestModal(false);
+                    window.location.reload(); // Reload to show updated user data
+                }}
+                userId={user?.uid || ''}
+            />
         </div>
     );
 }
