@@ -18,7 +18,10 @@ export default function ReleaseEpisode({
   const [episodeReleaseDate, setEpisodeReleaseDate] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<{
+    paymentReleased?: boolean;
+    paymentError?: string;
+  } | null>(null);
 
   const handleSubmit = async () => {
     if (submitting) return;
@@ -66,8 +69,8 @@ export default function ReleaseEpisode({
         setShowModal(false);
         onRelease();
       }, 3000);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
       setSubmitting(false);
     }
   };
@@ -108,10 +111,11 @@ export default function ReleaseEpisode({
                 </div>
 
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="release-date" className="block text-sm font-medium text-gray-700 mb-2">
                     Release Date (Optional)
                   </label>
                   <input
+                    id="release-date"
                     type="date"
                     value={episodeReleaseDate}
                     onChange={(e) => setEpisodeReleaseDate(e.target.value)}
@@ -119,7 +123,7 @@ export default function ReleaseEpisode({
                     disabled={submitting}
                   />
                   <p className="text-sm text-gray-500 mt-1">
-                    Leave blank to use today's date
+                    Leave blank to use today&apos;s date
                   </p>
                 </div>
 
