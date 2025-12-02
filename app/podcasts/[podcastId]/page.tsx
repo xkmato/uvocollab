@@ -1,21 +1,25 @@
 'use client';
 
 import PodcastPitchForm from '@/app/components/PodcastPitchForm';
+import AddPodcastToWishlistModal from '@/app/components/AddPodcastToWishlistModal';
 import { Podcast, PodcastService } from '@/app/types/podcast';
 import { db } from '@/lib/firebase';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
+import { useAuth } from '@/app/contexts/AuthContext';
 
 export default function PodcastDetailPage() {
     const params = useParams();
     const router = useRouter();
+    const { userData } = useAuth();
     const podcastId = params.podcastId as string;
 
     const [podcast, setPodcast] = useState<Podcast | null>(null);
     const [services, setServices] = useState<PodcastService[]>([]);
     const [selectedService, setSelectedService] = useState<PodcastService | null>(null);
+    const [showWishlistModal, setShowWishlistModal] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
@@ -167,9 +171,22 @@ export default function PodcastDetailPage() {
                                 )}
                             </div>
 
-                            <p className="text-gray-700 text-lg leading-relaxed max-w-3xl">
+                            <p className="text-gray-700 text-lg leading-relaxed max-w-3xl mb-6">
                                 {podcast.description}
                             </p>
+
+                            {/* Wishlist Button for Guests */}
+                            {userData?.isGuest && (
+                                <button
+                                    onClick={() => setShowWishlistModal(true)}
+                                    className="inline-flex items-center px-6 py-3 bg-white border-2 border-purple-600 text-purple-600 font-semibold rounded-lg hover:bg-purple-50 transition-colors"
+                                >
+                                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                    Add to My Wishlist
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -230,6 +247,19 @@ export default function PodcastDetailPage() {
                     onSuccess={() => {
                         setSelectedService(null);
                         alert('Your pitch has been submitted successfully!');
+                    }}
+                />
+            )}
+
+            {/* Add to Wishlist Modal */}
+            {showWishlistModal && podcast && userData?.isGuest && (
+                <AddPodcastToWishlistModal
+                    podcast={podcast}
+                    guestId={userData.uid}
+                    onClose={() => setShowWishlistModal(false)}
+                    onSuccess={() => {
+                        setShowWishlistModal(false);
+                        alert('Podcast added to your wishlist successfully!');
                     }}
                 />
             )}
