@@ -10,6 +10,13 @@ export type CollaborationStatus =
   | 'completed'
   | 'declined';
 
+export interface TimeSlot {
+  date: Date; // Recording date
+  time: string; // Time in HH:MM format
+  timezone: string; // IANA timezone identifier
+  duration?: string; // Expected duration
+}
+
 export interface Deliverable {
   fileName: string; // Name of the uploaded file
   fileUrl: string; // Firebase Storage URL to the file
@@ -43,17 +50,15 @@ export interface Collaboration {
   guestId?: string; // UID of the guest (for guest_appearance type)
   proposedTopics?: string[]; // Topics proposed during negotiation
   agreedTopics?: string[]; // Topics agreed upon for the appearance
-  recordingDate?: Date; // Confirmed recording date
-  schedulingDetails?: {
-    date: Date; // Recording date
-    time: string; // Recording time
-    timezone: string; // Timezone for the recording
-    duration: string; // Expected duration (e.g., "60 minutes")
-  };
+  recordingDate?: Date; // Confirmed recording date (deprecated - use schedulingDetails.date)
+  schedulingDetails?: TimeSlot; // Confirmed recording schedule with timezone
   recordingUrl?: string; // Zoom/Riverside/StreamYard link for recording
+  recordingPlatform?: 'zoom' | 'riverside' | 'streamyard' | 'zencastr' | 'other'; // Recording platform type
   prepNotes?: string; // Preparation notes for the guest
   episodeReleaseDate?: Date; // When the episode was released
   episodeUrl?: string; // URL to the released episode
+  rescheduleCount?: number; // Number of times recording has been rescheduled
+  maxReschedules?: number; // Maximum allowed reschedules (default: 2)
   negotiationHistory?: Array<{
     proposedBy: string; // UID of user proposing changes
     proposedPrice?: number;

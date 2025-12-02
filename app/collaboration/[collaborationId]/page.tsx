@@ -2,6 +2,9 @@
 
 import CommunicationThread from '@/app/components/CommunicationThread';
 import FileSharing from '@/app/components/FileSharing';
+import SchedulingInterface from '@/app/components/SchedulingInterface';
+import RescheduleInterface from '@/app/components/RescheduleInterface';
+import RecordingLinkManager from '@/app/components/RecordingLinkManager';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { Collaboration } from '@/app/types/collaboration';
 import { Service } from '@/app/types/service';
@@ -12,7 +15,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function CollaborationHub() {
-    const { user, loading } = useAuth();
+    const { user, userData, loading } = useAuth();
     const router = useRouter();
     const params = useParams();
     const collaborationId = params.collaborationId as string;
@@ -581,17 +584,38 @@ export default function CollaborationHub() {
                                         </div>
                                     )}
                                     
-                                    {collaboration.status === 'scheduling' && (
-                                        <div className="border-t pt-4">
-                                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                                                <p className="text-sm text-blue-800">
-                                                    📅 Time to schedule the recording session! (Scheduling feature coming soon)
-                                                </p>
-                                            </div>
-                                        </div>
-                                    )}
                                 </div>
                             </div>
+                        )}
+
+                        {/* Scheduling Interface - For guest_appearance type */}
+                        {collaboration.type === 'guest_appearance' && (collaboration.status === 'scheduling' || collaboration.status === 'scheduled') && userData && (
+                            <SchedulingInterface
+                                collaboration={collaboration}
+                                currentUser={userData}
+                                isGuest={collaboration.guestId === userData.uid}
+                                onScheduleConfirmed={loadCollaboration}
+                            />
+                        )}
+
+                        {/* Rescheduling Interface - For scheduled guest appearances */}
+                        {collaboration.type === 'guest_appearance' && collaboration.status === 'scheduled' && userData && (
+                            <RescheduleInterface
+                                collaboration={collaboration}
+                                currentUser={userData}
+                                isGuest={collaboration.guestId === userData.uid}
+                                onRescheduleConfirmed={loadCollaboration}
+                            />
+                        )}
+
+                        {/* Recording Link Manager - For guest appearances */}
+                        {collaboration.type === 'guest_appearance' && userData && (
+                            <RecordingLinkManager
+                                collaboration={collaboration}
+                                currentUser={userData}
+                                isPodcastOwner={collaboration.buyerId === userData.uid}
+                                onLinkUpdated={loadCollaboration}
+                            />
                         )}
 
                         {/* Milestone Checklist Card */}

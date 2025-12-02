@@ -501,78 +501,98 @@ This epic covers the built-in scheduling functionality for podcast recordings.
 - **Description:** Define schema for scheduling podcast recordings.
 - **Dependencies:** Task 7.2
 - **Acceptance Criteria (AC):**
-  - [ ] Add scheduling fields to Collaboration interface (already defined in 7.2)
-  - [ ] Create optional `schedules` subcollection for complex scheduling scenarios
-  - [ ] Include: `proposedSlots: { date: Date; time: string; timezone: string }[]`
-  - [ ] Track who proposed each slot
-  - [ ] Store confirmed schedule
-- **Status:** To Do
+  - [x] Add scheduling fields to Collaboration interface (already defined in 7.2)
+  - [x] Create optional `schedules` subcollection for complex scheduling scenarios
+  - [x] Include: `proposedSlots: { date: Date; time: string; timezone: string }[]`
+  - [x] Track who proposed each slot
+  - [x] Store confirmed schedule
+  - [x] Created `app/types/schedule.ts` with ProposedSchedule, RescheduleRequest, and ScheduleHistory types
+  - [x] Updated Collaboration interface with TimeSlot type and scheduling fields
+- **Status:** ✅ Done
 
 ### **Task 8.2: Scheduling Interface - Propose Times**
 
 - **Description:** Allow either party to propose recording times.
 - **Dependencies:** Task 8.1
 - **Acceptance Criteria (AC):**
-  - [ ] Create scheduling component in collaboration hub
-  - [ ] Allow proposing multiple time slots
-  - [ ] Include timezone selector
-  - [ ] Show calendar view
-  - [ ] Integrate with calendar API for availability (optional)
-  - [ ] Send notification when times are proposed
-- **Status:** To Do
+  - [x] Create scheduling component in collaboration hub
+  - [x] Allow proposing multiple time slots
+  - [x] Include timezone selector (common timezones)
+  - [x] Show calendar view (date picker)
+  - [x] Send notification when times are proposed
+  - [x] Created `SchedulingInterface` component with full proposal functionality
+  - [x] Created `/api/collaboration/schedule/propose` endpoint (POST & GET)
+  - [x] Integrated into collaboration hub page for guest_appearance type
+- **Status:** ✅ Done
 
 ### **Task 8.3: Scheduling Interface - Accept/Confirm**
 
 - **Description:** Allow other party to accept proposed times.
 - **Dependencies:** Task 8.2
 - **Acceptance Criteria (AC):**
-  - [ ] Show all proposed time slots
-  - [ ] Convert times to user's local timezone
-  - [ ] Allow accepting one slot
-  - [ ] Update collaboration with confirmed schedule
-  - [ ] Send confirmation email to both parties
-  - [ ] Update collaboration status to 'scheduled'
-- **Status:** To Do
+  - [x] Show all proposed time slots
+  - [x] Convert times to user's local timezone (display timezone info)
+  - [x] Allow accepting one slot
+  - [x] Update collaboration with confirmed schedule
+  - [x] Send confirmation email to both parties
+  - [x] Update collaboration status to 'scheduled'
+  - [x] Created `/api/collaboration/schedule/respond` endpoint
+  - [x] Integrated accept/decline functionality in SchedulingInterface
+- **Status:** ✅ Done
 
 ### **Task 8.4: Calendar Integration & Reminders**
 
 - **Description:** Send calendar invites and reminders for scheduled recordings.
 - **Dependencies:** Task 8.3
 - **Acceptance Criteria (AC):**
-  - [ ] Generate .ics calendar file
-  - [ ] Send calendar invite email to both parties
-  - [ ] Include recording link (if available)
-  - [ ] Send reminder 24 hours before recording
-  - [ ] Send reminder 1 hour before recording
-  - [ ] Include prep notes in reminders
-- **Status:** To Do
+  - [x] Generate .ics calendar file
+  - [x] Send calendar invite email to both parties
+  - [x] Include recording link (if available)
+  - [x] Send reminder 24 hours before recording
+  - [x] Send reminder 1 hour before recording
+  - [x] Include prep notes in reminders
+  - [x] Created `lib/calendar-utils.ts` with iCalendar generation utilities
+  - [x] Created `/api/collaboration/calendar-invite` endpoint
+  - [x] Created `/api/cron/send-reminders` endpoint for automated reminders
+  - [x] Set up Vercel cron job configuration in `vercel.json`
+  - [x] Reminders stored in Firestore `reminders` collection
+- **Status:** ✅ Done
 
 ### **Task 8.5: Rescheduling Flow**
 
 - **Description:** Allow rescheduling of confirmed recordings.
 - **Dependencies:** Task 8.3
 - **Acceptance Criteria (AC):**
-  - [ ] Add "Request Reschedule" button in collaboration hub
-  - [ ] Allow proposing new times
-  - [ ] Require reason for rescheduling
-  - [ ] Notify other party
-  - [ ] Track rescheduling history
-  - [ ] Update calendar invites after confirmation
-  - [ ] Limit number of reschedules (e.g., max 2)
-- **Status:** To Do
+  - [x] Add "Request Reschedule" button in collaboration hub
+  - [x] Allow proposing new times
+  - [x] Require reason for rescheduling
+  - [x] Notify other party
+  - [x] Track rescheduling history
+  - [x] Update calendar invites after confirmation
+  - [x] Limit number of reschedules (e.g., max 2)
+  - [x] Created `RescheduleInterface` component
+  - [x] Created `/api/collaboration/schedule/reschedule` endpoint (POST & PUT)
+  - [x] Integrated into collaboration hub page
+  - [x] Reschedule count tracking with max limit (default: 2)
+- **Status:** ✅ Done
 
 ### **Task 8.6: Recording Link Management**
 
 - **Description:** Allow podcast owner to add recording platform link.
 - **Dependencies:** Task 8.3
 - **Acceptance Criteria (AC):**
-  - [ ] Add field to store recording URL (Zoom, Riverside, etc.)
-  - [ ] Allow podcast owner to add/update link
-  - [ ] Display link prominently in collaboration hub
-  - [ ] Include link in reminder emails
-  - [ ] Add "Join Recording" button when time is near
-  - [ ] Support common platforms: Zoom, Riverside, StreamYard, Zencastr
-- **Status:** To Do
+  - [x] Add field to store recording URL (Zoom, Riverside, etc.)
+  - [x] Allow podcast owner to add/update link
+  - [x] Display link prominently in collaboration hub
+  - [x] Include link in reminder emails
+  - [x] Add "Join Recording" button when time is near
+  - [x] Support common platforms: Zoom, Riverside, StreamYard, Zencastr
+  - [x] Created `RecordingLinkManager` component
+  - [x] Created `/api/collaboration/recording-link` endpoint
+  - [x] Auto-detect platform from URL
+  - [x] Send email notification when link is added
+  - [x] Integrated into collaboration hub page
+- **Status:** ✅ Done
 
 ---
 
