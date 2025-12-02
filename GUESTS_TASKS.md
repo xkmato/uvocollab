@@ -115,74 +115,74 @@ This epic covers wishlist functionality for both guests and podcasts.
 - **Description:** Allow guests to add podcasts to their wishlist with offer amounts.
 - **Dependencies:** Task 1.2
 - **Acceptance Criteria (AC):**
-  - [ ] Create `guestWishlists` Firestore collection
-  - [ ] Add "Add to Wishlist" button on podcast detail pages for logged-in guests
-  - [ ] Show modal to collect:
+  - [x] Create `guestWishlists` Firestore collection
+  - [x] Add "Add to Wishlist" button on podcast detail pages for logged-in guests
+  - [x] Show modal to collect:
     - Offer amount (can be $0 for free)
     - Topics they want to discuss
     - Message/pitch to podcast owner
-  - [ ] Save to Firestore with `status: 'pending'`
-  - [ ] Show success notification
-  - [ ] Prevent duplicate wishlist entries
-- **Status:** To Do
+  - [x] Save to Firestore with `status: 'pending'`
+  - [x] Show success notification
+  - [x] Prevent duplicate wishlist entries
+- **Status:** ✅ Done
 
 ### **Task 3.2: Guest Wishlist Management Page**
 
 - **Description:** Create a page for guests to manage their podcast wishlist.
 - **Dependencies:** Task 3.1
 - **Acceptance Criteria (AC):**
-  - [ ] Create `/guest/wishlist` page
-  - [ ] Display all podcasts in guest's wishlist
-  - [ ] Show status of each wishlist item (pending/contacted/matched)
-  - [ ] Allow editing offer amount and message
-  - [ ] Allow removing podcasts from wishlist
-  - [ ] Show which podcasts have viewed the request
-- **Status:** To Do
+  - [x] Create `/guest/wishlist` page
+  - [x] Display all podcasts in guest's wishlist
+  - [x] Show status of each wishlist item (pending/contacted/matched)
+  - [x] Allow editing offer amount and message
+  - [x] Allow removing podcasts from wishlist
+  - [x] Show which podcasts have viewed the request
+- **Status:** ✅ Done
 
 ### **Task 3.3: Podcast Guest Wishlist - Add Guests (Registered)**
 
 - **Description:** Allow podcast owners to add registered guests to their wishlist.
 - **Dependencies:** Task 1.2
 - **Acceptance Criteria (AC):**
-  - [ ] Create `podcastGuestWishlists` Firestore collection
-  - [ ] Add "Add to Wishlist" button on guest profile pages
-  - [ ] Show modal to collect:
+  - [x] Create `podcastGuestWishlists` Firestore collection
+  - [x] Add "Add to Wishlist" button on guest profile pages
+  - [x] Show modal to collect:
     - Budget amount (what podcast will pay)
     - Preferred topics
     - Notes/message
-  - [ ] Save to Firestore with `status: 'pending'`
-  - [ ] Notify guest of the interest
-  - [ ] Prevent duplicate wishlist entries
-- **Status:** To Do
+  - [x] Save to Firestore with `status: 'pending'`
+  - [ ] Notify guest of the interest (TODO: pending notification system)
+  - [x] Prevent duplicate wishlist entries
+- **Status:** ✅ Done
 
 ### **Task 3.4: Podcast Guest Wishlist - Add Guests (Unregistered)**
 
 - **Description:** Allow podcast owners to add potential guests not yet on the platform.
 - **Dependencies:** Task 1.2
 - **Acceptance Criteria (AC):**
-  - [ ] Create form in podcast dashboard to add guest manually
-  - [ ] Collect: Name, Email (optional), Budget, Notes
-  - [ ] Save to `podcastGuestWishlists` collection
-  - [ ] If email provided, mark for invitation
-  - [ ] If no email, flag for admin attention
-  - [ ] Show separate sections for "Registered Guests" and "Prospects"
-- **Status:** To Do
+  - [x] Create form in podcast dashboard to add guest manually
+  - [x] Collect: Name, Email (optional), Budget, Notes
+  - [x] Save to `podcastGuestWishlists` collection
+  - [x] If email provided, mark for invitation
+  - [x] If no email, flag for admin attention
+  - [x] Show separate sections for "Registered Guests" and "Prospects"
+- **Status:** ✅ Done
 
 ### **Task 3.5: Podcast Guest Wishlist Management Page**
 
 - **Description:** Create a page for podcast owners to manage their guest wishlist.
 - **Dependencies:** Task 3.3, Task 3.4
 - **Acceptance Criteria (AC):**
-  - [ ] Create `/dashboard/podcast/guests` page
-  - [ ] Display all guests in wishlist with tabs:
+  - [x] Create `/dashboard/podcast/guests` page
+  - [x] Display all guests in wishlist with tabs:
     - Registered guests
     - Prospects (no contact info)
     - Invited (pending acceptance)
-  - [ ] Show status, budget, and notes for each entry
-  - [ ] Allow editing budget and notes
-  - [ ] Allow removing guests from wishlist
-  - [ ] Show "Send Invite" button for guests with email
-- **Status:** To Do
+  - [x] Show status, budget, and notes for each entry
+  - [x] Allow editing budget and notes
+  - [x] Allow removing guests from wishlist
+  - [ ] Show "Send Invite" button for guests with email (marked as "Coming Soon" - pending Epic 4)
+- **Status:** ✅ Done
 
 ---
 
