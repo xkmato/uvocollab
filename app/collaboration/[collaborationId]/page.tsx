@@ -5,6 +5,9 @@ import FileSharing from '@/app/components/FileSharing';
 import SchedulingInterface from '@/app/components/SchedulingInterface';
 import RescheduleInterface from '@/app/components/RescheduleInterface';
 import RecordingLinkManager from '@/app/components/RecordingLinkManager';
+import MarkRecordingComplete from '@/app/components/MarkRecordingComplete';
+import ReleaseEpisode from '@/app/components/ReleaseEpisode';
+import CollaborationFeedbackForm from '@/app/components/CollaborationFeedbackForm';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { Collaboration } from '@/app/types/collaboration';
 import { Service } from '@/app/types/service';
@@ -616,6 +619,76 @@ export default function CollaborationHub() {
                                 isPodcastOwner={collaboration.buyerId === userData.uid}
                                 onLinkUpdated={loadCollaboration}
                             />
+                        )}
+
+                        {/* Post-Recording Actions - For guest appearances */}
+                        {collaboration.type === 'guest_appearance' && userData && collaboration.buyerId === userData.uid && (
+                            <div className="bg-white rounded-lg shadow p-6">
+                                <h2 className="text-xl font-bold text-gray-900 mb-4">Post-Recording Actions</h2>
+                                
+                                {/* Mark Recording Complete */}
+                                {(collaboration.status === 'scheduled' || collaboration.status === 'in_progress') && (
+                                    <div className="mb-4">
+                                        <h3 className="text-sm font-medium text-gray-700 mb-2">Recording Completed?</h3>
+                                        <p className="text-sm text-gray-600 mb-3">
+                                            Mark the recording as complete to move to post-production phase.
+                                        </p>
+                                        <MarkRecordingComplete
+                                            collaborationId={collaborationId}
+                                            userId={userData.uid}
+                                            onComplete={loadCollaboration}
+                                        />
+                                    </div>
+                                )}
+
+                                {/* Release Episode */}
+                                {collaboration.status === 'post_production' && (
+                                    <div className="mb-4">
+                                        <h3 className="text-sm font-medium text-gray-700 mb-2">Episode Released?</h3>
+                                        <p className="text-sm text-gray-600 mb-3">
+                                            Mark the episode as released to notify the guest and release payment (if applicable).
+                                        </p>
+                                        <ReleaseEpisode
+                                            collaborationId={collaborationId}
+                                            userId={userData.uid}
+                                            onRelease={loadCollaboration}
+                                        />
+                                    </div>
+                                )}
+
+                                {collaboration.recordingNotes && (
+                                    <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                                        <h4 className="text-sm font-medium text-gray-700 mb-1">Recording Notes</h4>
+                                        <p className="text-sm text-gray-600 whitespace-pre-wrap">{collaboration.recordingNotes}</p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Feedback Section - For completed collaborations */}
+                        {collaboration.status === 'completed' && userData && (
+                            <div className="bg-white rounded-lg shadow p-6">
+                                <h2 className="text-xl font-bold text-gray-900 mb-4">Feedback & Rating</h2>
+                                
+                                <p className="text-sm text-gray-600 mb-4">
+                                    Share your experience working with{' '}
+                                    {collaboration.type === 'guest_appearance' 
+                                        ? (collaboration.guestId === userData.uid ? podcastOwner?.displayName : guest?.displayName)
+                                        : (isBuyer ? legend?.displayName : buyer?.displayName)
+                                    }
+                                </p>
+
+                                <CollaborationFeedbackForm
+                                    collaborationId={collaborationId}
+                                    userId={userData.uid}
+                                    recipientName={
+                                        collaboration.type === 'guest_appearance'
+                                            ? (collaboration.guestId === userData.uid ? podcastOwner?.displayName || 'the podcast owner' : guest?.displayName || 'the guest')
+                                            : (isBuyer ? legend?.displayName || 'the legend' : buyer?.displayName || 'the buyer')
+                                    }
+                                    onSubmit={loadCollaboration}
+                                />
+                            </div>
                         )}
 
                         {/* Milestone Checklist Card */}

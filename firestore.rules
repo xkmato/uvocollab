@@ -57,8 +57,25 @@ service cloud.firestore {
     match /collaborations/{collaborationId} {
       allow read: if request.auth != null && 
         (resource.data.buyerId == request.auth.uid || 
-         resource.data.legendId == request.auth.uid);
+         resource.data.legendId == request.auth.uid ||
+         resource.data.guestId == request.auth.uid);
       allow write: if false; // Only managed via API
+    }
+
+    // Collaboration Feedback - users can read public feedback, create their own
+    match /collaborationFeedback/{feedbackId} {
+      allow read: if request.auth != null && 
+        (resource.data.isPublic == true || 
+         resource.data.fromUserId == request.auth.uid || 
+         resource.data.toUserId == request.auth.uid);
+      allow create: if request.auth != null && request.resource.data.fromUserId == request.auth.uid;
+      allow update, delete: if false; // Cannot edit or delete feedback once submitted
+    }
+
+    // Reminders - managed via cron jobs only
+    match /reminders/{reminderId} {
+      allow read: if false;
+      allow write: if false; // Only managed via API/cron
     }
 
     // Podcasts - publicly readable (or auth only), managed via API

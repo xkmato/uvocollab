@@ -30,4 +30,11 @@ export interface User {
   guestVerificationRequestedAt?: Date; // When verification was requested
   socialLinks?: { platform: string; url: string }[]; // Social media links
   previousAppearances?: string[]; // Links to previous podcast appearances
+  
+  // Feedback stats
+  feedbackStats?: {
+    averageRating: number;
+    totalReviews: number;
+    wouldCollaborateAgainPercentage: number;
+  };
 }

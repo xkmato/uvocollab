@@ -605,38 +605,38 @@ This epic covers the workflow after recording is complete.
 - **Description:** Allow podcast owner to mark recording as completed.
 - **Dependencies:** Task 8.3
 - **Acceptance Criteria (AC):**
-  - [ ] Add "Mark Recording Complete" button for podcast owner
-  - [ ] Update collaboration status to 'post_production'
-  - [ ] Notify guest that recording is complete
-  - [ ] If escrow payment, keep funds held until episode release
-  - [ ] Allow adding notes about recording session
-- **Status:** To Do
+  - [x] Add "Mark Recording Complete" button for podcast owner
+  - [x] Update collaboration status to 'post_production'
+  - [x] Notify guest that recording is complete
+  - [x] If escrow payment, keep funds held until episode release
+  - [x] Allow adding notes about recording session
+- **Status:** ✅ Done
 
 ### **Task 9.2: Episode Release Notification**
 
 - **Description:** Allow podcast owner to notify when episode is released.
 - **Dependencies:** Task 9.1
 - **Acceptance Criteria (AC):**
-  - [ ] Add "Episode Released" button for podcast owner
-  - [ ] Collect episode URL and release date
-  - [ ] Update collaboration status to 'completed'
-  - [ ] Release escrow payment to guest (if applicable)
-  - [ ] Send notification to guest with episode link
-  - [ ] Add episode to guest's profile (previous appearances)
-- **Status:** To Do
+  - [x] Add "Episode Released" button for podcast owner
+  - [x] Collect episode URL and release date
+  - [x] Update collaboration status to 'completed'
+  - [x] Release escrow payment to guest (if applicable)
+  - [x] Send notification to guest with episode link
+  - [x] Add episode to guest's profile (previous appearances)
+- **Status:** ✅ Done
 
 ### **Task 9.3: Feedback & Rating System**
 
 - **Description:** Allow both parties to leave feedback after collaboration.
 - **Dependencies:** Task 9.2
 - **Acceptance Criteria (AC):**
-  - [ ] Create feedback form for both parties
-  - [ ] Collect: Rating (1-5 stars), Written review, Would collaborate again (yes/no)
-  - [ ] Store feedback in `collaborationFeedback` subcollection
-  - [ ] Display average rating on guest/podcast profiles
-  - [ ] Allow making reviews public or private
-  - [ ] Prevent editing after submission
-- **Status:** To Do
+  - [x] Create feedback form for both parties
+  - [x] Collect: Rating (1-5 stars), Written review, Would collaborate again (yes/no)
+  - [x] Store feedback in `collaborationFeedback` collection
+  - [x] Display average rating on guest/podcast profiles (FeedbackDisplay component created)
+  - [x] Allow making reviews public or private
+  - [x] Prevent editing after submission (checks for existing feedback)
+- **Status:** ✅ Done
 
 ---
 

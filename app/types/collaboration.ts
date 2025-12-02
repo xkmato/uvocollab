@@ -59,6 +59,8 @@ export interface Collaboration {
   episodeUrl?: string; // URL to the released episode
   rescheduleCount?: number; // Number of times recording has been rescheduled
   maxReschedules?: number; // Maximum allowed reschedules (default: 2)
+  recordingCompletedAt?: Date; // When recording was marked as complete
+  recordingNotes?: string; // Notes about the recording session
   negotiationHistory?: Array<{
     proposedBy: string; // UID of user proposing changes
     proposedPrice?: number;
