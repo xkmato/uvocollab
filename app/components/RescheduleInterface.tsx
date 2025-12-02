@@ -3,7 +3,7 @@
 import { Collaboration } from '@/app/types/collaboration';
 import { RescheduleRequest } from '@/app/types/schedule';
 import { User } from '@/app/types/user';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface RescheduleInterfaceProps {
   collaboration: Collaboration;
@@ -51,11 +51,7 @@ export default function RescheduleInterface({
     'Pacific/Auckland',
   ];
 
-  useEffect(() => {
-    loadReschedules();
-  }, [collaboration.id]);
-
-  const loadReschedules = async () => {
+  const loadReschedules = React.useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/collaboration/schedule/reschedule?collaborationId=${collaboration.id}`);
@@ -69,7 +65,11 @@ export default function RescheduleInterface({
     } finally {
       setLoading(false);
     }
-  };
+  }, [collaboration.id]);
+
+  useEffect(() => {
+    loadReschedules();
+  }, [loadReschedules]);
 
   const addSlot = () => {
     setSlots([
@@ -185,9 +185,9 @@ export default function RescheduleInterface({
     }
   };
 
-  const formatDate = (date: any) => {
+  const formatDate = (date: Date | { toDate: () => Date } | string) => {
     try {
-      const d = date?.toDate ? date.toDate() : new Date(date);
+      const d = typeof date === 'object' && date !== null && 'toDate' in date ? date.toDate() : new Date(date);
       return d.toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
@@ -254,12 +254,12 @@ export default function RescheduleInterface({
 
                     <div className="mb-3">
                       <p className="text-sm font-semibold text-gray-700 mb-1">Reason:</p>
-                      <p className="text-gray-800 italic">"{request.reason}"</p>
+                      <p className="text-gray-800 italic">&ldquo;{request.reason}&rdquo;</p>
                     </div>
 
                     <div className="space-y-2 mb-3">
                       <p className="text-sm font-semibold text-gray-700">Proposed New Times:</p>
-                      {request.proposedSlots?.map((slot: any, index: number) => (
+                      {request.proposedSlots?.map((slot: { date: Date | string; time: string; timezone: string; duration?: string }, index: number) => (
                         <div key={index} className="flex items-center gap-2 bg-white rounded p-2">
                           <span className="font-semibold">Option {index + 1}:</span>
                           <span>{formatDate(slot.date)}</span>
@@ -359,6 +359,7 @@ export default function RescheduleInterface({
                               value={slot.date}
                               onChange={(e) => updateSlot(index, 'date', e.target.value)}
                               min={new Date().toISOString().split('T')[0]}
+                              aria-label="Recording date"
                               className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-orange-500"
                             />
                           </div>
@@ -369,6 +370,7 @@ export default function RescheduleInterface({
                               type="time"
                               value={slot.time}
                               onChange={(e) => updateSlot(index, 'time', e.target.value)}
+                              aria-label="Recording time"
                               className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-orange-500"
                             />
                           </div>
@@ -378,6 +380,7 @@ export default function RescheduleInterface({
                             <select
                               value={slot.timezone}
                               onChange={(e) => updateSlot(index, 'timezone', e.target.value)}
+                              aria-label="Timezone"
                               className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-orange-500"
                             >
                               {commonTimezones.map((tz) => (
@@ -391,6 +394,7 @@ export default function RescheduleInterface({
                             <select
                               value={slot.duration}
                               onChange={(e) => updateSlot(index, 'duration', e.target.value)}
+                              aria-label="Duration"
                               className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-orange-500"
                             >
                               <option value="30 minutes">30 minutes</option>

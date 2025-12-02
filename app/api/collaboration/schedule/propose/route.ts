@@ -83,11 +83,18 @@ export async function POST(req: NextRequest) {
       .collection('schedules')
       .doc();
 
+    interface SlotInput {
+      date: string;
+      time: string;
+      timezone: string;
+      duration?: string;
+    }
+
     const proposalData = {
       collaborationId,
       proposedBy,
       proposedByRole,
-      slots: slots.map((slot: any) => ({
+      slots: slots.map((slot: SlotInput) => ({
         date: new Date(slot.date),
         time: slot.time,
         timezone: slot.timezone,

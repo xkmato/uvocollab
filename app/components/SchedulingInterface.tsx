@@ -3,7 +3,7 @@
 import { Collaboration } from '@/app/types/collaboration';
 import { ProposedSchedule } from '@/app/types/schedule';
 import { User } from '@/app/types/user';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface SchedulingInterfaceProps {
   collaboration: Collaboration;
@@ -47,11 +47,7 @@ export default function SchedulingInterface({
     'Pacific/Auckland',
   ];
 
-  useEffect(() => {
-    loadProposals();
-  }, [collaboration.id]);
-
-  const loadProposals = async () => {
+  const loadProposals = React.useCallback(async () => {
     try {
       setLoadingProposals(true);
       const response = await fetch(`/api/collaboration/schedule/propose?collaborationId=${collaboration.id}`);
@@ -65,7 +61,11 @@ export default function SchedulingInterface({
     } finally {
       setLoadingProposals(false);
     }
-  };
+  }, [collaboration.id]);
+
+  useEffect(() => {
+    loadProposals();
+  }, [loadProposals]);
 
   const addSlot = () => {
     setSlots([
@@ -176,9 +176,9 @@ export default function SchedulingInterface({
     }
   };
 
-  const formatDate = (date: any) => {
+  const formatDate = (date: Date | { toDate: () => Date } | string) => {
     try {
-      const d = date?.toDate ? date.toDate() : new Date(date);
+      const d = typeof date === 'object' && date !== null && 'toDate' in date ? date.toDate() : new Date(date);
       return d.toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
@@ -188,13 +188,6 @@ export default function SchedulingInterface({
     } catch {
       return 'Invalid date';
     }
-  };
-
-  const convertTime = (time: string, fromTz: string, toTz: string) => {
-    // Simple time conversion placeholder
-    // In production, use a library like date-fns-tz or moment-timezone
-    if (fromTz === toTz) return time;
-    return `${time} (${fromTz})`;
   };
 
   const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -252,11 +245,11 @@ export default function SchedulingInterface({
                     </div>
 
                     {proposal.message && (
-                      <p className="text-gray-700 mb-3 italic">"{proposal.message}"</p>
+                      <p className="text-gray-700 mb-3 italic">&ldquo;{proposal.message}&rdquo;</p>
                     )}
 
                     <div className="space-y-2 mb-3">
-                      {proposal.slots?.map((slot: any, index: number) => (
+                      {proposal.slots?.map((slot: { date: Date | string; time: string; timezone: string; duration?: string }, index: number) => (
                         <div key={index} className="flex items-center gap-2">
                           <span className="font-semibold">Option {index + 1}:</span>
                           <span>{formatDate(slot.date)}</span>
@@ -339,6 +332,7 @@ export default function SchedulingInterface({
                               value={slot.date}
                               onChange={(e) => updateSlot(index, 'date', e.target.value)}
                               min={new Date().toISOString().split('T')[0]}
+                              aria-label="Recording date"
                               className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
                             />
                           </div>
@@ -351,6 +345,7 @@ export default function SchedulingInterface({
                               type="time"
                               value={slot.time}
                               onChange={(e) => updateSlot(index, 'time', e.target.value)}
+                              aria-label="Recording time"
                               className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
                             />
                           </div>
@@ -362,6 +357,7 @@ export default function SchedulingInterface({
                             <select
                               value={slot.timezone}
                               onChange={(e) => updateSlot(index, 'timezone', e.target.value)}
+                              aria-label="Timezone"
                               className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
                             >
                               {commonTimezones.map((tz) => (
@@ -379,6 +375,7 @@ export default function SchedulingInterface({
                             <select
                               value={slot.duration}
                               onChange={(e) => updateSlot(index, 'duration', e.target.value)}
+                              aria-label="Duration"
                               className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
                             >
                               <option value="30 minutes">30 minutes</option>

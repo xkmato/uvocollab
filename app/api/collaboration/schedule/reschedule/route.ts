@@ -65,6 +65,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    interface SlotInput {
+      date: string;
+      time: string;
+      timezone: string;
+      duration?: string;
+    }
+
     // Create reschedule request
     const rescheduleRef = db
       .collection('collaborations')
@@ -78,7 +85,7 @@ export async function POST(req: NextRequest) {
       requestedByRole,
       reason,
       previousSchedule: collabData?.schedulingDetails,
-      proposedSlots: proposedSlots.map((slot: any) => ({
+      proposedSlots: proposedSlots.map((slot: SlotInput) => ({
         date: new Date(slot.date),
         time: slot.time,
         timezone: slot.timezone,
@@ -120,7 +127,7 @@ Time: ${currentSchedule?.time} ${currentSchedule?.timezone}
 Reason for Rescheduling: ${reason}
 
 Proposed New Times:
-${proposedSlots.map((slot: any, index: number) => {
+${proposedSlots.map((slot: SlotInput, index: number) => {
   const slotDate = new Date(slot.date).toLocaleDateString('en-US', {
     weekday: 'long',
     year: 'numeric',

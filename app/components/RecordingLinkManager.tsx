@@ -170,6 +170,7 @@ export default function RecordingLinkManager({
                 setRecordingPlatform(e.target.value);
                 setError(null);
               }}
+              aria-label="Recording Platform"
               className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
             >
               {platforms.map((platform) => (

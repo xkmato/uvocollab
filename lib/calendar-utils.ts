@@ -31,7 +31,7 @@ export function generateICS(event: CalendarEvent): string {
   const startTime = formatDate(event.startTime);
   const endTime = formatDate(event.endTime);
 
-  let ics = [
+  const ics = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
     'PRODID:-//UvoCollab//Podcast Recording//EN',
@@ -98,7 +98,7 @@ export function getTimeUntilRecording(recordingDate: Date): {
  * Format recording details for email
  */
 export function formatRecordingDetails(
-  schedulingDetails: any,
+  schedulingDetails: { date: string; time: string; timezone: string; duration?: string },
   recordingUrl?: string,
   prepNotes?: string
 ): string {

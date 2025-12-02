@@ -17,7 +17,6 @@ export async function GET(req: NextRequest) {
 
     const now = new Date();
     const twentyFiveHoursFromNow = new Date(now.getTime() + 25 * 60 * 60 * 1000);
-    const twoHoursFromNow = new Date(now.getTime() + 2 * 60 * 60 * 1000);
 
     // Find reminders that need to be sent
     const remindersSnap = await db
@@ -51,10 +50,8 @@ export async function GET(req: NextRequest) {
       }
 
       const collabData = collabSnap.data();
-      const podcastSnap = await db.collection('podcasts').doc(collabData?.podcastId).get();
-      const podcastData = podcastSnap.exists ? podcastSnap.data() : null;
 
-      let updateData: any = {};
+      const updateData: Record<string, boolean> = {};
 
       // Send 24-hour reminder
       if (timing.shouldSend24HourReminder && !reminder.reminder24hSent) {
