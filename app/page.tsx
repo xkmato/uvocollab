@@ -333,14 +333,14 @@ export default function Home() {
                 UvoCollab
               </h1>
               <p className="text-2xl md:text-3xl text-white/90 mb-4 max-w-3xl mx-auto font-light">
-                Where Rising Artists & Podcasters Meet Industry Legends
+                Where Rising Artists, Podcasters & Expert Guests Meet Industry Legends
               </p>
               <p className="text-lg md:text-xl text-white/70 max-w-2xl mx-auto">
-                Connect, collaborate, and create magic with verified music and podcast professionals.
+                Connect, collaborate, and create magic with verified music professionals, podcasters, and expert guests.
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-20 animate-slideIn">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20 animate-slideIn">
               <Link
                 href="/auth/signup"
                 className="group relative px-10 py-5 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-lg font-bold rounded-full hover:shadow-2xl hover:scale-105 transition-all duration-300 overflow-hidden"
@@ -353,6 +353,12 @@ export default function Home() {
                 className="px-10 py-5 bg-white/10 backdrop-blur-md border-2 border-white/30 text-white text-lg font-bold rounded-full hover:bg-white/20 hover:shadow-xl hover:scale-105 transition-all duration-300"
               >
                 Sign In
+              </Link>
+              <Link
+                href="/guests"
+                className="group relative px-10 py-5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-lg font-bold rounded-full hover:shadow-2xl hover:scale-105 transition-all duration-300"
+              >
+                Become a Guest
               </Link>
               <Link
                 href="/apply"
@@ -410,16 +416,19 @@ export default function Home() {
         {/* How It Works Section */}
         <div className="py-20 bg-black/20 backdrop-blur-sm">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-4xl font-bold text-white text-center mb-16">How It Works</h2>
+            <h2 className="text-4xl font-bold text-white text-center mb-4">How It Works</h2>
+            <p className="text-xl text-white/70 text-center mb-16 max-w-2xl mx-auto">
+              Whether you're an artist, podcaster, or expert guest, we've made collaboration simple
+            </p>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
               {/* Connecting Line (Desktop) */}
               <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 -translate-y-1/2 opacity-30"></div>
 
               {[
-                { step: '01', title: 'Discover', desc: 'Browse verified legends and podcasts.' },
-                { step: '02', title: 'Connect', desc: 'Send a pitch or booking request.' },
-                { step: '03', title: 'Collaborate', desc: 'Funds held securely in escrow.' },
-                { step: '04', title: 'Release', desc: 'Get your completed project & rights.' }
+                { step: '01', title: 'Discover', desc: 'Browse verified legends, podcasts, and expert guests.' },
+                { step: '02', title: 'Connect', desc: 'Send a pitch, booking request, or guest invite.' },
+                { step: '03', title: 'Collaborate', desc: 'Funds held securely in escrow. Schedule made easy.' },
+                { step: '04', title: 'Release', desc: 'Get your completed project, episode, or payment.' }
               ].map((item, i) => (
                 <div key={i} className="relative z-10 bg-slate-900/80 border border-white/10 p-6 rounded-2xl text-center hover:transform hover:-translate-y-2 transition-all duration-300">
                   <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4 shadow-lg shadow-purple-500/20">

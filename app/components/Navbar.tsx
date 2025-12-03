@@ -43,6 +43,12 @@ export default function Navbar() {
                         >
                             Podcasts
                         </Link>
+                        <Link
+                            href="/guests"
+                            className={`text-sm font-medium transition-colors hover:text-white ${isActive('/guests') ? 'text-white' : 'text-white/70'}`}
+                        >
+                            For Guests
+                        </Link>
 
                         {user ? (
                             <div className="flex items-center gap-4">
@@ -118,6 +124,13 @@ export default function Navbar() {
                             onClick={() => setIsMenuOpen(false)}
                         >
                             Podcasts
+                        </Link>
+                        <Link
+                            href="/guests"
+                            className="block px-3 py-2 text-base font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-lg"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            For Guests
                         </Link>
 
                         {user ? (

@@ -796,37 +796,37 @@ This epic covers marketing and SEO for the guest feature.
 - **Description:** Create marketing landing page for the guest feature.
 - **Dependencies:** None
 - **Acceptance Criteria (AC):**
-  - [ ] Create `/guests` page with marketing content
-  - [ ] Explain how guest feature works
-  - [ ] Show benefits for guests and podcasters
-  - [ ] Include testimonials (when available)
-  - [ ] Add clear CTA to sign up as guest
-  - [ ] Optimize for SEO
-- **Status:** To Do
+  - [x] Create `/guests` page with marketing content
+  - [x] Explain how guest feature works
+  - [x] Show benefits for guests and podcasters
+  - [x] Include testimonials (when available)
+  - [x] Add clear CTA to sign up as guest
+  - [x] Optimize for SEO
+- **Status:** ✅ Done
 
 ### **Task 13.2: Update Main Landing Page**
 
 - **Description:** Update homepage to promote guest feature.
 - **Dependencies:** Task 13.1
 - **Acceptance Criteria (AC):**
-  - [ ] Add guest feature to homepage
-  - [ ] Update hero section to mention guests
-  - [ ] Add guest discovery to "How it Works" section
-  - [ ] Update navigation to include guest links
-- **Status:** To Do
+  - [x] Add guest feature to homepage
+  - [x] Update hero section to mention guests
+  - [x] Add guest discovery to "How it Works" section
+  - [x] Update navigation to include guest links
+- **Status:** ✅ Done
 
 ### **Task 13.3: SEO Optimization**
 
 - **Description:** Optimize all guest-related pages for search engines.
 - **Dependencies:** Task 5.1, Task 5.2, Task 13.1
 - **Acceptance Criteria (AC):**
-  - [ ] Add meta tags to all guest pages
-  - [ ] Create guest sitemap
-  - [ ] Add structured data for guest profiles
-  - [ ] Optimize guest discovery page for search
-  - [ ] Create robots.txt entries
-  - [ ] Ensure fast page load times
-- **Status:** To Do
+  - [x] Add meta tags to all guest pages
+  - [x] Create guest sitemap
+  - [x] Add structured data for guest profiles
+  - [x] Optimize guest discovery page for search
+  - [x] Create robots.txt entries
+  - [x] Ensure fast page load times
+- **Status:** ✅ Done
 
 ---
 

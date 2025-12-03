@@ -116,10 +116,36 @@ export default function PublicGuestProfilePage() {
     );
   }
 
+  // Generate structured data for SEO
+  const structuredData = guest ? {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: guest.displayName,
+    description: guest.guestBio || '',
+    image: guest.profileImageUrl || '',
+    jobTitle: 'Podcast Guest',
+    knowsAbout: guest.guestTopics || [],
+    url: `https://uvocollab.com/guest/${guestId}`,
+    sameAs: guest.socialLinks?.map(link => link.url) || [],
+    offers: guest.guestRate && guest.guestRate > 0 ? {
+      '@type': 'Offer',
+      price: guest.guestRate,
+      priceCurrency: 'USD',
+      description: 'Guest appearance fee',
+    } : undefined,
+  } : null;
+
   return (
-    <div className="min-h-screen bg-gray-50 pb-12">
-      {/* Header / Profile */}
-      <div className="bg-white shadow-sm">
+    <>
+      {structuredData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      )}
+      <div className="min-h-screen bg-gray-50 pb-12">
+        {/* Header / Profile */}
+        <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col md:flex-row gap-8 items-start">
             {/* Profile Image */}
@@ -278,5 +304,6 @@ export default function PublicGuestProfilePage() {
         />
       )}
     </div>
+    </>
   );
 }
