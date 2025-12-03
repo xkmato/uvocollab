@@ -196,19 +196,19 @@ export default function SchedulingInterface({
   const canProposeNew = !pendingProposals.some(p => p.proposedBy === currentUser.uid);
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">📅 Schedule Recording</h2>
+    <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+      <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">📅 Schedule Recording</h2>
 
       {/* Current Schedule (if confirmed) */}
       {collaboration.status === 'scheduled' && collaboration.schedulingDetails && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-          <h3 className="text-lg font-semibold text-green-900 mb-2">✅ Recording Scheduled</h3>
-          <div className="text-green-800">
+        <div className="bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+          <h3 className="text-base sm:text-lg font-semibold text-green-900 mb-2">✅ Recording Scheduled</h3>
+          <div className="text-sm sm:text-base text-green-800 space-y-1">
             <p><strong>Date:</strong> {formatDate(collaboration.schedulingDetails.date)}</p>
             <p><strong>Time:</strong> {collaboration.schedulingDetails.time} {collaboration.schedulingDetails.timezone}</p>
             <p><strong>Duration:</strong> {collaboration.schedulingDetails.duration || '60 minutes'}</p>
             {userTimezone !== collaboration.schedulingDetails.timezone && (
-              <p className="text-sm mt-2 text-green-700">
+              <p className="text-xs sm:text-sm mt-2 text-green-700">
                 Your timezone: {userTimezone}
               </p>
             )}
@@ -224,40 +224,44 @@ export default function SchedulingInterface({
       ) : (
         <>
           {pendingProposals.length > 0 && (
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Pending Proposals</h3>
+            <div className="mb-4 sm:mb-6">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Pending Proposals</h3>
               {pendingProposals.map((proposal) => {
                 const isMyProposal = proposal.proposedBy === currentUser.uid;
 
                 return (
                   <div
                     key={proposal.id}
-                    className={`border rounded-lg p-4 mb-4 ${isMyProposal ? 'border-blue-200 bg-blue-50' : 'border-yellow-200 bg-yellow-50'
+                    className={`border rounded-lg p-3 sm:p-4 mb-3 sm:mb-4 ${isMyProposal ? 'border-blue-200 bg-blue-50' : 'border-yellow-200 bg-yellow-50'
                       }`}
                   >
-                    <div className="flex justify-between items-start mb-3">
-                      <h4 className="font-semibold text-gray-900">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3 gap-2">
+                      <h4 className="font-semibold text-sm sm:text-base text-gray-900">
                         {isMyProposal ? 'Your Proposal' : `Proposal from ${proposal.proposedByRole === 'guest' ? 'Guest' : 'Podcast Owner'}`}
                       </h4>
-                      <span className="text-sm text-gray-500">
+                      <span className="text-xs sm:text-sm text-gray-500">
                         {formatDate(proposal.createdAt)}
                       </span>
                     </div>
 
                     {proposal.message && (
-                      <p className="text-gray-700 mb-3 italic">&ldquo;{proposal.message}&rdquo;</p>
+                      <p className="text-sm sm:text-base text-gray-700 mb-3 italic">&ldquo;{proposal.message}&rdquo;</p>
                     )}
 
                     <div className="space-y-2 mb-3">
                       {proposal.slots?.map((slot: { date: Date | string; time: string; timezone: string; duration?: string }, index: number) => (
-                        <div key={index} className="flex items-center gap-2">
-                          <span className="font-semibold">Option {index + 1}:</span>
-                          <span>{formatDate(slot.date)}</span>
-                          <span>at {slot.time} {slot.timezone}</span>
+                        <div key={index} className="flex flex-col sm:flex-row sm:items-center gap-2 p-2 bg-white/50 rounded">
+                          <div className="flex-1 text-sm sm:text-base">
+                            <span className="font-semibold">Option {index + 1}:</span>
+                            <div className="text-gray-700 mt-1">
+                              <div>{formatDate(slot.date)}</div>
+                              <div className="text-xs sm:text-sm">{slot.time} {slot.timezone}</div>
+                            </div>
+                          </div>
                           {!isMyProposal && (
                             <button
                               onClick={() => handleRespondToProposal(proposal.id!, 'accept', index)}
-                              className="ml-auto px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
+                              className="w-full sm:w-auto px-3 py-1.5 sm:py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs sm:text-sm whitespace-nowrap"
                             >
                               Select This Time
                             </button>
@@ -273,7 +277,7 @@ export default function SchedulingInterface({
                             const reason = prompt('Reason for declining (optional):');
                             handleRespondToProposal(proposal.id!, 'decline', undefined, reason || undefined);
                           }}
-                          className="px-4 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200"
+                          className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-red-100 text-red-700 rounded hover:bg-red-200"
                         >
                           Decline All
                         </button>
@@ -281,7 +285,7 @@ export default function SchedulingInterface({
                     )}
 
                     {isMyProposal && (
-                      <p className="text-sm text-blue-700">Waiting for response...</p>
+                      <p className="text-xs sm:text-sm text-blue-700">Waiting for response...</p>
                     )}
                   </div>
                 );
@@ -304,28 +308,28 @@ export default function SchedulingInterface({
                   {canProposeNew ? '+ Propose Recording Times' : 'You have a pending proposal'}
                 </button>
               ) : (
-                <div className="border border-gray-300 rounded-lg p-4">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Propose Recording Times</h3>
+                <div className="border border-gray-300 rounded-lg p-3 sm:p-4">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Propose Recording Times</h3>
 
-                  <div className="space-y-4 mb-4">
+                  <div className="space-y-3 sm:space-y-4 mb-4">
                     {slots.map((slot, index) => (
                       <div key={index} className="border border-gray-200 rounded p-3">
                         <div className="flex justify-between items-center mb-2">
-                          <span className="font-medium">Option {index + 1}</span>
+                          <span className="text-sm sm:text-base font-medium">Option {index + 1}</span>
                           {slots.length > 1 && (
                             <button
                               onClick={() => removeSlot(index)}
-                              className="text-red-600 hover:text-red-700 text-sm"
+                              className="text-red-600 hover:text-red-700 text-xs sm:text-sm"
                             >
                               Remove
                             </button>
                           )}
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                              Date
+                            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
+                              📅 Date
                             </label>
                             <input
                               type="date"
@@ -333,32 +337,32 @@ export default function SchedulingInterface({
                               onChange={(e) => updateSlot(index, 'date', e.target.value)}
                               min={new Date().toISOString().split('T')[0]}
                               aria-label="Recording date"
-                              className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                              className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
                             />
                           </div>
 
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                              Time
+                            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
+                              🕐 Time
                             </label>
                             <input
                               type="time"
                               value={slot.time}
                               onChange={(e) => updateSlot(index, 'time', e.target.value)}
                               aria-label="Recording time"
-                              className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                              className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
                             />
                           </div>
 
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                              Timezone
+                            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
+                              🌍 Timezone
                             </label>
                             <select
                               value={slot.timezone}
                               onChange={(e) => updateSlot(index, 'timezone', e.target.value)}
                               aria-label="Timezone"
-                              className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                              className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
                             >
                               {commonTimezones.map((tz) => (
                                 <option key={tz} value={tz}>
@@ -369,14 +373,14 @@ export default function SchedulingInterface({
                           </div>
 
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                              Duration
+                            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
+                              ⏱️ Duration
                             </label>
                             <select
                               value={slot.duration}
                               onChange={(e) => updateSlot(index, 'duration', e.target.value)}
                               aria-label="Duration"
-                              className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                              className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
                             >
                               <option value="30 minutes">30 minutes</option>
                               <option value="45 minutes">45 minutes</option>
@@ -392,35 +396,35 @@ export default function SchedulingInterface({
 
                   <button
                     onClick={addSlot}
-                    className="text-blue-600 hover:text-blue-700 text-sm font-medium mb-4"
+                    className="text-blue-600 hover:text-blue-700 text-xs sm:text-sm font-medium mb-4"
                   >
                     + Add Another Time Option
                   </button>
 
                   <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Message (Optional)
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
+                      💬 Message (Optional)
                     </label>
                     <textarea
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       rows={3}
                       placeholder="Add a message with your proposal..."
-                      className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
 
                   {error && (
-                    <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-700">
+                    <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-sm sm:text-base text-red-700">
                       {error}
                     </div>
                   )}
 
-                  <div className="flex gap-3">
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                     <button
                       onClick={handleProposeSchedule}
                       disabled={submitting}
-                      className="flex-1 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400"
+                      className="flex-1 py-2 text-sm sm:text-base bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400"
                     >
                       {submitting ? 'Sending...' : 'Send Proposal'}
                     </button>
@@ -429,7 +433,7 @@ export default function SchedulingInterface({
                         setShowProposeForm(false);
                         setError(null);
                       }}
-                      className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+                      className="px-4 py-2 text-sm sm:text-base bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
                     >
                       Cancel
                     </button>

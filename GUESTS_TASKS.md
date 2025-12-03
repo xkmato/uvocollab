@@ -755,35 +755,35 @@ This epic covers ensuring all guest features work well on mobile and have good U
 - **Description:** Ensure guest and podcast discovery pages work well on mobile.
 - **Dependencies:** Task 5.1, Task 5.3
 - **Acceptance Criteria (AC):**
-  - [ ] Test all discovery pages on mobile devices
-  - [ ] Optimize card layouts for small screens
-  - [ ] Ensure filters work well on mobile
-  - [ ] Test search functionality on mobile
-  - [ ] Optimize images for mobile loading
-- **Status:** To Do
+  - [x] Test all discovery pages on mobile devices
+  - [x] Optimize card layouts for small screens
+  - [x] Ensure filters work well on mobile
+  - [x] Test search functionality on mobile
+  - [x] Optimize images for mobile loading
+- **Status:** ✅ Done
 
 ### **Task 12.2: Mobile Responsive Design - Scheduling**
 
 - **Description:** Ensure scheduling interface works well on mobile.
 - **Dependencies:** Task 8.2, Task 8.3
 - **Acceptance Criteria (AC):**
-  - [ ] Test scheduling calendar on mobile
-  - [ ] Ensure time selection works with touch
-  - [ ] Optimize timezone selector for mobile
-  - [ ] Test date picker on mobile devices
-- **Status:** To Do
+  - [x] Test scheduling calendar on mobile
+  - [x] Ensure time selection works with touch
+  - [x] Optimize timezone selector for mobile
+  - [x] Test date picker on mobile devices
+- **Status:** ✅ Done
 
 ### **Task 12.3: Onboarding & Tooltips**
 
 - **Description:** Add onboarding flow and helpful tooltips for new guests.
 - **Dependencies:** Task 2.1
 - **Acceptance Criteria (AC):**
-  - [ ] Create welcome modal for new guests
-  - [ ] Add tooltips explaining key features
-  - [ ] Create guided tour of guest dashboard
-  - [ ] Add "Getting Started" checklist
-  - [ ] Provide examples of good guest profiles
-- **Status:** To Do
+  - [x] Create welcome modal for new guests
+  - [x] Add tooltips explaining key features
+  - [x] Create guided tour of guest dashboard
+  - [x] Add "Getting Started" checklist
+  - [x] Provide examples of good guest profiles
+- **Status:** ✅ Done
 
 ---
 

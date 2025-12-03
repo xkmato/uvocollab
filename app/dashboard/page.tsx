@@ -1,6 +1,8 @@
 'use client';
 
 import BecomeGuestModal from '@/app/components/BecomeGuestModal';
+import GuestOnboardingModal from '@/app/components/GuestOnboardingModal';
+import GettingStartedChecklist from '@/app/components/GettingStartedChecklist';
 import PaymentCheckout from '@/app/components/PaymentCheckout';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { Collaboration } from '@/app/types/collaboration';
@@ -179,6 +181,18 @@ export default function Dashboard() {
             </div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                {/* Guest Onboarding Modal */}
+                {userData?.isGuest && (
+                    <GuestOnboardingModal user={userData} onComplete={() => {}} />
+                )}
+
+                {/* Getting Started Checklist for Guests */}
+                {userData?.isGuest && (
+                    <div className="mb-8">
+                        <GettingStartedChecklist user={userData} />
+                    </div>
+                )}
+
                 {/* Quick Actions */}
                 <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-4">
                     <Link

@@ -199,50 +199,53 @@ export default function GuestMarketplacePage() {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
                 {/* Header */}
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900">Discover Guests</h1>
-                    <p className="mt-2 text-gray-600">
+                <div className="mb-6 sm:mb-8">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Discover Guests</h1>
+                    <p className="mt-2 text-sm sm:text-base text-gray-600">
                         Find the perfect guest for your podcast
                     </p>
                 </div>
 
                 {/* Search and Filter Bar */}
-                <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
-                    <div className="flex flex-col md:flex-row gap-4">
+                <div className="bg-white rounded-lg shadow-sm p-3 sm:p-4 mb-4 sm:mb-6">
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                         {/* Search */}
                         <div className="flex-1">
                             <input
                                 type="text"
-                                placeholder="Search by name, bio, or topics..."
+                                placeholder="Search guests..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             />
                         </div>
                         {/* Filter Toggle */}
                         <button
                             onClick={() => setShowFilters(!showFilters)}
-                            className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                            className="px-4 sm:px-6 py-2 text-sm sm:text-base bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2"
                         >
-                            {showFilters ? 'Hide Filters' : 'Show Filters'}
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                            </svg>
+                            <span>{showFilters ? 'Hide' : 'Filters'}</span>
                         </button>
                     </div>
 
                     {/* Filters */}
                     {showFilters && (
-                        <div className="mt-4 pt-4 border-t border-gray-200 grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                             {/* Price Range Filter */}
                             <div>
-                                <label htmlFor="price-range-filter" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Price Range
+                                <label htmlFor="price-range-filter" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
+                                    💰 Price Range
                                 </label>
                                 <select
                                     id="price-range-filter"
                                     value={filters.priceRange}
                                     onChange={(e) => handleFilterChange('priceRange', e.target.value)}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                    className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                                 >
                                     <option value="all">All Prices</option>
                                     <option value="free">Free</option>
@@ -254,14 +257,14 @@ export default function GuestMarketplacePage() {
 
                             {/* Topics Filter */}
                             <div>
-                                <label htmlFor="topics-filter" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Topics
+                                <label htmlFor="topics-filter" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
+                                    🎯 Topics
                                 </label>
                                 <select
                                     id="topics-filter"
                                     value={filters.topics}
                                     onChange={(e) => handleFilterChange('topics', e.target.value)}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                    className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                                 >
                                     <option value="all">All Topics</option>
                                     {allTopics.map((topic) => (
@@ -274,14 +277,14 @@ export default function GuestMarketplacePage() {
 
                             {/* Verification Filter */}
                             <div>
-                                <label htmlFor="verification-filter" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Verification Status
+                                <label htmlFor="verification-filter" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
+                                    ✓ Verification
                                 </label>
                                 <select
                                     id="verification-filter"
                                     value={filters.verified}
                                     onChange={(e) => handleFilterChange('verified', e.target.value)}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                    className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                                 >
                                     <option value="all">All Guests</option>
                                     <option value="verified">Verified Only</option>
@@ -293,44 +296,44 @@ export default function GuestMarketplacePage() {
                 </div>
 
                 {/* Results Count */}
-                <div className="mb-4 text-gray-600">
+                <div className="mb-3 sm:mb-4 text-sm sm:text-base text-gray-600">
                     {filteredGuests.length} {filteredGuests.length === 1 ? 'guest' : 'guests'} found
                 </div>
 
                 {/* Guest Grid */}
                 {filteredGuests.length === 0 ? (
-                    <div className="bg-white rounded-lg shadow-sm p-8 text-center">
-                        <p className="text-gray-500">No guests found matching your criteria.</p>
+                    <div className="bg-white rounded-lg shadow-sm p-6 sm:p-8 text-center">
+                        <p className="text-sm sm:text-base text-gray-500">No guests found matching your criteria.</p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                         {filteredGuests.map((guest) => (
                             <div
                                 key={guest.uid}
-                                className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6"
+                                className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-4 sm:p-6"
                             >
                                 {/* Guest Header */}
-                                <div className="flex items-start gap-4 mb-4">
-                                    <div className="relative">
+                                <div className="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
+                                    <div className="relative flex-shrink-0">
                                         {guest.profileImageUrl ? (
                                             <Image
                                                 src={guest.profileImageUrl}
                                                 alt={guest.displayName}
-                                                width={64}
-                                                height={64}
-                                                className="rounded-full object-cover"
+                                                width={56}
+                                                height={56}
+                                                className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover"
                                             />
                                         ) : (
-                                            <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-                                                <span className="text-2xl text-gray-500">
+                                            <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gray-200 rounded-full flex items-center justify-center">
+                                                <span className="text-xl sm:text-2xl text-gray-500">
                                                     {guest.displayName.charAt(0).toUpperCase()}
                                                 </span>
                                             </div>
                                         )}
                                         {guest.isVerifiedGuest && (
-                                            <div className="absolute -bottom-1 -right-1 bg-blue-600 rounded-full p-1">
+                                            <div className="absolute -bottom-1 -right-1 bg-blue-600 rounded-full p-0.5 sm:p-1">
                                                 <svg
-                                                    className="w-4 h-4 text-white"
+                                                    className="w-3 h-3 sm:w-4 sm:h-4 text-white"
                                                     fill="currentColor"
                                                     viewBox="0 0 20 20"
                                                 >
@@ -344,10 +347,10 @@ export default function GuestMarketplacePage() {
                                         )}
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <h3 className="text-lg font-semibold text-gray-900 truncate">
+                                        <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
                                             {guest.displayName}
                                         </h3>
-                                        <p className="text-sm text-gray-600">
+                                        <p className="text-xs sm:text-sm text-gray-600 font-medium">
                                             {guest.guestRate && guest.guestRate > 0
                                                 ? `$${guest.guestRate}`
                                                 : 'Negotiable'}
@@ -356,25 +359,25 @@ export default function GuestMarketplacePage() {
                                 </div>
 
                                 {/* Guest Bio */}
-                                <p className="text-sm text-gray-600 mb-4 line-clamp-3">
+                                <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4 line-clamp-3">
                                     {guest.guestBio || guest.bio || 'No bio available'}
                                 </p>
 
                                 {/* Topics */}
                                 {guest.guestTopics && guest.guestTopics.length > 0 && (
-                                    <div className="mb-4">
-                                        <div className="flex flex-wrap gap-2">
+                                    <div className="mb-3 sm:mb-4">
+                                        <div className="flex flex-wrap gap-1.5 sm:gap-2">
                                             {guest.guestTopics.slice(0, 3).map((topic, index) => (
                                                 <span
                                                     key={index}
-                                                    className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
+                                                    className="px-2 py-0.5 sm:py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
                                                 >
                                                     {topic}
                                                 </span>
                                             ))}
                                             {guest.guestTopics.length > 3 && (
-                                                <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
-                                                    +{guest.guestTopics.length - 3} more
+                                                <span className="px-2 py-0.5 sm:py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                                                    +{guest.guestTopics.length - 3}
                                                 </span>
                                             )}
                                         </div>
@@ -383,23 +386,23 @@ export default function GuestMarketplacePage() {
 
                                 {/* Availability */}
                                 {guest.guestAvailability && (
-                                    <p className="text-xs text-gray-500 mb-4">
+                                    <p className="text-xs text-gray-500 mb-3 sm:mb-4 truncate">
                                         📅 {guest.guestAvailability}
                                     </p>
                                 )}
 
                                 {/* Actions */}
-                                <div className="flex gap-2">
+                                <div className="flex flex-col sm:flex-row gap-2">
                                     <button
                                         onClick={() => handleViewProfile(guest.uid)}
-                                        className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
+                                        className="flex-1 px-3 sm:px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-xs sm:text-sm font-medium"
                                     >
                                         View Profile
                                     </button>
                                     {userPodcastId && (
                                         <button
                                             onClick={() => handleAddToWishlist(guest)}
-                                            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                                            className="flex-1 px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm font-medium"
                                         >
                                             Add to Wishlist
                                         </button>

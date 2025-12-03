@@ -207,24 +207,24 @@ export default function PodcastMarketplacePage() {
         <div className="min-h-screen bg-gray-50">
             {/* Hero Section */}
             <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
                     <div className="text-center">
-                        <h1 className="text-5xl font-bold mb-4">Podcast Marketplace</h1>
-                        <p className="text-xl text-white/90 max-w-2xl mx-auto">
+                        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4">Podcast Marketplace</h1>
+                        <p className="text-base sm:text-lg lg:text-xl text-white/90 max-w-2xl mx-auto px-2">
                             Find the perfect podcast for your next collaboration, interview, or promotion.
                         </p>
 
                         {/* Search Bar */}
-                        <div className="max-w-2xl mx-auto mt-8 relative">
+                        <div className="max-w-2xl mx-auto mt-6 sm:mt-8 relative">
                             <input
                                 type="text"
-                                placeholder="Search podcasts by title or keyword..."
+                                placeholder="Search podcasts..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full px-6 py-4 rounded-full text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-300 shadow-lg"
+                                className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-full text-sm sm:text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-300 shadow-lg"
                             />
-                            <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                 </svg>
                             </div>
@@ -235,14 +235,14 @@ export default function PodcastMarketplacePage() {
 
             {/* Filters Section */}
             <div className="bg-white border-b">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                    <div className="flex flex-wrap items-center justify-between gap-4">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+                    <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4">
                         <button
                             onClick={() => setShowFilters(!showFilters)}
-                            className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                            className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm sm:text-base bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
                         >
                             <svg
-                                className="w-5 h-5"
+                                className="w-4 h-4 sm:w-5 sm:h-5"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -262,25 +262,25 @@ export default function PodcastMarketplacePage() {
                         {activeFilterCount > 0 && (
                             <button
                                 onClick={resetFilters}
-                                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                                className="text-xs sm:text-sm text-blue-600 hover:text-blue-700 font-medium"
                             >
-                                Clear all filters
+                                Clear all
                             </button>
                         )}
                     </div>
 
                     {showFilters && (
-                        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-gray-50 rounded-lg">
+                        <div className="mt-4 sm:mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
                             {/* Category Filter */}
                             <div>
-                                <label htmlFor="category-filter" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Category
+                                <label htmlFor="category-filter" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
+                                    📁 Category
                                 </label>
                                 <select
                                     id="category-filter"
                                     value={filters.category}
                                     onChange={(e) => handleFilterChange('category', e.target.value)}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 >
                                     <option value="all">All Categories</option>
                                     <option value="Business">Business</option>
@@ -296,14 +296,14 @@ export default function PodcastMarketplacePage() {
 
                             {/* Audience Size Filter */}
                             <div>
-                                <label htmlFor="audience-size-filter" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Audience Size (Avg. Listeners)
+                                <label htmlFor="audience-size-filter" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
+                                    👥 Audience Size
                                 </label>
                                 <select
                                     id="audience-size-filter"
                                     value={filters.audienceSize}
                                     onChange={(e) => handleFilterChange('audienceSize', e.target.value)}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 >
                                     <option value="all">Any Size</option>
                                     <option value="small">&lt; 1,000</option>
@@ -315,14 +315,14 @@ export default function PodcastMarketplacePage() {
 
                             {/* Price Range Filter */}
                             <div>
-                                <label htmlFor="price-range-filter" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Price Range
+                                <label htmlFor="price-range-filter" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
+                                    💰 Price
                                 </label>
                                 <select
                                     id="price-range-filter"
                                     value={filters.priceRange}
                                     onChange={(e) => handleFilterChange('priceRange', e.target.value)}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 >
                                     <option value="all">All Prices</option>
                                     <option value="free">Free / Cross-Promo</option>
@@ -332,14 +332,14 @@ export default function PodcastMarketplacePage() {
 
                             {/* Seeking Guests Filter */}
                             <div>
-                                <label htmlFor="seeking-guests-filter" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Guest Opportunities
+                                <label htmlFor="seeking-guests-filter" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
+                                    🎙️ Opportunities
                                 </label>
                                 <select
                                     id="seeking-guests-filter"
                                     value={filters.seekingGuests}
                                     onChange={(e) => handleFilterChange('seekingGuests', e.target.value)}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 >
                                     <option value="all">All Podcasts</option>
                                     <option value="seeking">Seeking Guests</option>
@@ -351,12 +351,12 @@ export default function PodcastMarketplacePage() {
             </div>
 
             {/* Marketplace Grid */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
                 {filteredPodcasts.length === 0 ? (
-                    <div className="bg-white rounded-lg shadow p-12 text-center">
+                    <div className="bg-white rounded-lg shadow p-8 sm:p-12 text-center">
                         <div className="text-gray-400 mb-4">
                             <svg
-                                className="w-16 h-16 mx-auto"
+                                className="w-12 h-12 sm:w-16 sm:h-16 mx-auto"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -371,25 +371,25 @@ export default function PodcastMarketplacePage() {
                         </div>
                         {activeFilterCount > 0 ? (
                             <>
-                                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
                                     No Podcasts Match Your Filters
                                 </h3>
-                                <p className="text-gray-600 mb-4">
+                                <p className="text-sm sm:text-base text-gray-600 mb-4">
                                     Try adjusting your filters to see more results.
                                 </p>
                                 <button
                                     onClick={resetFilters}
-                                    className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                                    className="px-4 sm:px-6 py-2 text-sm sm:text-base bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                                 >
                                     Clear All Filters
                                 </button>
                             </>
                         ) : (
                             <>
-                                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
                                     No Podcasts Available Yet
                                 </h3>
-                                <p className="text-gray-600">
+                                <p className="text-sm sm:text-base text-gray-600">
                                     Check back soon as we onboard more podcasts to the platform.
                                 </p>
                             </>
@@ -397,8 +397,8 @@ export default function PodcastMarketplacePage() {
                     </div>
                 ) : (
                     <>
-                        <div className="mb-8">
-                            <p className="text-gray-600">
+                        <div className="mb-4 sm:mb-6 lg:mb-8">
+                            <p className="text-sm sm:text-base text-gray-600">
                                 Showing {filteredPodcasts.length} {filteredPodcasts.length === 1 ? 'podcast' : 'podcasts'}
                                 {activeFilterCount > 0 && (
                                     <span className="text-gray-500">
@@ -408,7 +408,7 @@ export default function PodcastMarketplacePage() {
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                             {filteredPodcasts.map((podcast) => (
                                 <div
                                     key={podcast.id}
@@ -416,7 +416,7 @@ export default function PodcastMarketplacePage() {
                                     className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 overflow-hidden flex flex-col h-full"
                                 >
                                     {/* Cover Image */}
-                                    <div className="relative h-48 bg-gray-200">
+                                    <div className="relative h-40 sm:h-48 bg-gray-200">
                                         {podcast.coverImageUrl ? (
                                             <Image
                                                 src={podcast.coverImageUrl}
@@ -426,13 +426,13 @@ export default function PodcastMarketplacePage() {
                                             />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center bg-purple-100">
-                                                <span className="text-4xl">🎙️</span>
+                                                <span className="text-3xl sm:text-4xl">🎙️</span>
                                             </div>
                                         )}
                                         {/* Category Badge */}
                                         {podcast.categories && podcast.categories.length > 0 && (
-                                            <div className="absolute top-3 right-3">
-                                                <span className="px-2 py-1 bg-black/70 text-white text-xs rounded-full backdrop-blur-sm">
+                                            <div className="absolute top-2 sm:top-3 right-2 sm:right-3">
+                                                <span className="px-2 py-0.5 sm:py-1 bg-black/70 text-white text-xs rounded-full backdrop-blur-sm">
                                                     {podcast.categories[0]}
                                                 </span>
                                             </div>
@@ -440,32 +440,32 @@ export default function PodcastMarketplacePage() {
                                     </div>
 
                                     {/* Card Content */}
-                                    <div className="p-5 flex-grow flex flex-col">
-                                        <h3 className="text-xl font-bold text-gray-900 mb-1 truncate">
+                                    <div className="p-4 sm:p-5 flex-grow flex flex-col">
+                                        <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-1 truncate">
                                             {podcast.title}
                                         </h3>
 
-                                        <div className="flex items-center text-sm text-gray-500 mb-3">
-                                            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div className="flex items-center text-xs sm:text-sm text-gray-500 mb-2 sm:mb-3">
+                                            <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                             </svg>
                                             {podcast.avgListeners ? podcast.avgListeners.toLocaleString() : 'N/A'} listeners
                                         </div>
 
-                                        <p className="text-gray-600 text-sm line-clamp-3 mb-4 flex-grow">
+                                        <p className="text-gray-600 text-xs sm:text-sm line-clamp-3 mb-3 sm:mb-4 flex-grow">
                                             {podcast.description}
                                         </p>
 
                                         <div className="mt-auto">
-                                            <div className="flex flex-wrap gap-2 mb-4">
+                                            <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4">
                                                 {podcastServices[podcast.id]?.slice(0, 2).map(service => (
-                                                    <span key={service.id} className="inline-block px-2 py-1 bg-purple-50 text-purple-700 text-xs rounded border border-purple-100">
+                                                    <span key={service.id} className="inline-block px-2 py-0.5 sm:py-1 bg-purple-50 text-purple-700 text-xs rounded border border-purple-100 truncate max-w-full">
                                                         {service.title}
                                                     </span>
                                                 ))}
                                                 {podcastServices[podcast.id]?.length > 2 && (
-                                                    <span className="inline-block px-2 py-1 bg-gray-50 text-gray-500 text-xs rounded border border-gray-100">
-                                                        +{podcastServices[podcast.id].length - 2} more
+                                                    <span className="inline-block px-2 py-0.5 sm:py-1 bg-gray-50 text-gray-500 text-xs rounded border border-gray-100">
+                                                        +{podcastServices[podcast.id].length - 2}
                                                     </span>
                                                 )}
                                             </div>
@@ -474,13 +474,13 @@ export default function PodcastMarketplacePage() {
                                             {userData?.isGuest ? (
                                                 <div className="flex flex-col gap-2">
                                                     <button
-                                                        className="w-full px-4 py-2 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700 transition-colors duration-200"
+                                                        className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700 transition-colors duration-200"
                                                         onClick={(e) => handleAddToWishlist(podcast, e)}
                                                     >
                                                         Add to Wishlist
                                                     </button>
                                                     <button
-                                                        className="w-full px-4 py-2 bg-white text-purple-600 font-semibold rounded-md border border-purple-600 hover:bg-purple-50 transition-colors duration-200"
+                                                        className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base bg-white text-purple-600 font-semibold rounded-md border border-purple-600 hover:bg-purple-50 transition-colors duration-200"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             handleCardClick(podcast.id);
@@ -491,7 +491,7 @@ export default function PodcastMarketplacePage() {
                                                 </div>
                                             ) : (
                                                 <button
-                                                    className="w-full px-4 py-2 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700 transition-colors duration-200"
+                                                    className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700 transition-colors duration-200"
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         handleCardClick(podcast.id);

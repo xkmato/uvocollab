@@ -1,6 +1,8 @@
 'use client';
 
 import { useAuth } from '@/app/contexts/AuthContext';
+import ProfileExamplesModal from '@/app/components/ProfileExamplesModal';
+import Tooltip from '@/app/components/Tooltip';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -195,7 +197,8 @@ export default function GuestProfile() {
                 {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-4xl font-bold text-white mb-2">Guest Profile</h1>
-                    <p className="text-white/70">Manage your guest information and visibility</p>
+                    <p className="text-white/70 mb-3">Manage your guest information and visibility</p>
+                    <ProfileExamplesModal />
                 </div>
 
                 {/* Verification Status */}
@@ -286,17 +289,28 @@ export default function GuestProfile() {
                             <h3 className="text-xl font-bold text-white mb-4">Guest Information</h3>
                             <div className="space-y-4">
                                 <div>
-                                    <label htmlFor="guestBio" className="block text-white/70 text-sm mb-2">Bio / Expertise</label>
+                                    <label htmlFor="guestBio" className="block text-white/70 text-sm mb-2 flex items-center gap-2">
+                                        Bio / Expertise
+                                        <Tooltip content="Write a compelling bio that highlights your expertise, experience, and what makes you a great guest. Include achievements and credentials.">
+                                            <span className="text-white/40 hover:text-white/60 cursor-help">ℹ️</span>
+                                        </Tooltip>
+                                    </label>
                                     <textarea
                                         id="guestBio"
                                         value={formData.guestBio}
                                         onChange={(e) => handleInputChange('guestBio', e.target.value)}
                                         className="w-full bg-slate-700/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500 min-h-[120px]"
+                                        placeholder="Marketing consultant with 10+ years helping SaaS companies scale..."
                                         required
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="guestRate" className="block text-white/70 text-sm mb-2">Guest Rate (USD)</label>
+                                    <label htmlFor="guestRate" className="block text-white/70 text-sm mb-2 flex items-center gap-2">
+                                        Guest Rate (USD)
+                                        <Tooltip content="Set your appearance fee. Use $0 for free appearances. You can negotiate rates later with podcasts.">
+                                            <span className="text-white/40 hover:text-white/60 cursor-help">ℹ️</span>
+                                        </Tooltip>
+                                    </label>
                                     <input
                                         id="guestRate"
                                         type="number"
@@ -305,18 +319,24 @@ export default function GuestProfile() {
                                         className="w-full bg-slate-700/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500"
                                         min="0"
                                         step="0.01"
+                                        placeholder="500"
                                         required
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="guestTopics" className="block text-white/70 text-sm mb-2">Topics / Expertise Areas</label>
+                                    <label htmlFor="guestTopics" className="block text-white/70 text-sm mb-2 flex items-center gap-2">
+                                        Topics / Expertise Areas
+                                        <Tooltip content="List the topics you can speak about. Be specific to help podcasts find you. Use commas to separate topics.">
+                                            <span className="text-white/40 hover:text-white/60 cursor-help">ℹ️</span>
+                                        </Tooltip>
+                                    </label>
                                     <input
                                         id="guestTopics"
                                         type="text"
                                         value={formData.guestTopics}
                                         onChange={(e) => handleInputChange('guestTopics', e.target.value)}
                                         className="w-full bg-slate-700/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                        placeholder="Comma-separated topics"
+                                        placeholder="Digital Marketing, SaaS Growth, Content Strategy, SEO"
                                         required
                                     />
                                 </div>

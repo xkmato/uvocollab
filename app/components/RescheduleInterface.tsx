@@ -203,16 +203,16 @@ export default function RescheduleInterface({
   const hasPendingRequest = pendingReschedules.some(r => r.requestedBy === currentUser.uid);
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-4">🔄 Reschedule Recording</h2>
+    <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+      <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">🔄 Reschedule Recording</h2>
 
       {/* Reschedule Limit Info */}
-      <div className={`p-4 rounded-lg mb-6 ${canReschedule ? 'bg-blue-50 border border-blue-200' : 'bg-red-50 border border-red-200'}`}>
-        <p className={`text-sm ${canReschedule ? 'text-blue-800' : 'text-red-800'}`}>
+      <div className={`p-3 sm:p-4 rounded-lg mb-4 sm:mb-6 ${canReschedule ? 'bg-blue-50 border border-blue-200' : 'bg-red-50 border border-red-200'}`}>
+        <p className={`text-xs sm:text-sm ${canReschedule ? 'text-blue-800' : 'text-red-800'}`}>
           <strong>Reschedules:</strong> {rescheduleCount} of {maxReschedules} used
         </p>
         {!canReschedule && (
-          <p className="text-sm text-red-700 mt-1">
+          <p className="text-xs sm:text-sm text-red-700 mt-1">
             Maximum reschedules reached. Please contact support if you need to make changes.
           </p>
         )}
@@ -226,48 +226,52 @@ export default function RescheduleInterface({
       ) : (
         <>
           {pendingReschedules.length > 0 && (
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Pending Reschedule Requests</h3>
+            <div className="mb-4 sm:mb-6">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Pending Reschedule Requests</h3>
               {pendingReschedules.map((request) => {
                 const isMyRequest = request.requestedBy === currentUser.uid;
 
                 return (
                   <div
                     key={request.id}
-                    className={`border rounded-lg p-4 mb-4 ${isMyRequest ? 'border-blue-200 bg-blue-50' : 'border-orange-200 bg-orange-50'}`}
+                    className={`border rounded-lg p-3 sm:p-4 mb-3 sm:mb-4 ${isMyRequest ? 'border-blue-200 bg-blue-50' : 'border-orange-200 bg-orange-50'}`}
                   >
-                    <div className="flex justify-between items-start mb-3">
-                      <h4 className="font-semibold text-gray-900">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3 gap-2">
+                      <h4 className="font-semibold text-sm sm:text-base text-gray-900">
                         {isMyRequest ? 'Your Reschedule Request' : `Reschedule Request from ${request.requestedByRole === 'guest' ? 'Guest' : 'Podcast Owner'}`}
                       </h4>
-                      <span className="text-sm text-gray-500">
+                      <span className="text-xs sm:text-sm text-gray-500">
                         {formatDate(request.createdAt)}
                       </span>
                     </div>
 
-                    <div className="bg-white rounded p-3 mb-3">
-                      <p className="text-sm text-gray-600 mb-1"><strong>Previous Schedule:</strong></p>
-                      <p className="text-gray-800">
+                    <div className="bg-white rounded p-2 sm:p-3 mb-3">
+                      <p className="text-xs sm:text-sm text-gray-600 mb-1"><strong>Previous Schedule:</strong></p>
+                      <p className="text-xs sm:text-base text-gray-800">
                         {formatDate(request.previousSchedule?.date)} at {request.previousSchedule?.time} {request.previousSchedule?.timezone}
                       </p>
                     </div>
 
                     <div className="mb-3">
-                      <p className="text-sm font-semibold text-gray-700 mb-1">Reason:</p>
-                      <p className="text-gray-800 italic">&ldquo;{request.reason}&rdquo;</p>
+                      <p className="text-xs sm:text-sm font-semibold text-gray-700 mb-1">Reason:</p>
+                      <p className="text-xs sm:text-base text-gray-800 italic">&ldquo;{request.reason}&rdquo;</p>
                     </div>
 
                     <div className="space-y-2 mb-3">
-                      <p className="text-sm font-semibold text-gray-700">Proposed New Times:</p>
+                      <p className="text-xs sm:text-sm font-semibold text-gray-700">Proposed New Times:</p>
                       {request.proposedSlots?.map((slot: { date: Date | string; time: string; timezone: string; duration?: string }, index: number) => (
-                        <div key={index} className="flex items-center gap-2 bg-white rounded p-2">
-                          <span className="font-semibold">Option {index + 1}:</span>
-                          <span>{formatDate(slot.date)}</span>
-                          <span>at {slot.time} {slot.timezone}</span>
+                        <div key={index} className="flex flex-col sm:flex-row sm:items-center gap-2 bg-white rounded p-2">
+                          <div className="flex-1 text-sm sm:text-base">
+                            <span className="font-semibold">Option {index + 1}:</span>
+                            <div className="text-gray-700 mt-1">
+                              <div>{formatDate(slot.date)}</div>
+                              <div className="text-xs sm:text-sm">{slot.time} {slot.timezone}</div>
+                            </div>
+                          </div>
                           {!isMyRequest && (
                             <button
                               onClick={() => handleRespondToReschedule(request.id!, 'accept', index)}
-                              className="ml-auto px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
+                              className="w-full sm:w-auto px-3 py-1.5 sm:py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs sm:text-sm whitespace-nowrap"
                             >
                               Accept This Time
                             </button>
@@ -283,7 +287,7 @@ export default function RescheduleInterface({
                             const reason = prompt('Reason for declining (optional):');
                             handleRespondToReschedule(request.id!, 'decline', undefined, reason || undefined);
                           }}
-                          className="px-4 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200"
+                          className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-red-100 text-red-700 rounded hover:bg-red-200"
                         >
                           Decline All
                         </button>
@@ -291,7 +295,7 @@ export default function RescheduleInterface({
                     )}
 
                     {isMyRequest && (
-                      <p className="text-sm text-blue-700">Waiting for response...</p>
+                      <p className="text-xs sm:text-sm text-blue-700">Waiting for response...</p>
                     )}
                   </div>
                 );
@@ -318,11 +322,11 @@ export default function RescheduleInterface({
                       : 'Request Reschedule'}
                 </button>
               ) : (
-                <div className="border border-gray-300 rounded-lg p-4">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Request Reschedule</h3>
+                <div className="border border-gray-300 rounded-lg p-3 sm:p-4">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Request Reschedule</h3>
 
                   <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                       Reason for Rescheduling <span className="text-red-600">*</span>
                     </label>
                     <textarea
@@ -330,58 +334,58 @@ export default function RescheduleInterface({
                       onChange={(e) => setReason(e.target.value)}
                       rows={3}
                       placeholder="Please explain why you need to reschedule..."
-                      className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-orange-500"
+                      className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:ring-2 focus:ring-orange-500"
                       required
                     />
                   </div>
 
-                  <div className="space-y-4 mb-4">
-                    <p className="font-medium text-gray-900">Proposed New Times:</p>
+                  <div className="space-y-3 sm:space-y-4 mb-4">
+                    <p className="text-sm sm:text-base font-medium text-gray-900">Proposed New Times:</p>
                     {slots.map((slot, index) => (
                       <div key={index} className="border border-gray-200 rounded p-3">
                         <div className="flex justify-between items-center mb-2">
-                          <span className="font-medium">Option {index + 1}</span>
+                          <span className="text-sm sm:text-base font-medium">Option {index + 1}</span>
                           {slots.length > 1 && (
                             <button
                               onClick={() => removeSlot(index)}
-                              className="text-red-600 hover:text-red-700 text-sm"
+                              className="text-red-600 hover:text-red-700 text-xs sm:text-sm"
                             >
                               Remove
                             </button>
                           )}
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">📅 Date</label>
                             <input
                               type="date"
                               value={slot.date}
                               onChange={(e) => updateSlot(index, 'date', e.target.value)}
                               min={new Date().toISOString().split('T')[0]}
                               aria-label="Recording date"
-                              className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-orange-500"
+                              className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:ring-2 focus:ring-orange-500"
                             />
                           </div>
 
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
+                            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">🕐 Time</label>
                             <input
                               type="time"
                               value={slot.time}
                               onChange={(e) => updateSlot(index, 'time', e.target.value)}
                               aria-label="Recording time"
-                              className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-orange-500"
+                              className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:ring-2 focus:ring-orange-500"
                             />
                           </div>
 
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Timezone</label>
+                            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">🌍 Timezone</label>
                             <select
                               value={slot.timezone}
                               onChange={(e) => updateSlot(index, 'timezone', e.target.value)}
                               aria-label="Timezone"
-                              className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-orange-500"
+                              className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:ring-2 focus:ring-orange-500"
                             >
                               {commonTimezones.map((tz) => (
                                 <option key={tz} value={tz}>{tz.replace(/_/g, ' ')}</option>
@@ -390,12 +394,12 @@ export default function RescheduleInterface({
                           </div>
 
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Duration</label>
+                            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">⏱️ Duration</label>
                             <select
                               value={slot.duration}
                               onChange={(e) => updateSlot(index, 'duration', e.target.value)}
                               aria-label="Duration"
-                              className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-orange-500"
+                              className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:ring-2 focus:ring-orange-500"
                             >
                               <option value="30 minutes">30 minutes</option>
                               <option value="45 minutes">45 minutes</option>
@@ -411,22 +415,22 @@ export default function RescheduleInterface({
 
                   <button
                     onClick={addSlot}
-                    className="text-orange-600 hover:text-orange-700 text-sm font-medium mb-4"
+                    className="text-orange-600 hover:text-orange-700 text-xs sm:text-sm font-medium mb-4"
                   >
                     + Add Another Time Option
                   </button>
 
                   {error && (
-                    <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-700">
+                    <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-sm sm:text-base text-red-700">
                       {error}
                     </div>
                   )}
 
-                  <div className="flex gap-3">
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                     <button
                       onClick={handleRequestReschedule}
                       disabled={submitting}
-                      className="flex-1 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 disabled:bg-gray-400"
+                      className="flex-1 py-2 text-sm sm:text-base bg-orange-600 text-white rounded hover:bg-orange-700 disabled:bg-gray-400"
                     >
                       {submitting ? 'Sending...' : 'Send Reschedule Request'}
                     </button>
@@ -436,7 +440,7 @@ export default function RescheduleInterface({
                         setError(null);
                         setReason('');
                       }}
-                      className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+                      className="px-4 py-2 text-sm sm:text-base bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
                     >
                       Cancel
                     </button>
