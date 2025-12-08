@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
       coverImageUrl: coverImageUrl || null,
       avgListeners: avgListeners || null,
       websiteUrl: websiteUrl || null,
-      status: 'pending',
+      status: 'approved',
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -92,7 +92,7 @@ View and vet the application here: ${appUrl}/admin/vetting
       console.error('Failed to send admin notification email for podcast', emailError);
     }
 
-    return NextResponse.json({ success: true, podcastId: podcastRef.id, message: 'Podcast submitted and pending review' }, { status: 201 });
+    return NextResponse.json({ success: true, podcastId: podcastRef.id, message: 'Podcast submitted successfully' }, { status: 201 });
   } catch (error) {
     console.error('Error submitting podcast:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

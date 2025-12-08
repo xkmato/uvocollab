@@ -1,14 +1,14 @@
 'use client';
 
-import PodcastPitchForm from '@/app/components/PodcastPitchForm';
 import AddPodcastToWishlistModal from '@/app/components/AddPodcastToWishlistModal';
+import PodcastPitchForm from '@/app/components/PodcastPitchForm';
+import { useAuth } from '@/app/contexts/AuthContext';
 import { Podcast, PodcastService } from '@/app/types/podcast';
 import { db } from '@/lib/firebase';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import { useAuth } from '@/app/contexts/AuthContext';
 
 export default function PodcastDetailPage() {
     const params = useParams();
@@ -111,7 +111,7 @@ export default function PodcastDetailPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 pb-12">
+        <div className="min-h-screen bg-gray-50 pb-12 pt-20">
             {/* Header / Cover */}
             <div className="bg-white shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -197,8 +197,26 @@ export default function PodcastDetailPage() {
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Available Opportunities</h2>
 
                 {services.length === 0 ? (
-                    <div className="bg-white rounded-lg shadow p-8 text-center">
-                        <p className="text-gray-500">This podcast has not listed any collaboration opportunities yet.</p>
+                    <div className="bg-white rounded-lg shadow p-12 text-center">
+                        <div className="mb-4">
+                            <svg className="w-16 h-16 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                            </svg>
+                        </div>
+                        <h3 className="text-xl font-semibold text-gray-900 mb-2">No Services Available</h3>
+                        <p className="text-gray-500 mb-6">This podcast hasn't listed any collaboration opportunities yet.</p>
+
+                        {userData?.uid === podcast?.ownerId && (
+                            <button
+                                onClick={() => router.push('/dashboard/podcast')}
+                                className="inline-flex items-center px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors"
+                            >
+                                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
+                                Add Services to Your Podcast
+                            </button>
+                        )}
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

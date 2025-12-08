@@ -19,7 +19,7 @@ interface Filters {
 
 export default function PodcastMarketplacePage() {
     const router = useRouter();
-    const { userData } = useAuth();
+    const { user, userData, loading: authLoading } = useAuth();
     const [allPodcasts, setAllPodcasts] = useState<Podcast[]>([]);
     const [filteredPodcasts, setFilteredPodcasts] = useState<Podcast[]>([]);
     const [podcastServices, setPodcastServices] = useState<Record<string, PodcastService[]>>({});
@@ -37,8 +37,11 @@ export default function PodcastMarketplacePage() {
     const [showWishlistModal, setShowWishlistModal] = useState(false);
 
     useEffect(() => {
-        loadPodcasts();
-    }, []);
+        // Load podcasts once auth state is determined (works for both authenticated and unauthenticated users)
+        if (!authLoading) {
+            loadPodcasts();
+        }
+    }, [authLoading]);
 
     useEffect(() => {
         applyFilters();
@@ -83,11 +86,6 @@ export default function PodcastMarketplacePage() {
 
     const applyFilters = () => {
         let filtered = [...allPodcasts];
-
-        // Filter out current user's podcasts
-        if (userData?.uid) {
-            filtered = filtered.filter(podcast => podcast.ownerId !== userData.uid);
-        }
 
         // Search query
         if (searchQuery) {

@@ -84,7 +84,7 @@ export default function PodcastServiceForm({ podcastId, service, onSuccess, onCa
                     required
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border bg-white text-gray-900"
                     placeholder="e.g., 30-Minute Guest Spot"
                 />
             </div>
@@ -96,7 +96,7 @@ export default function PodcastServiceForm({ podcastId, service, onSuccess, onCa
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     rows={3}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border bg-white text-gray-900"
                     placeholder="Describe what the buyer gets..."
                 />
             </div>
@@ -110,7 +110,7 @@ export default function PodcastServiceForm({ podcastId, service, onSuccess, onCa
                         required
                         value={formData.price}
                         onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border bg-white text-gray-900"
                     />
                     <p className="text-xs text-gray-500 mt-1">Set to 0 for free/cross-promotion</p>
                 </div>
@@ -122,7 +122,7 @@ export default function PodcastServiceForm({ podcastId, service, onSuccess, onCa
                         required
                         value={formData.duration}
                         onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border bg-white text-gray-900"
                         placeholder="e.g., 30 mins, 1 hour"
                     />
                 </div>
@@ -133,7 +133,7 @@ export default function PodcastServiceForm({ podcastId, service, onSuccess, onCa
                 <select
                     value={formData.type}
                     onChange={(e) => setFormData({ ...formData, type: e.target.value as PodcastServiceType })}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border bg-white text-gray-900"
                 >
                     <option value="guest_spot">Guest Spot</option>
                     <option value="ad_read">Ad Read</option>

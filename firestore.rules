@@ -84,10 +84,16 @@ service cloud.firestore {
       allow write: if false; // Only managed via API
     }
 
-    // Podcasts - publicly readable (or auth only), managed via API
+    // Podcasts - publicly readable, managed via API
     match /podcasts/{podcastId} {
-      allow read: if request.auth != null;
+      allow read: if true;
       allow write: if false; // Managed via Server Actions
+      
+      // Services subcollection - publicly readable
+      match /services/{serviceId} {
+        allow read: if true;
+        allow write: if false; // Managed via API
+      }
     }
 
     // Default deny all other documents
