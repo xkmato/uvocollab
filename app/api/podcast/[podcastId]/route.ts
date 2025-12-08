@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { podcastId: string } }
+  { params }: { params: Promise<{ podcastId: string }> }
 ) {
   try {
     const authHeader = request.headers.get('authorization');
@@ -19,7 +19,7 @@ export async function GET(
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
-    const { podcastId } = params;
+    const { podcastId } = await params;
 
     if (!podcastId) {
       return NextResponse.json({ error: 'Podcast ID is required' }, { status: 400 });
