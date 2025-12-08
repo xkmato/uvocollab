@@ -74,7 +74,7 @@ export async function PUT(request: NextRequest) {
     const docRef = snapshot.docs[0].ref;
     
     // Fields allowed to be updated
-    const { title, description, coverImageUrl, categories, avgListeners, rssFeedUrl, websiteUrl } = body;
+    const { title, description, coverImageUrl, categories, avgListeners, rssFeedUrl, websiteUrl, platformLinks } = body;
     
         const updateData: Record<string, unknown> = {
       updatedAt: new Date(),
@@ -87,6 +87,7 @@ export async function PUT(request: NextRequest) {
     if (avgListeners !== undefined) updateData.avgListeners = avgListeners;
     if (rssFeedUrl !== undefined) updateData.rssFeedUrl = rssFeedUrl;
     if (websiteUrl !== undefined) updateData.websiteUrl = websiteUrl;
+    if (platformLinks !== undefined) updateData.platformLinks = platformLinks;
 
     await docRef.update(updateData);
 

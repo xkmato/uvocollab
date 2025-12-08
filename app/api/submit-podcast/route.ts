@@ -32,18 +32,20 @@ export async function POST(request: NextRequest) {
       coverImageUrl,
       avgListeners,
       websiteUrl,
+      platformLinks,
     } = body as {
       title: string;
       description?: string;
-      rssFeedUrl: string;
+      rssFeedUrl?: string;
       categories: string[];
       coverImageUrl?: string;
       avgListeners?: number;
       websiteUrl?: string;
+      platformLinks?: Array<{ platform: string; url: string }>;
     };
 
     // Validate required fields
-    if (!title || !rssFeedUrl || !categories || !Array.isArray(categories) || categories.length === 0) {
+    if (!title || !categories || !Array.isArray(categories) || categories.length === 0) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
@@ -52,11 +54,12 @@ export async function POST(request: NextRequest) {
       ownerId,
       title: title.trim(),
       description: description?.trim() || null,
-      rssFeedUrl: rssFeedUrl.trim(),
+      rssFeedUrl: rssFeedUrl?.trim() || null,
       categories,
       coverImageUrl: coverImageUrl || null,
       avgListeners: avgListeners || null,
       websiteUrl: websiteUrl || null,
+      platformLinks: platformLinks || [],
       status: 'approved',
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -81,7 +84,8 @@ export async function POST(request: NextRequest) {
 
 Title: ${podcastData.title}
 Categories: ${podcastData.categories.join(', ')}
-RSS Feed: ${podcastData.rssFeedUrl}
+${podcastData.rssFeedUrl ? `RSS Feed: ${podcastData.rssFeedUrl}` : 'RSS Feed: Not provided'}
+${podcastData.platformLinks && podcastData.platformLinks.length > 0 ? `Platforms: ${podcastData.platformLinks.map((l: { platform: string; url: string }) => `${l.platform} (${l.url})`).join(', ')}` : ''}
 Status: ${podcastData.status}
 
 View and vet the application here: ${appUrl}/admin/vetting

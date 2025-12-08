@@ -19,6 +19,7 @@ export default function RegisterPodcast() {
         category: '',
         avgListeners: '',
         coverImageUrl: '',
+        platformLinks: [{ platform: '', url: '' }],
     });
 
     const categories = [
@@ -53,7 +54,7 @@ export default function RegisterPodcast() {
             }
 
             // Basic validation
-            if (!formData.title || !formData.description || !formData.rssFeedUrl || !formData.category) {
+            if (!formData.title || !formData.description || !formData.category) {
                 throw new Error('Please fill in all required fields');
             }
 
@@ -65,11 +66,12 @@ export default function RegisterPodcast() {
             const payload = {
                 title: formData.title,
                 description: formData.description,
-                rssFeedUrl: formData.rssFeedUrl,
+                rssFeedUrl: formData.rssFeedUrl || null,
                 categories: [formData.category],
                 coverImageUrl: formData.coverImageUrl || null,
                 avgListeners: formData.avgListeners ? Number(formData.avgListeners) : null,
                 websiteUrl: formData.websiteUrl || null,
+                platformLinks: formData.platformLinks.filter(link => link.platform && link.url),
             };
 
             const response = await fetch('/api/submit-podcast', {
@@ -205,7 +207,7 @@ export default function RegisterPodcast() {
 
                         {/* RSS Feed */}
                         <div>
-                            <label className="block text-white font-semibold mb-2">RSS Feed URL *</label>
+                            <label className="block text-white font-semibold mb-2">RSS Feed URL (Optional)</label>
                             <input
                                 type="url"
                                 name="rssFeedUrl"
@@ -213,7 +215,6 @@ export default function RegisterPodcast() {
                                 onChange={handleChange}
                                 className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:bg-white/10 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/50 transition-all"
                                 placeholder="https://feed.podbean.com/..."
-                                required
                             />
                         </div>
 
@@ -258,6 +259,64 @@ export default function RegisterPodcast() {
                             <p className="mt-2 text-sm text-white/60">
                                 Please provide a direct link to your podcast cover art (square, min 1400x1400px recommended).
                             </p>
+                        </div>
+
+                        {/* Platform Links */}
+                        <div>
+                            <label className="block text-white font-semibold mb-2">Platform Links (Optional)</label>
+                            <p className="text-sm text-white/60 mb-3">Add links to where people can find your podcast (Spotify, Apple Podcasts, YouTube, etc.)</p>
+                            <div className="space-y-3">
+                                {formData.platformLinks.map((link, index) => (
+                                    <div key={index} className="flex gap-3">
+                                        <input
+                                            type="text"
+                                            placeholder="Platform name (e.g., Spotify)"
+                                            value={link.platform}
+                                            onChange={(e) => {
+                                                const updated = [...formData.platformLinks];
+                                                updated[index].platform = e.target.value;
+                                                setFormData({ ...formData, platformLinks: updated });
+                                            }}
+                                            className="w-1/3 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:bg-white/10 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/50 transition-all"
+                                        />
+                                        <input
+                                            type="url"
+                                            placeholder="URL"
+                                            value={link.url}
+                                            onChange={(e) => {
+                                                const updated = [...formData.platformLinks];
+                                                updated[index].url = e.target.value;
+                                                setFormData({ ...formData, platformLinks: updated });
+                                            }}
+                                            className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:bg-white/10 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/50 transition-all"
+                                        />
+                                        {formData.platformLinks.length > 1 && (
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    const updated = formData.platformLinks.filter((_, i) => i !== index);
+                                                    setFormData({ ...formData, platformLinks: updated });
+                                                }}
+                                                className="px-4 py-3 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-xl transition-all"
+                                            >
+                                                ✕
+                                            </button>
+                                        )}
+                                    </div>
+                                ))}
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setFormData({
+                                            ...formData,
+                                            platformLinks: [...formData.platformLinks, { platform: '', url: '' }]
+                                        });
+                                    }}
+                                    className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all text-sm"
+                                >
+                                    + Add Another Platform
+                                </button>
+                            </div>
                         </div>
 
                         {/* Submit Button */}

@@ -10,10 +10,11 @@ interface Podcast {
     id: string;
     title: string;
     description: string;
-    rssFeedUrl: string;
+    rssFeedUrl?: string;
     websiteUrl?: string;
     categories?: string[];
     avgListeners?: number;
+    platformLinks?: Array<{ platform: string; url: string }>;
     createdAt: { seconds: number } | string;
     status: string;
     [key: string]: unknown;
@@ -86,37 +87,37 @@ export default function AdminPodcastVettingPage() {
             </div>
 
             <div className="mb-6 border-b border-gray-200">
-                    <nav className="-mb-px flex space-x-8">
-                        {(['pending', 'all', 'approved', 'rejected'] as const).map((tab) => (
-                            <button
-                                key={tab}
-                                onClick={() => setFilter(tab)}
-                                className={`
+                <nav className="-mb-px flex space-x-8">
+                    {(['pending', 'all', 'approved', 'rejected'] as const).map((tab) => (
+                        <button
+                            key={tab}
+                            onClick={() => setFilter(tab)}
+                            className={`
                                     whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium
                                     ${filter === tab
-                                        ? 'border-blue-500 text-blue-600'
-                                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                                    }
+                                    ? 'border-blue-500 text-blue-600'
+                                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                                }
                                 `}
-                            >
-                                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                            </button>
-                        ))}
-                    </nav>
-                </div>
-
-                {podcasts.length === 0 ? (
-                    <div className="text-center py-12">
-                        <p className="text-gray-500">No {filter !== 'all' ? filter : ''} podcast submissions found</p>
-                    </div>
-                ) : (
-                    <div className="space-y-6">
-                        {podcasts.map((podcast) => (
-                            <PodcastCard key={podcast.id} podcast={podcast} onUpdate={fetchPodcasts} />
-                        ))}
-                    </div>
-                )}
+                        >
+                            {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                        </button>
+                    ))}
+                </nav>
             </div>
+
+            {podcasts.length === 0 ? (
+                <div className="text-center py-12">
+                    <p className="text-gray-500">No {filter !== 'all' ? filter : ''} podcast submissions found</p>
+                </div>
+            ) : (
+                <div className="space-y-6">
+                    {podcasts.map((podcast) => (
+                        <PodcastCard key={podcast.id} podcast={podcast} onUpdate={fetchPodcasts} />
+                    ))}
+                </div>
+            )}
+        </div>
     );
 }
 
@@ -124,7 +125,7 @@ function PodcastCard({ podcast, onUpdate }: { podcast: Podcast; onUpdate: () => 
     const [isExpanded, setIsExpanded] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
 
-    const { title, description, rssFeedUrl, websiteUrl, categories, avgListeners, createdAt, status } = podcast;
+    const { title, description, rssFeedUrl, websiteUrl, categories, avgListeners, platformLinks, createdAt, status } = podcast;
 
     const handleApprove = async () => {
         if (!confirm(`Are you sure you want to approve "${title}"?`)) return;
@@ -209,10 +210,31 @@ function PodcastCard({ podcast, onUpdate }: { podcast: Podcast; onUpdate: () => 
                             {getStatusBadge()}
                         </div>
                         <div className="space-y-1 text-sm text-gray-600">
-                            <p><span className="font-medium">RSS:</span> <a href={rssFeedUrl} className="link" target="_blank" rel="noreferrer">{rssFeedUrl}</a></p>
+                            {rssFeedUrl && <p><span className="font-medium">RSS:</span> <a href={rssFeedUrl} className="link" target="_blank" rel="noreferrer">{rssFeedUrl}</a></p>}
                             {websiteUrl && <p><span className="font-medium">Website:</span> <a href={websiteUrl} className="link" target="_blank" rel="noreferrer">{websiteUrl}</a></p>}
                             <p><span className="font-medium">Categories:</span> {(categories || []).join(', ')}</p>
                             {typeof avgListeners === 'number' && <p><span className="font-medium">Avg listeners:</span> {avgListeners}</p>}
+                            {platformLinks && platformLinks.length > 0 && (
+                                <div>
+                                    <span className="font-medium">Platforms:</span>
+                                    <div className="flex flex-wrap gap-2 mt-1">
+                                        {platformLinks.map((link, index) => (
+                                            <a
+                                                key={index}
+                                                href={link.url}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs hover:bg-blue-100"
+                                            >
+                                                {link.platform}
+                                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                                </svg>
+                                            </a>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                             {createdAt && (
                                 <p><span className="font-medium">Submitted:</span> {new Date(typeof createdAt === 'object' && 'seconds' in createdAt ? createdAt.seconds * 1000 : createdAt).toLocaleDateString()}</p>
                             )}

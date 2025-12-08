@@ -31,6 +31,7 @@ export default function PodcastDashboard() {
         websiteUrl: '',
         categories: [] as string[],
         avgListeners: 0,
+        platformLinks: [] as Array<{ platform: string; url: string }>,
     });
 
     useEffect(() => {
@@ -59,10 +60,11 @@ export default function PodcastDashboard() {
                 setPodcastForm({
                     title: podcastData.podcast.title,
                     description: podcastData.podcast.description,
-                    rssFeedUrl: podcastData.podcast.rssFeedUrl,
+                    rssFeedUrl: podcastData.podcast.rssFeedUrl || '',
                     websiteUrl: podcastData.podcast.websiteUrl || '',
                     categories: podcastData.podcast.categories,
                     avgListeners: podcastData.podcast.avgListeners || 0,
+                    platformLinks: podcastData.podcast.platformLinks || [],
                 });
 
                 // Fetch Services
@@ -222,7 +224,7 @@ export default function PodcastDashboard() {
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label htmlFor="podcast-rss-feed" className="block text-sm font-medium text-gray-700">RSS Feed URL</label>
+                                        <label htmlFor="podcast-rss-feed" className="block text-sm font-medium text-gray-700">RSS Feed URL (Optional)</label>
                                         <input
                                             id="podcast-rss-feed"
                                             type="url"
@@ -242,6 +244,61 @@ export default function PodcastDashboard() {
                                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
                                             aria-label="Website URL"
                                         />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Platform Links (Optional)</label>
+                                    <div className="space-y-2">
+                                        {podcastForm.platformLinks.map((link, index) => (
+                                            <div key={index} className="flex gap-2">
+                                                <input
+                                                    type="text"
+                                                    placeholder="Platform (e.g., Spotify)"
+                                                    value={link.platform}
+                                                    onChange={(e) => {
+                                                        const updated = [...podcastForm.platformLinks];
+                                                        updated[index].platform = e.target.value;
+                                                        setPodcastForm({ ...podcastForm, platformLinks: updated });
+                                                    }}
+                                                    className="w-1/3 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                                />
+                                                <input
+                                                    type="url"
+                                                    placeholder="URL"
+                                                    value={link.url}
+                                                    onChange={(e) => {
+                                                        const updated = [...podcastForm.platformLinks];
+                                                        updated[index].url = e.target.value;
+                                                        setPodcastForm({ ...podcastForm, platformLinks: updated });
+                                                    }}
+                                                    className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                                />
+                                                {podcastForm.platformLinks.length > 1 && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            const updated = podcastForm.platformLinks.filter((_, i) => i !== index);
+                                                            setPodcastForm({ ...podcastForm, platformLinks: updated });
+                                                        }}
+                                                        className="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-md text-sm"
+                                                    >
+                                                        ✕
+                                                    </button>
+                                                )}
+                                            </div>
+                                        ))}
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setPodcastForm({
+                                                    ...podcastForm,
+                                                    platformLinks: [...podcastForm.platformLinks, { platform: '', url: '' }]
+                                                });
+                                            }}
+                                            className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md text-sm"
+                                        >
+                                            + Add Platform
+                                        </button>
                                     </div>
                                 </div>
                                 <div className="flex justify-end gap-3 pt-4">
@@ -274,8 +331,29 @@ export default function PodcastDashboard() {
                                     </div>
                                     <div className="text-sm text-gray-500 space-y-1">
                                         <p><strong>Status:</strong> <span className={`capitalize ${podcast.status === 'approved' ? 'text-green-600' : 'text-yellow-600'}`}>{podcast.status}</span></p>
-                                        <p><strong>RSS:</strong> <a href={podcast.rssFeedUrl} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline truncate block max-w-md">{podcast.rssFeedUrl}</a></p>
+                                        {podcast.rssFeedUrl && <p><strong>RSS:</strong> <a href={podcast.rssFeedUrl} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline truncate block max-w-md">{podcast.rssFeedUrl}</a></p>}
                                         {podcast.websiteUrl && <p><strong>Website:</strong> <a href={podcast.websiteUrl} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">{podcast.websiteUrl}</a></p>}
+                                        {podcast.platformLinks && podcast.platformLinks.length > 0 && (
+                                            <div>
+                                                <strong>Platforms:</strong>
+                                                <div className="flex flex-wrap gap-2 mt-1">
+                                                    {podcast.platformLinks.map((link, index) => (
+                                                        <a
+                                                            key={index}
+                                                            href={link.url}
+                                                            target="_blank"
+                                                            rel="noreferrer"
+                                                            className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs hover:bg-blue-100"
+                                                        >
+                                                            {link.platform}
+                                                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                                            </svg>
+                                                        </a>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                                 <div>

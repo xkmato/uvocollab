@@ -1,5 +1,10 @@
 export type PodcastStatus = 'pending' | 'approved' | 'rejected';
 
+export interface PodcastPlatformLink {
+  platform: string; // e.g., "Spotify", "Apple Podcasts", "YouTube", etc.
+  url: string;
+}
+
 export interface Podcast {
   id: string; // Firestore document ID
   ownerId: string; // Reference to the user who owns the podcast
@@ -8,8 +13,9 @@ export interface Podcast {
   coverImageUrl: string;
   categories: string[]; // e.g., Tech, Music, Business
   avgListeners?: number; // Optional
-  rssFeedUrl: string;
+  rssFeedUrl?: string; // Optional
   websiteUrl?: string; // Optional
+  platformLinks?: PodcastPlatformLink[]; // Optional - platforms like Spotify, Apple Podcasts, etc.
   status: PodcastStatus;
   createdAt: Date; // Firestore Timestamp
   updatedAt: Date; // Firestore Timestamp
