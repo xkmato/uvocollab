@@ -1,5 +1,6 @@
 'use client';
 
+import { useAuth } from '@/app/contexts/AuthContext';
 import { Service } from '@/app/types/service';
 import { User } from '@/app/types/user';
 import { db } from '@/lib/firebase';
@@ -17,6 +18,7 @@ interface Filters {
 
 export default function MarketplacePage() {
     const router = useRouter();
+    const { userData } = useAuth();
     const [allLegends, setAllLegends] = useState<User[]>([]);
     const [filteredLegends, setFilteredLegends] = useState<User[]>([]);
     const [legendServices, setLegendServices] = useState<Record<string, Service[]>>({});
@@ -77,6 +79,11 @@ export default function MarketplacePage() {
 
     const applyFilters = () => {
         let filtered = [...allLegends];
+
+        // Filter out current user
+        if (userData?.uid) {
+            filtered = filtered.filter(legend => legend.uid !== userData.uid);
+        }
 
         // Filter by genre
         if (filters.genre !== 'all') {

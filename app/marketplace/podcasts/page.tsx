@@ -84,6 +84,11 @@ export default function PodcastMarketplacePage() {
     const applyFilters = () => {
         let filtered = [...allPodcasts];
 
+        // Filter out current user's podcasts
+        if (userData?.uid) {
+            filtered = filtered.filter(podcast => podcast.ownerId !== userData.uid);
+        }
+
         // Search query
         if (searchQuery) {
             const query = searchQuery.toLowerCase();

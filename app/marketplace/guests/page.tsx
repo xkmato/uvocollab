@@ -1,13 +1,13 @@
 'use client';
 
+import AddGuestToWishlistModal from '@/app/components/AddGuestToWishlistModal';
+import { useAuth } from '@/app/contexts/AuthContext';
 import { User } from '@/app/types/user';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useAuth } from '@/app/contexts/AuthContext';
-import AddGuestToWishlistModal from '@/app/components/AddGuestToWishlistModal';
 
 // Filter types
 interface Filters {
@@ -101,6 +101,11 @@ export default function GuestMarketplacePage() {
 
     const applyFilters = () => {
         let filtered = [...allGuests];
+
+        // Filter out current user
+        if (userData?.uid) {
+            filtered = filtered.filter(guest => guest.uid !== userData.uid);
+        }
 
         // Search query
         if (searchQuery) {
