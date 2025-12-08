@@ -194,7 +194,22 @@ export default function PodcastDetailPage() {
 
             {/* Services Section */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Available Opportunities</h2>
+                <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-2xl font-bold text-gray-900">Available Opportunities</h2>
+
+                    {/* Add Service Button for Owners */}
+                    {userData?.uid === podcast?.ownerId && (
+                        <button
+                            onClick={() => router.push('/dashboard/podcast')}
+                            className="inline-flex items-center px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors"
+                        >
+                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            Add Service
+                        </button>
+                    )}
+                </div>
 
                 {services.length === 0 ? (
                     <div className="bg-white rounded-lg shadow p-12 text-center">
@@ -243,9 +258,13 @@ export default function PodcastDetailPage() {
 
                                 <button
                                     onClick={() => handleRequestCollab(service.id)}
-                                    className="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-md transition-colors flex items-center justify-center"
+                                    disabled={userData?.uid === podcast?.ownerId}
+                                    className={`w-full py-3 px-4 font-semibold rounded-md transition-colors flex items-center justify-center ${userData?.uid === podcast?.ownerId
+                                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                            : 'bg-purple-600 hover:bg-purple-700 text-white'
+                                        }`}
                                 >
-                                    Request Collab
+                                    {userData?.uid === podcast?.ownerId ? 'Your Service' : 'Request Collab'}
                                     <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                     </svg>
