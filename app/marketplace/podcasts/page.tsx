@@ -1,13 +1,13 @@
 'use client';
 
+import AddPodcastToWishlistModal from '@/app/components/AddPodcastToWishlistModal';
+import { useAuth } from '@/app/contexts/AuthContext';
 import { Podcast, PodcastService } from '@/app/types/podcast';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useAuth } from '@/app/contexts/AuthContext';
-import AddPodcastToWishlistModal from '@/app/components/AddPodcastToWishlistModal';
 
 // Filter types
 interface Filters {
@@ -134,9 +134,9 @@ export default function PodcastMarketplacePage() {
             filtered = filtered.filter((podcast) => {
                 const services = podcastServices[podcast.id] || [];
                 const hasGuestService = services.some(
-                    s => s.title.toLowerCase().includes('guest') || 
-                         s.title.toLowerCase().includes('interview') ||
-                         s.description.toLowerCase().includes('guest')
+                    s => s.title.toLowerCase().includes('guest') ||
+                        s.title.toLowerCase().includes('interview') ||
+                        s.description.toLowerCase().includes('guest')
                 );
                 return hasGuestService;
             });
@@ -204,7 +204,7 @@ export default function PodcastMarketplacePage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 pt-20">
             {/* Hero Section */}
             <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
@@ -221,7 +221,7 @@ export default function PodcastMarketplacePage() {
                                 placeholder="Search podcasts..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-full text-sm sm:text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-300 shadow-lg"
+                                className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-full text-sm sm:text-base text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-300 shadow-lg"
                             />
                             <div className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
                                 <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -239,10 +239,10 @@ export default function PodcastMarketplacePage() {
                     <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4">
                         <button
                             onClick={() => setShowFilters(!showFilters)}
-                            className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm sm:text-base bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                            className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
                         >
                             <svg
-                                className="w-4 h-4 sm:w-5 sm:h-5"
+                                className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -441,25 +441,25 @@ export default function PodcastMarketplacePage() {
 
                                     {/* Card Content */}
                                     <div className="p-4 sm:p-5 flex-grow flex flex-col">
-                                        <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-1 truncate">
+                                        <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 line-clamp-2">
                                             {podcast.title}
                                         </h3>
 
-                                        <div className="flex items-center text-xs sm:text-sm text-gray-500 mb-2 sm:mb-3">
+                                        <div className="flex items-center text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3">
                                             <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                             </svg>
                                             {podcast.avgListeners ? podcast.avgListeners.toLocaleString() : 'N/A'} listeners
                                         </div>
 
-                                        <p className="text-gray-600 text-xs sm:text-sm line-clamp-3 mb-3 sm:mb-4 flex-grow">
+                                        <p className="text-gray-700 text-xs sm:text-sm line-clamp-2 mb-3 sm:mb-4 flex-grow leading-relaxed">
                                             {podcast.description}
                                         </p>
 
                                         <div className="mt-auto">
                                             <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4">
                                                 {podcastServices[podcast.id]?.slice(0, 2).map(service => (
-                                                    <span key={service.id} className="inline-block px-2 py-0.5 sm:py-1 bg-purple-50 text-purple-700 text-xs rounded border border-purple-100 truncate max-w-full">
+                                                    <span key={service.id} className="inline-block px-2 py-0.5 sm:py-1 bg-purple-50 text-purple-800 text-xs rounded border border-purple-200 truncate max-w-full font-medium">
                                                         {service.title}
                                                     </span>
                                                 ))}
