@@ -121,7 +121,7 @@ export default function MarketplacePage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center pt-20">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
                     <p className="text-gray-600">Loading marketplace...</p>
@@ -132,7 +132,7 @@ export default function MarketplacePage() {
 
     if (error) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center pt-20">
                 <div className="text-center">
                     <h1 className="text-2xl font-bold text-gray-900 mb-2">Something Went Wrong</h1>
                     <p className="text-gray-600 mb-6">{error}</p>
@@ -148,7 +148,7 @@ export default function MarketplacePage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 pt-20">
             {/* Hero Section */}
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -167,7 +167,7 @@ export default function MarketplacePage() {
                     <div className="flex flex-wrap items-center justify-between gap-4">
                         <button
                             onClick={() => setShowFilters(!showFilters)}
-                            className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                            className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors text-gray-900"
                         >
                             <svg
                                 className="w-5 h-5"
@@ -208,7 +208,7 @@ export default function MarketplacePage() {
                                     id="genre-select"
                                     value={filters.genre}
                                     onChange={(e) => handleFilterChange('genre', e.target.value)}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                                 >
                                     <option value="all">All Genres</option>
                                     <option value="Hip Hop">Hip Hop</option>
@@ -233,7 +233,7 @@ export default function MarketplacePage() {
                                     id="price-range-select"
                                     value={filters.priceRange}
                                     onChange={(e) => handleFilterChange('priceRange', e.target.value)}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                                 >
                                     <option value="all">All Prices</option>
                                     <option value="budget">Budget ($0 - $500)</option>
@@ -251,7 +251,7 @@ export default function MarketplacePage() {
                                     id="service-type-select"
                                     value={filters.serviceType}
                                     onChange={(e) => handleFilterChange('serviceType', e.target.value)}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                                 >
                                     <option value="all">All Services</option>
                                     <option value="Verse">Verse</option>
