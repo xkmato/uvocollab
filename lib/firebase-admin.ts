@@ -7,6 +7,7 @@ import { getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
 
 let app: App;
+let isInitialized = false;
 
 // Initialize Firebase Admin if not already initialized
 if (!getApps().length) {
@@ -38,15 +39,22 @@ if (!getApps().length) {
           projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
         }
   );
+  isInitialized = true;
 } else {
   app = getApps()[0];
 }
 
 export const adminAuth = getAuth(app);
-export const adminDb = getFirestore(app);
-export const adminStorage = getStorage(app);
 
-// Initialize Firestore settings
-adminDb.settings({
-  ignoreUndefinedProperties: true,
-});
+// Get Firestore instance
+const db = getFirestore(app);
+
+// Initialize Firestore settings only on first initialization
+if (isInitialized) {
+  db.settings({
+    ignoreUndefinedProperties: true,
+  });
+}
+
+export const adminDb = db;
+export const adminStorage = getStorage(app);

@@ -1,20 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuth } from 'firebase/auth';
-import { 
-  collection, 
-  query, 
-  where, 
-  orderBy, 
-  limit,
-  getDocs,
-  addDoc,
-  updateDoc,
-  doc,
-  serverTimestamp,
-  Timestamp
-} from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { adminDb } from '@/lib/firebase-admin';
 import { CreateNotificationData, Notification } from '@/app/types/notification';
+import { FieldValue } from 'firebase-admin/firestore';
 
 /**
  * GET /api/notifications
@@ -35,31 +22,29 @@ export async function GET(request: NextRequest) {
     }
 
     // Build query
-    let q = query(
-      collection(db, 'notifications'),
-      where('userId', '==', userId),
-      orderBy('createdAt', 'desc'),
-      limit(limitCount)
-    );
+    let q = adminDb
+      .collection('notifications')
+      .where('userId', '==', userId)
+      .orderBy('createdAt', 'desc')
+      .limit(limitCount);
 
     if (unreadOnly) {
-      q = query(
-        collection(db, 'notifications'),
-        where('userId', '==', userId),
-        where('read', '==', false),
-        orderBy('createdAt', 'desc'),
-        limit(limitCount)
-      );
+      q = adminDb
+        .collection('notifications')
+        .where('userId', '==', userId)
+        .where('read', '==', false)
+        .orderBy('createdAt', 'desc')
+        .limit(limitCount);
     }
 
-    const snapshot = await getDocs(q);
+    const snapshot = await q.get();
     const notifications: Notification[] = snapshot.docs.map(doc => {
       const data = doc.data();
       return {
         id: doc.id,
         ...data,
-        createdAt: data.createdAt?.toDate() || new Date(),
-        expiresAt: data.expiresAt?.toDate(),
+        createdAt: data.createdAt?.toDate?.() || new Date(),
+        expiresAt: data.expiresAt?.toDate?.(),
       } as Notification;
     });
 
@@ -103,15 +88,14 @@ export async function POST(request: NextRequest) {
       actionUrl: actionUrl || null,
       actionText: actionText || null,
       read: false,
-      createdAt: serverTimestamp(),
-      expiresAt: expiresAt ? Timestamp.fromDate(new Date(expiresAt)) : null,
+      createdAt: FieldValue.serverTimestamp(),
+      expiresAt: expiresAt ? new Date(expiresAt) : null,
       metadata: metadata || {},
     };
 
-    const notificationRef = await addDoc(
-      collection(db, 'notifications'),
-      notificationData
-    );
+    const notificationRef = await adminDb
+      .collection('notifications')
+      .add(notificationData);
 
     return NextResponse.json({
       success: true,
@@ -150,10 +134,10 @@ export async function PATCH(request: NextRequest) {
 
     // Update each notification
     const updatePromises = notificationIds.map(async (notificationId) => {
-      const notificationRef = doc(db, 'notifications', notificationId);
-      await updateDoc(notificationRef, {
-        read: true,
-      });
+      await adminDb
+        .collection('notifications')
+        .doc(notificationId)
+        .update({ read: true });
     });
 
     await Promise.all(updatePromises);
@@ -188,19 +172,19 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Get all unread notifications for user
-    const q = query(
-      collection(db, 'notifications'),
-      where('userId', '==', userId),
-      where('read', '==', false)
-    );
+    const q = adminDb
+      .collection('notifications')
+      .where('userId', '==', userId)
+      .where('read', '==', false);
 
-    const snapshot = await getDocs(q);
+    const snapshot = await q.get();
     
     // Mark all as read
     const updatePromises = snapshot.docs.map(async (document) => {
-      await updateDoc(doc(db, 'notifications', document.id), {
-        read: true,
-      });
+      await adminDb
+        .collection('notifications')
+        .doc(document.id)
+        .update({ read: true });
     });
 
     await Promise.all(updatePromises);
