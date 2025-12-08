@@ -4,10 +4,10 @@ import { useAuth } from '@/app/contexts/AuthContext';
 import { PodcastGuestWishlist } from '@/app/types/guest';
 import { Podcast } from '@/app/types/podcast';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 type TabType = 'registered' | 'prospects' | 'invited';
@@ -15,6 +15,8 @@ type TabType = 'registered' | 'prospects' | 'invited';
 export default function PodcastGuestWishlistPage() {
   const { userData, loading: authLoading } = useAuth();
   const router = useRouter();
+  const params = useParams();
+  const podcastId = params.podcastId as string;
 
   const [podcast, setPodcast] = useState<Podcast | null>(null);
   const [wishlists, setWishlists] = useState<PodcastGuestWishlist[]>([]);
@@ -24,32 +26,39 @@ export default function PodcastGuestWishlistPage() {
   const [showAddProspectModal, setShowAddProspectModal] = useState(false);
   const [editingWishlist, setEditingWishlist] = useState<PodcastGuestWishlist | null>(null);
 
-  // Redirect if user doesn't have a podcast
+  // Load podcast and verify ownership
   useEffect(() => {
-    if (!authLoading && userData?.uid) {
+    if (!authLoading && userData?.uid && podcastId) {
       loadPodcast();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userData, authLoading]);
+  }, [userData, authLoading, podcastId]);
 
   const loadPodcast = async () => {
-    if (!userData?.uid) return;
+    if (!userData?.uid || !podcastId) return;
 
     try {
-      // Find user's podcast
-      const podcastsRef = collection(db, 'podcasts');
-      const q = query(podcastsRef, where('ownerId', '==', userData.uid));
-      const querySnapshot = await getDocs(q);
+      // Fetch specific podcast
+      const podcastRef = doc(db, 'podcasts', podcastId);
+      const podcastSnap = await getDoc(podcastRef);
 
-      if (querySnapshot.empty) {
-        router.push('/dashboard');
+      if (!podcastSnap.exists()) {
+        setError('Podcast not found');
+        setLoading(false);
         return;
       }
 
       const podcastData = {
-        id: querySnapshot.docs[0].id,
-        ...querySnapshot.docs[0].data(),
+        id: podcastSnap.id,
+        ...podcastSnap.data(),
       } as Podcast;
+
+      // Verify ownership
+      if (podcastData.ownerId !== userData.uid) {
+        setError('Unauthorized: You do not own this podcast');
+        setLoading(false);
+        return;
+      }
 
       setPodcast(podcastData);
       loadWishlist(podcastData.id);
@@ -188,31 +197,28 @@ export default function PodcastGuestWishlistPage() {
             <nav className="flex -mb-px">
               <button
                 onClick={() => setActiveTab('registered')}
-                className={`px-6 py-4 text-sm font-semibold border-b-2 transition-colors ${
-                  activeTab === 'registered'
+                className={`px-6 py-4 text-sm font-semibold border-b-2 transition-colors ${activeTab === 'registered'
                     ? 'border-purple-600 text-purple-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
+                  }`}
               >
                 Registered Guests ({wishlists.filter((w) => w.isRegistered && !w.inviteSent).length})
               </button>
               <button
                 onClick={() => setActiveTab('prospects')}
-                className={`px-6 py-4 text-sm font-semibold border-b-2 transition-colors ${
-                  activeTab === 'prospects'
+                className={`px-6 py-4 text-sm font-semibold border-b-2 transition-colors ${activeTab === 'prospects'
                     ? 'border-purple-600 text-purple-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
+                  }`}
               >
                 Prospects ({wishlists.filter((w) => !w.isRegistered).length})
               </button>
               <button
                 onClick={() => setActiveTab('invited')}
-                className={`px-6 py-4 text-sm font-semibold border-b-2 transition-colors ${
-                  activeTab === 'invited'
+                className={`px-6 py-4 text-sm font-semibold border-b-2 transition-colors ${activeTab === 'invited'
                     ? 'border-purple-600 text-purple-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
+                  }`}
               >
                 Invited ({wishlists.filter((w) => w.inviteSent).length})
               </button>

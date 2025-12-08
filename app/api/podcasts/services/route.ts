@@ -19,17 +19,29 @@ export async function GET(request: NextRequest) {
 
     const ownerId = decodedToken.uid;
 
-    // Get podcast ID
-    const podcastSnapshot = await adminDb.collection('podcasts')
-      .where('ownerId', '==', ownerId)
-      .limit(1)
-      .get();
+    // Get podcast ID from query params or default to first owned podcast
+    const { searchParams } = new URL(request.url);
+    let podcastId = searchParams.get('podcastId');
 
-    if (podcastSnapshot.empty) {
-      return NextResponse.json({ error: 'Podcast not found' }, { status: 404 });
+    if (!podcastId) {
+      // Fallback to first podcast for backward compatibility
+      const podcastSnapshot = await adminDb.collection('podcasts')
+        .where('ownerId', '==', ownerId)
+        .limit(1)
+        .get();
+
+      if (podcastSnapshot.empty) {
+        return NextResponse.json({ error: 'Podcast not found' }, { status: 404 });
+      }
+
+      podcastId = podcastSnapshot.docs[0].id;
+    } else {
+      // Verify ownership of specified podcast
+      const podcastDoc = await adminDb.collection('podcasts').doc(podcastId).get();
+      if (!podcastDoc.exists || podcastDoc.data()?.ownerId !== ownerId) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+      }
     }
-
-    const podcastId = podcastSnapshot.docs[0].id;
 
     const servicesSnapshot = await adminDb.collection('podcasts')
       .doc(podcastId)

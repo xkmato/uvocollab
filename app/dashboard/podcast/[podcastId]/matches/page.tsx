@@ -4,12 +4,14 @@ import { useAuth } from '@/app/contexts/AuthContext';
 import { Match } from '@/app/types/match';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 
 export default function PodcastMatchesPage() {
   const { user, userData, loading: authLoading } = useAuth();
   const router = useRouter();
+  const params = useParams();
+  const podcastId = params.podcastId as string;
 
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(true);
@@ -66,7 +68,7 @@ export default function PodcastMatchesPage() {
       setDismissingMatch(matchId);
       if (!user) return;
       const token = await user.getIdToken();
-      
+
       const response = await fetch('/api/matching/dismiss-match', {
         method: 'POST',
         headers: {
@@ -143,7 +145,7 @@ export default function PodcastMatchesPage() {
               </p>
             </div>
             <Link
-              href="/dashboard/podcast/guests"
+              href={`/dashboard/podcast/${podcastId}/guests`}
               className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
             >
               View Guest Wishlist

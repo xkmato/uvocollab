@@ -20,23 +20,21 @@ export async function GET(request: NextRequest) {
 
     const snapshot = await adminDb.collection('podcasts')
       .where('ownerId', '==', ownerId)
-      .limit(1)
       .get();
 
     if (snapshot.empty) {
-      return NextResponse.json({ podcast: null });
+      return NextResponse.json({ podcasts: [] });
     }
 
-    const doc = snapshot.docs[0];
-    const podcast = {
+    const podcasts = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
       // Convert timestamps to ISO strings for JSON serialization
       createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || doc.data().createdAt,
       updatedAt: doc.data().updatedAt?.toDate?.()?.toISOString() || doc.data().updatedAt,
-    };
+    }));
 
-    return NextResponse.json({ podcast });
+    return NextResponse.json({ podcasts });
   } catch (error) {
     console.error('Error fetching podcast:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -60,18 +58,23 @@ export async function PUT(request: NextRequest) {
 
     const ownerId = decodedToken.uid;
     const body = await request.json();
+    const { podcastId } = body;
+
+    if (!podcastId) {
+      return NextResponse.json({ error: 'Podcast ID is required' }, { status: 400 });
+    }
 
     // Get the podcast to ensure ownership
-    const snapshot = await adminDb.collection('podcasts')
-      .where('ownerId', '==', ownerId)
-      .limit(1)
-      .get();
+    const docRef = adminDb.collection('podcasts').doc(podcastId);
+    const doc = await docRef.get();
 
-    if (snapshot.empty) {
+    if (!doc.exists) {
       return NextResponse.json({ error: 'Podcast not found' }, { status: 404 });
     }
 
-    const docRef = snapshot.docs[0].ref;
+    if (doc.data()?.ownerId !== ownerId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+    }
     
     // Fields allowed to be updated
     const { title, description, coverImageUrl, categories, avgListeners, rssFeedUrl, websiteUrl, platformLinks } = body;

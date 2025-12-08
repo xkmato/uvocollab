@@ -21,18 +21,30 @@ export async function GET(request: NextRequest) {
 
         const userId = decodedToken.uid;
 
-        // Find the podcast owned by this user
-        const podcastsSnapshot = await adminDb
-            .collection('podcasts')
-            .where('ownerId', '==', userId)
-            .limit(1)
-            .get();
+        // Get podcast ID from query params or default to first owned podcast
+        const { searchParams } = new URL(request.url);
+        let podcastId = searchParams.get('podcastId');
 
-        if (podcastsSnapshot.empty) {
-            return NextResponse.json({ pitches: [] });
+        if (!podcastId) {
+            // Fallback to first podcast for backward compatibility
+            const podcastsSnapshot = await adminDb
+                .collection('podcasts')
+                .where('ownerId', '==', userId)
+                .limit(1)
+                .get();
+
+            if (podcastsSnapshot.empty) {
+                return NextResponse.json({ pitches: [] });
+            }
+
+            podcastId = podcastsSnapshot.docs[0].id;
+        } else {
+            // Verify ownership of specified podcast
+            const podcastDoc = await adminDb.collection('podcasts').doc(podcastId).get();
+            if (!podcastDoc.exists || podcastDoc.data()?.ownerId !== userId) {
+                return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+            }
         }
-
-        const podcastId = podcastsSnapshot.docs[0].id;
 
         // Fetch collaborations for this podcast
         const collaborationsSnapshot = await adminDb
