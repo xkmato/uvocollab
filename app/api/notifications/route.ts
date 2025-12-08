@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { adminDb } from '@/lib/firebase-admin';
 import { CreateNotificationData, Notification } from '@/app/types/notification';
+import { adminDb } from '@/lib/firebase-admin';
 import { FieldValue } from 'firebase-admin/firestore';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * GET /api/notifications
