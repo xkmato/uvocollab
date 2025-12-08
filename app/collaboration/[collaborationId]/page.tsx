@@ -1,13 +1,13 @@
 'use client';
 
+import CollaborationFeedbackForm from '@/app/components/CollaborationFeedbackForm';
 import CommunicationThread from '@/app/components/CommunicationThread';
 import FileSharing from '@/app/components/FileSharing';
-import SchedulingInterface from '@/app/components/SchedulingInterface';
-import RescheduleInterface from '@/app/components/RescheduleInterface';
-import RecordingLinkManager from '@/app/components/RecordingLinkManager';
 import MarkRecordingComplete from '@/app/components/MarkRecordingComplete';
+import RecordingLinkManager from '@/app/components/RecordingLinkManager';
 import ReleaseEpisode from '@/app/components/ReleaseEpisode';
-import CollaborationFeedbackForm from '@/app/components/CollaborationFeedbackForm';
+import RescheduleInterface from '@/app/components/RescheduleInterface';
+import SchedulingInterface from '@/app/components/SchedulingInterface';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { Collaboration } from '@/app/types/collaboration';
 import { Service } from '@/app/types/service';
@@ -88,7 +88,7 @@ export default function CollaborationHub() {
             if (collabData.type === 'guest_appearance') {
                 // For guest appearances, check if user is guest or podcast owner
                 hasAccess = collabData.guestId === user.uid || collabData.buyerId === user.uid;
-                
+
                 // Load guest and podcast data
                 if (collabData.guestId) {
                     const guestQuery = query(collection(db, 'users'), where('uid', '==', collabData.guestId));
@@ -97,13 +97,13 @@ export default function CollaborationHub() {
                         setGuest(guestSnap.docs[0].data() as User);
                     }
                 }
-                
+
                 if (collabData.podcastId) {
                     const podcastDoc = await getDoc(doc(db, 'podcasts', collabData.podcastId));
                     if (podcastDoc.exists()) {
                         const podcastData = { id: podcastDoc.id, ...podcastDoc.data() };
                         setPodcast(podcastData);
-                        
+
                         if ((podcastData as any).userId) {
                             const ownerQuery = query(collection(db, 'users'), where('uid', '==', (podcastData as any).userId));
                             const ownerSnap = await getDocs(ownerQuery);
@@ -220,7 +220,7 @@ export default function CollaborationHub() {
                 }
             ];
         }
-        
+
         if (collab.type === 'podcast') {
             return [
                 {
@@ -312,7 +312,7 @@ export default function CollaborationHub() {
     const isLegend = user?.uid === collaboration.legendId;
     const isGuest = collaboration.type === 'guest_appearance' && user?.uid === collaboration.guestId;
     const isPodcastOwner = collaboration.type === 'guest_appearance' && podcast && user?.uid === podcast.userId;
-    
+
     // Determine the other party based on collaboration type
     let otherParty;
     if (collaboration.type === 'guest_appearance') {
@@ -362,7 +362,7 @@ export default function CollaborationHub() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 pt-20">
             {/* Header */}
             <div className="bg-white border-b">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -477,7 +477,7 @@ export default function CollaborationHub() {
                         {collaboration.type === 'guest_appearance' && (
                             <div className="bg-white rounded-lg shadow p-6">
                                 <h2 className="text-xl font-bold text-gray-900 mb-4">Guest Appearance Details</h2>
-                                
+
                                 <div className="space-y-4">
                                     {/* Topics */}
                                     {collaboration.agreedTopics && collaboration.agreedTopics.length > 0 && (
@@ -495,7 +495,7 @@ export default function CollaborationHub() {
                                             </div>
                                         </div>
                                     )}
-                                    
+
                                     {/* Recording Schedule */}
                                     {collaboration.schedulingDetails && (
                                         <div className="border-t pt-4">
@@ -520,7 +520,7 @@ export default function CollaborationHub() {
                                             </div>
                                         </div>
                                     )}
-                                    
+
                                     {/* Recording Link */}
                                     {collaboration.recordingUrl && (
                                         <div className="border-t pt-4">
@@ -535,7 +535,7 @@ export default function CollaborationHub() {
                                             </a>
                                         </div>
                                     )}
-                                    
+
                                     {/* Prep Notes */}
                                     {collaboration.prepNotes && (
                                         <div className="border-t pt-4">
@@ -545,7 +545,7 @@ export default function CollaborationHub() {
                                             </div>
                                         </div>
                                     )}
-                                    
+
                                     {/* Episode Release */}
                                     {collaboration.episodeUrl && (
                                         <div className="border-t pt-4">
@@ -569,7 +569,7 @@ export default function CollaborationHub() {
                                             )}
                                         </div>
                                     )}
-                                    
+
                                     {/* Next Steps based on status */}
                                     {collaboration.status === 'pending_agreement' && (
                                         <div className="border-t pt-4">
@@ -586,7 +586,7 @@ export default function CollaborationHub() {
                                             </div>
                                         </div>
                                     )}
-                                    
+
                                 </div>
                             </div>
                         )}
@@ -625,7 +625,7 @@ export default function CollaborationHub() {
                         {collaboration.type === 'guest_appearance' && userData && collaboration.buyerId === userData.uid && (
                             <div className="bg-white rounded-lg shadow p-6">
                                 <h2 className="text-xl font-bold text-gray-900 mb-4">Post-Recording Actions</h2>
-                                
+
                                 {/* Mark Recording Complete */}
                                 {(collaboration.status === 'scheduled' || collaboration.status === 'in_progress') && (
                                     <div className="mb-4">
@@ -669,10 +669,10 @@ export default function CollaborationHub() {
                         {collaboration.status === 'completed' && userData && (
                             <div className="bg-white rounded-lg shadow p-6">
                                 <h2 className="text-xl font-bold text-gray-900 mb-4">Feedback & Rating</h2>
-                                
+
                                 <p className="text-sm text-gray-600 mb-4">
                                     Share your experience working with{' '}
-                                    {collaboration.type === 'guest_appearance' 
+                                    {collaboration.type === 'guest_appearance'
                                         ? (collaboration.guestId === userData.uid ? podcastOwner?.displayName : guest?.displayName)
                                         : (isBuyer ? legend?.displayName : buyer?.displayName)
                                     }

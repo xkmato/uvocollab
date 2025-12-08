@@ -165,7 +165,7 @@ export default function PodcastGuestWishlistPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 py-8 pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
@@ -198,8 +198,8 @@ export default function PodcastGuestWishlistPage() {
               <button
                 onClick={() => setActiveTab('registered')}
                 className={`px-6 py-4 text-sm font-semibold border-b-2 transition-colors ${activeTab === 'registered'
-                    ? 'border-purple-600 text-purple-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-purple-600 text-purple-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
               >
                 Registered Guests ({wishlists.filter((w) => w.isRegistered && !w.inviteSent).length})
@@ -207,8 +207,8 @@ export default function PodcastGuestWishlistPage() {
               <button
                 onClick={() => setActiveTab('prospects')}
                 className={`px-6 py-4 text-sm font-semibold border-b-2 transition-colors ${activeTab === 'prospects'
-                    ? 'border-purple-600 text-purple-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-purple-600 text-purple-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
               >
                 Prospects ({wishlists.filter((w) => !w.isRegistered).length})
@@ -216,8 +216,8 @@ export default function PodcastGuestWishlistPage() {
               <button
                 onClick={() => setActiveTab('invited')}
                 className={`px-6 py-4 text-sm font-semibold border-b-2 transition-colors ${activeTab === 'invited'
-                    ? 'border-purple-600 text-purple-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-purple-600 text-purple-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
               >
                 Invited ({wishlists.filter((w) => w.inviteSent).length})

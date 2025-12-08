@@ -133,9 +133,9 @@ export default function GuestCollaborationAgreement() {
             }
 
             // Check access: only guest and podcast owner can view
-            const hasAccess = collabData.guestId === user.uid || 
-                             (podcast && podcast.userId === user.uid);
-            
+            const hasAccess = collabData.guestId === user.uid ||
+                (podcast && podcast.userId === user.uid);
+
             if (!hasAccess) {
                 setAccessDenied(true);
                 setLoadingData(false);
@@ -319,7 +319,7 @@ export default function GuestCollaborationAgreement() {
     const paymentDirection = (collaboration as Collaboration & { paymentDirection?: string }).paymentDirection;
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12">
+        <div className="min-h-screen bg-gray-50 py-12 pt-20">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="bg-white rounded-lg shadow-md p-6 mb-6">
@@ -341,7 +341,7 @@ export default function GuestCollaborationAgreement() {
                 {/* Collaboration Details */}
                 <div className="bg-white rounded-lg shadow-md p-6 mb-6">
                     <h2 className="text-xl font-bold text-gray-900 mb-4">Collaboration Details</h2>
-                    
+
                     <div className="space-y-4">
                         {/* Parties */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -456,9 +456,8 @@ export default function GuestCollaborationAgreement() {
                                 return (
                                     <div
                                         key={index}
-                                        className={`border-l-4 pl-4 ${
-                                            isCurrentUser ? 'border-indigo-500' : 'border-gray-300'
-                                        }`}
+                                        className={`border-l-4 pl-4 ${isCurrentUser ? 'border-indigo-500' : 'border-gray-300'
+                                            }`}
                                     >
                                         <div className="flex justify-between items-start mb-2">
                                             <p className="font-semibold">
@@ -497,7 +496,7 @@ export default function GuestCollaborationAgreement() {
                 {showNegotiation && canRespond && (
                     <div className="bg-white rounded-lg shadow-md p-6 mb-6">
                         <h2 className="text-xl font-bold text-gray-900 mb-4">Submit Counter-Offer</h2>
-                        
+
                         <div className="space-y-4">
                             {/* Price */}
                             <div>
