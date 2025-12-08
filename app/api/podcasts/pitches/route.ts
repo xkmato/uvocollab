@@ -59,6 +59,7 @@ export async function GET(request: NextRequest) {
 
             // Fetch service details
             let serviceTitle = 'Unknown Service';
+            let serviceType = 'guest_spot';
             if (data.serviceId) {
                 const serviceDoc = await adminDb
                     .collection('podcasts')
@@ -67,7 +68,9 @@ export async function GET(request: NextRequest) {
                     .doc(data.serviceId)
                     .get();
                 if (serviceDoc.exists) {
-                    serviceTitle = serviceDoc.data()?.title || 'Unknown Service';
+                    const serviceData = serviceDoc.data();
+                    serviceTitle = serviceData?.title || 'Unknown Service';
+                    serviceType = serviceData?.type || 'guest_spot';
                 }
             }
 
@@ -77,6 +80,7 @@ export async function GET(request: NextRequest) {
                 buyerName,
                 buyerEmail,
                 serviceTitle,
+                serviceType,
                 // Convert timestamps to ISO strings
                 createdAt: data.createdAt?.toDate().toISOString(),
                 updatedAt: data.updatedAt?.toDate().toISOString(),

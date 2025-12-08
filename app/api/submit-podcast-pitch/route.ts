@@ -29,20 +29,21 @@ export async function POST(request: NextRequest) {
             podcastId,
             serviceId,
             price,
+            // Guest spot fields
             topicProposal,
             guestBio,
             previousMediaUrl,
             proposedDates,
             pressKitUrl,
+            // Cross-promotion fields
+            crossPromoPodcastId,
+            crossPromoMessage,
+            // Ad read fields
+            adProductName,
+            adProductDescription,
+            adTargetAudience,
+            adProductUrl,
         } = body;
-
-        // Validate required fields
-        if (!podcastId || !serviceId || !topicProposal || !guestBio || !previousMediaUrl || !proposedDates) {
-            return NextResponse.json(
-                { error: 'Missing required fields' },
-                { status: 400 }
-            );
-        }
 
         // Validate price
         if (price < 0) {
@@ -93,6 +94,7 @@ export async function POST(request: NextRequest) {
         }
 
         const serviceData = serviceDoc.data();
+        const serviceType = serviceData?.type || 'guest_spot';
         
         // Verify the price matches
         if (serviceData?.price !== price) {
@@ -102,26 +104,59 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Create the collaboration document
+        // Validate required fields based on service type
+        if (serviceType === 'guest_spot' || serviceType === 'other') {
+            if (!topicProposal || !guestBio || !previousMediaUrl || !proposedDates) {
+                return NextResponse.json(
+                    { error: 'Missing required fields for guest spot' },
+                    { status: 400 }
+                );
+            }
+        } else if (serviceType === 'cross_promotion') {
+            if (!crossPromoPodcastId || !crossPromoMessage) {
+                return NextResponse.json(
+                    { error: 'Missing required fields for cross-promotion' },
+                    { status: 400 }
+                );
+            }
+        } else if (serviceType === 'ad_read') {
+            if (!adProductName || !adProductDescription) {
+                return NextResponse.json(
+                    { error: 'Missing required fields for ad read' },
+                    { status: 400 }
+                );
+            }
+        }
+
+        // Create the collaboration document with type-specific fields
         const collaborationData: CreateCollaborationData = {
             type: 'podcast',
             buyerId,
             podcastId,
             serviceId,
             price,
-            topicProposal: topicProposal.trim(),
-            guestBio: guestBio.trim(),
-            pitchBestWorkUrl: previousMediaUrl.trim(), // Mapping previousMediaUrl to pitchBestWorkUrl for consistency or use a new field
-            proposedDates: proposedDates.trim(),
-            pressKitUrl: pressKitUrl || null,
         };
 
-        // Note: I'm using pitchBestWorkUrl to store previousMediaUrl to reuse some frontend logic if needed, 
-        // but I also added specific fields to the type. 
-        // Let's make sure we save all specific fields.
+        // Add fields based on service type
+        if (serviceType === 'guest_spot' || serviceType === 'other') {
+            collaborationData.topicProposal = topicProposal?.trim();
+            collaborationData.guestBio = guestBio?.trim();
+            collaborationData.previousMediaUrl = previousMediaUrl?.trim();
+            collaborationData.pitchBestWorkUrl = previousMediaUrl?.trim();
+            collaborationData.proposedDates = proposedDates?.trim();
+            collaborationData.pressKitUrl = pressKitUrl || null;
+        } else if (serviceType === 'cross_promotion') {
+            collaborationData.crossPromoPodcastId = crossPromoPodcastId;
+            collaborationData.crossPromoMessage = crossPromoMessage?.trim();
+        } else if (serviceType === 'ad_read') {
+            collaborationData.adProductName = adProductName?.trim();
+            collaborationData.adProductDescription = adProductDescription?.trim();
+            collaborationData.adTargetAudience = adTargetAudience?.trim();
+            collaborationData.adProductUrl = adProductUrl?.trim();
+        }
+
         const dbData = {
             ...collaborationData,
-            previousMediaUrl: previousMediaUrl.trim(), // Explicitly save it if needed, though pitchBestWorkUrl might be enough
             status: 'pending_review' as const,
             createdAt: new Date(),
             updatedAt: new Date(),
@@ -150,7 +185,8 @@ export async function POST(request: NextRequest) {
                     buyerName,
                     podcastData.title,
                     serviceData?.title,
-                    topicProposal.trim()
+                    serviceType,
+                    collaborationData
                 );
             } catch (emailError) {
                 console.error('Failed to send notification email:', emailError);
@@ -177,11 +213,40 @@ async function sendNewPodcastPitchNotification(
     buyerName: string,
     podcastTitle: string,
     serviceTitle: string,
-    topicProposal: string
+    serviceType: string,
+    collaborationData: CreateCollaborationData
 ): Promise<void> {
     const subject = `🎙️ New Collaboration Request for ${podcastTitle}`;
     
     const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://uvocollab.com'}/dashboard/podcast`;
+    
+    // Build details based on service type
+    let detailsText = '';
+    let detailsHtml = '';
+
+    if (serviceType === 'guest_spot' || serviceType === 'other') {
+        detailsText = `Topic Proposal:\n"${collaborationData.topicProposal}"\n\nGuest Bio:\n${collaborationData.guestBio}`;
+        detailsHtml = `
+            <h3>Topic Proposal:</h3>
+            <div class="message-box">"${collaborationData.topicProposal}"</div>
+            <h3>Guest Bio:</h3>
+            <div class="pitch-details"><p>${collaborationData.guestBio}</p></div>
+        `;
+    } else if (serviceType === 'cross_promotion') {
+        detailsText = `Message:\n"${collaborationData.crossPromoMessage}"`;
+        detailsHtml = `
+            <h3>Cross-Promotion Message:</h3>
+            <div class="message-box">"${collaborationData.crossPromoMessage}"</div>
+        `;
+    } else if (serviceType === 'ad_read') {
+        detailsText = `Product: ${collaborationData.adProductName}\n\nDescription:\n${collaborationData.adProductDescription}`;
+        detailsHtml = `
+            <h3>Product:</h3>
+            <p><strong>${collaborationData.adProductName}</strong></p>
+            <h3>Description:</h3>
+            <div class="pitch-details"><p>${collaborationData.adProductDescription}</p></div>
+        `;
+    }
     
     const text = `
 Hello ${ownerName},
@@ -190,8 +255,7 @@ You have a new collaboration request for ${podcastTitle} from ${buyerName}!
 
 Service Requested: ${serviceTitle}
 
-Topic Proposal:
-"${topicProposal}"
+${detailsText}
 
 To review this pitch, visit your Podcast Dashboard:
 ${dashboardUrl}
@@ -237,10 +301,7 @@ The UvoCollab Team
       <p><strong>${serviceTitle}</strong></p>
     </div>
     
-    <h3>Topic Proposal:</h3>
-    <div class="message-box">
-      "${topicProposal}"
-    </div>
+    ${detailsHtml}
     
     <p>To review this pitch, visit your Podcast Dashboard:</p>
     

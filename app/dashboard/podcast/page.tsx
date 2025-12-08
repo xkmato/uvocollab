@@ -15,7 +15,7 @@ export default function PodcastDashboard() {
 
     const [podcast, setPodcast] = useState<Podcast | null>(null);
     const [services, setServices] = useState<PodcastService[]>([]);
-    const [pitches, setPitches] = useState<(Collaboration & { buyerName?: string; serviceTitle?: string })[]>([]);
+    const [pitches, setPitches] = useState<(Collaboration & { buyerName?: string; serviceTitle?: string; serviceType?: string })[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -308,10 +308,10 @@ export default function PodcastDashboard() {
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <span className={`px-2 py-1 text-xs font-medium rounded-full ${pitch.status === 'pending_review' ? 'bg-yellow-100 text-yellow-800' :
-                                                        pitch.status === 'pending_payment' ? 'bg-blue-100 text-blue-800' :
-                                                            pitch.status === 'in_progress' ? 'bg-green-100 text-green-800' :
-                                                                pitch.status === 'completed' ? 'bg-gray-100 text-gray-800' :
-                                                                    'bg-red-100 text-red-800'
+                                                    pitch.status === 'pending_payment' ? 'bg-blue-100 text-blue-800' :
+                                                        pitch.status === 'in_progress' ? 'bg-green-100 text-green-800' :
+                                                            pitch.status === 'completed' ? 'bg-gray-100 text-gray-800' :
+                                                                'bg-red-100 text-red-800'
                                                     }`}>
                                                     {pitch.status.replace('_', ' ')}
                                                 </span>
@@ -319,40 +319,97 @@ export default function PodcastDashboard() {
                                         </div>
 
                                         <div className="bg-gray-50 p-4 rounded-md mb-4 space-y-3">
-                                            <div>
-                                                <h4 className="text-sm font-semibold text-gray-700">Topic Proposal:</h4>
-                                                <p className="text-gray-800 mt-1">{pitch.topicProposal}</p>
-                                            </div>
-                                            {pitch.guestBio && (
-                                                <div>
-                                                    <h4 className="text-sm font-semibold text-gray-700">Guest Bio:</h4>
-                                                    <p className="text-gray-800 mt-1 text-sm">{pitch.guestBio}</p>
-                                                </div>
+                                            {/* Guest Spot / Other Service Details */}
+                                            {(pitch.serviceType === 'guest_spot' || pitch.serviceType === 'other' || !pitch.serviceType) && (
+                                                <>
+                                                    {pitch.topicProposal && (
+                                                        <div>
+                                                            <h4 className="text-sm font-semibold text-gray-700">Topic Proposal:</h4>
+                                                            <p className="text-gray-800 mt-1">{pitch.topicProposal}</p>
+                                                        </div>
+                                                    )}
+                                                    {pitch.guestBio && (
+                                                        <div>
+                                                            <h4 className="text-sm font-semibold text-gray-700">Guest Bio:</h4>
+                                                            <p className="text-gray-800 mt-1 text-sm">{pitch.guestBio}</p>
+                                                        </div>
+                                                    )}
+                                                    {pitch.pitchBestWorkUrl && (
+                                                        <div>
+                                                            <h4 className="text-sm font-semibold text-gray-700">Previous Work / Links:</h4>
+                                                            <a href={pitch.pitchBestWorkUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm break-all">
+                                                                {pitch.pitchBestWorkUrl}
+                                                            </a>
+                                                        </div>
+                                                    )}
+                                                    {pitch.proposedDates && (
+                                                        <div>
+                                                            <h4 className="text-sm font-semibold text-gray-700">Proposed Dates:</h4>
+                                                            <p className="text-gray-800 mt-1 text-sm">{pitch.proposedDates}</p>
+                                                        </div>
+                                                    )}
+                                                    {pitch.pressKitUrl && (
+                                                        <div>
+                                                            <h4 className="text-sm font-semibold text-gray-700">Press Kit / Audio:</h4>
+                                                            <a href={pitch.pressKitUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm flex items-center gap-1">
+                                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                                </svg>
+                                                                View File
+                                                            </a>
+                                                        </div>
+                                                    )}
+                                                </>
                                             )}
-                                            {pitch.pitchBestWorkUrl && (
-                                                <div>
-                                                    <h4 className="text-sm font-semibold text-gray-700">Previous Work / Links:</h4>
-                                                    <a href={pitch.pitchBestWorkUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm break-all">
-                                                        {pitch.pitchBestWorkUrl}
-                                                    </a>
-                                                </div>
+
+                                            {/* Cross-Promotion Details */}
+                                            {pitch.serviceType === 'cross_promotion' && (
+                                                <>
+                                                    {pitch.crossPromoPodcastId && (
+                                                        <div>
+                                                            <h4 className="text-sm font-semibold text-gray-700">Their Podcast ID:</h4>
+                                                            <p className="text-gray-800 mt-1 text-sm font-mono">{pitch.crossPromoPodcastId}</p>
+                                                        </div>
+                                                    )}
+                                                    {pitch.crossPromoMessage && (
+                                                        <div>
+                                                            <h4 className="text-sm font-semibold text-gray-700">Cross-Promotion Message:</h4>
+                                                            <p className="text-gray-800 mt-1">{pitch.crossPromoMessage}</p>
+                                                        </div>
+                                                    )}
+                                                </>
                                             )}
-                                            {pitch.proposedDates && (
-                                                <div>
-                                                    <h4 className="text-sm font-semibold text-gray-700">Proposed Dates:</h4>
-                                                    <p className="text-gray-800 mt-1 text-sm">{pitch.proposedDates}</p>
-                                                </div>
-                                            )}
-                                            {pitch.pressKitUrl && (
-                                                <div>
-                                                    <h4 className="text-sm font-semibold text-gray-700">Press Kit / Audio:</h4>
-                                                    <a href={pitch.pressKitUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm flex items-center gap-1">
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                                        </svg>
-                                                        View File
-                                                    </a>
-                                                </div>
+
+                                            {/* Ad Read Details */}
+                                            {pitch.serviceType === 'ad_read' && (
+                                                <>
+                                                    {pitch.adProductName && (
+                                                        <div>
+                                                            <h4 className="text-sm font-semibold text-gray-700">Product/Service:</h4>
+                                                            <p className="text-gray-800 mt-1 font-medium">{pitch.adProductName}</p>
+                                                        </div>
+                                                    )}
+                                                    {pitch.adProductDescription && (
+                                                        <div>
+                                                            <h4 className="text-sm font-semibold text-gray-700">Description:</h4>
+                                                            <p className="text-gray-800 mt-1">{pitch.adProductDescription}</p>
+                                                        </div>
+                                                    )}
+                                                    {pitch.adTargetAudience && (
+                                                        <div>
+                                                            <h4 className="text-sm font-semibold text-gray-700">Target Audience:</h4>
+                                                            <p className="text-gray-800 mt-1 text-sm">{pitch.adTargetAudience}</p>
+                                                        </div>
+                                                    )}
+                                                    {pitch.adProductUrl && (
+                                                        <div>
+                                                            <h4 className="text-sm font-semibold text-gray-700">Product Website:</h4>
+                                                            <a href={pitch.adProductUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm break-all">
+                                                                {pitch.adProductUrl}
+                                                            </a>
+                                                        </div>
+                                                    )}
+                                                </>
                                             )}
                                         </div>
 

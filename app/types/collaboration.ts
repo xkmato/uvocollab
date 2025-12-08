@@ -45,6 +45,17 @@ export interface Collaboration {
   guestBio?: string; // Bio of the guest
   proposedDates?: string; // Proposed dates for recording
   pressKitUrl?: string; // URL to press kit or audio sample
+  previousMediaUrl?: string; // Previous media/links for guest spot
+
+  // Cross-Promotion Specific Fields
+  crossPromoPodcastId?: string; // ID of requester's podcast for cross-promotion
+  crossPromoMessage?: string; // Message about cross-promotion opportunity
+
+  // Ad Read Specific Fields
+  adProductName?: string; // Name of product/service to advertise
+  adProductDescription?: string; // Description of the product/service
+  adTargetAudience?: string; // Target audience for the ad
+  adProductUrl?: string; // URL to product/service website
 
   // Guest Appearance Specific Fields
   guestId?: string; // UID of the guest (for guest_appearance type)
@@ -113,6 +124,17 @@ export interface CreateCollaborationData {
   guestBio?: string;
   proposedDates?: string;
   pressKitUrl?: string;
+  previousMediaUrl?: string;
+
+  // Cross-Promotion
+  crossPromoPodcastId?: string;
+  crossPromoMessage?: string;
+
+  // Ad Read
+  adProductName?: string;
+  adProductDescription?: string;
+  adTargetAudience?: string;
+  adProductUrl?: string;
 
   // Guest Appearance
   guestId?: string;
