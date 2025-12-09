@@ -13,19 +13,19 @@ let isInitialized = false;
 if (!getApps().length) {
   // Check if we have individual service account credentials
   const hasIndividualCredentials = 
-    process.env.FIREBASE_PROJECT_ID &&
-    process.env.FIREBASE_PRIVATE_KEY &&
-    process.env.FIREBASE_CLIENT_EMAIL;
+    process.env.BE_FIREBASE_PROJECT_ID &&
+    process.env.BE_FIREBASE_PRIVATE_KEY &&
+    process.env.BE_FIREBASE_CLIENT_EMAIL;
 
   // Try to get service account from JSON string or individual env vars
   let serviceAccount;
-  if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
-    serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+  if (process.env.BE_FIREBASE_SERVICE_ACCOUNT_KEY) {
+    serviceAccount = JSON.parse(process.env.BE_FIREBASE_SERVICE_ACCOUNT_KEY);
   } else if (hasIndividualCredentials) {
     serviceAccount = {
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      projectId: process.env.BE_FIREBASE_PROJECT_ID,
+      privateKey: process.env.BE_FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+      clientEmail: process.env.BE_FIREBASE_CLIENT_EMAIL,
     };
   }
 
@@ -33,7 +33,7 @@ if (!getApps().length) {
     serviceAccount
       ? {
           credential: cert(serviceAccount),
-          projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || process.env.FIREBASE_PROJECT_ID,
+          projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || process.env.BE_FIREBASE_PROJECT_ID,
         }
       : {
           projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
