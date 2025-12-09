@@ -84,10 +84,20 @@ export default function RegisterPodcast() {
             });
 
             if (!response.ok) {
-                const err = await response.json();
-                throw new Error(err?.error || 'Failed to submit podcast');
+                // Check if response is JSON before parsing
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const err = await response.json();
+                    throw new Error(err?.error || 'Failed to submit podcast');
+                } else {
+                    // Server returned HTML or other non-JSON response (likely an error page)
+                    const text = await response.text();
+                    console.error('Non-JSON response from server:', text.substring(0, 200));
+                    throw new Error(`Server error (${response.status}): Unable to submit podcast. Please try again.`);
+                }
             }
 
+            const result = await response.json();
             setSuccess(true);
             // Redirect after a delay? Or just show success message.
             // router.push('/dashboard'); 
