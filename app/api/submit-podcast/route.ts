@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
 
     // Notify Admins for vetting — fallback to support email
     try {
-      const adminEmail = process.env.SUPPORT_EMAIL || 'support@uvocollab.com';
+      const adminEmail = process.env.SUPPORT_EMAIL || 'hello@uvotamstudio.com';
       const subject = `New Podcast Submission: ${podcastData.title}`;
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://uvocollab.com';
       const text = `A new podcast submission has been created by ${ownerEmail}.

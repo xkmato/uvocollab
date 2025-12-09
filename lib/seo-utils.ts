@@ -55,7 +55,7 @@ export function generateOrganizationSchema(): OrganizationSchema {
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'Customer Support',
-      email: 'support@uvocollab.com',
+      email: 'hello@uvotamstudio.com',
     },
   };
 }

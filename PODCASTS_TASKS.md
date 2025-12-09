@@ -33,7 +33,7 @@ This epic covers the data structure and the flow for users to list their podcast
   - **Acceptance Criteria (AC):**
     - [x] Creates a document in `podcasts` collection with `status: 'pending'`.
     - [x] Updates the user's document to indicate they are a "Podcaster" (adds `hasPodcast: true` on users doc).
-    - [x] Sends a notification to Admins for vetting (sends email to `support@uvocollab.com` by default).
+    - [x] Sends a notification to Admins for vetting (sends email to `hello@uvotamstudio.com` by default).
   - **Status:** To Do
   - **Status:** Done
 

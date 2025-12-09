@@ -208,7 +208,7 @@ Best regards,
 The UvoCollab Team
 
 ---
-Questions? Reply to this email or contact us at support@uvocollab.com
+Questions? Reply to this email or contact us at hello@uvotamstudio.com
 `;
 
     const html = `
@@ -265,7 +265,7 @@ Questions? Reply to this email or contact us at support@uvocollab.com
     <p><strong>Best regards,</strong><br>The UvoCollab Team</p>
   </div>
   <div class="footer">
-    Questions? Reply to this email or contact us at support@uvocollab.com
+    Questions? Reply to this email or contact us at hello@uvotamstudio.com
   </div>
 </body>
 </html>

@@ -80,7 +80,7 @@ Best regards,
 The UvoCollab Team
 
 ---
-Questions? Reply to this email or contact us at support@uvocollab.com
+Questions? Reply to this email or contact us at hello@uvotamstudio.com
 `;
 
   const html = `
@@ -127,7 +127,7 @@ Questions? Reply to this email or contact us at support@uvocollab.com
     <p><strong>Best regards,</strong><br>The UvoCollab Team</p>
   </div>
   <div class="footer">
-    Questions? Reply to this email or contact us at support@uvocollab.com
+    Questions? Reply to this email or contact us at hello@uvotamstudio.com
   </div>
 </body>
 </html>
@@ -174,7 +174,7 @@ Best regards,
 The UvoCollab Team
 
 ---
-Questions? Reply to this email or contact us at support@uvocollab.com
+Questions? Reply to this email or contact us at hello@uvotamstudio.com
 `;
 
   const html = `
@@ -209,7 +209,7 @@ Questions? Reply to this email or contact us at support@uvocollab.com
     <p><strong>Best regards,</strong><br>The UvoCollab Team</p>
   </div>
   <div class="footer">
-    Questions? Reply to this email or contact us at support@uvocollab.com
+    Questions? Reply to this email or contact us at hello@uvotamstudio.com
   </div>
 </body>
 </html>
@@ -266,7 +266,7 @@ Best regards,
 The UvoCollab Team
 
 ---
-Questions? Reply to this email or contact us at support@uvocollab.com
+Questions? Reply to this email or contact us at hello@uvotamstudio.com
 `;
 
   const html = `
@@ -326,7 +326,7 @@ Questions? Reply to this email or contact us at support@uvocollab.com
     <p><strong>Best regards,</strong><br>The UvoCollab Team</p>
   </div>
   <div class="footer">
-    Questions? Reply to this email or contact us at support@uvocollab.com
+    Questions? Reply to this email or contact us at hello@uvotamstudio.com
   </div>
 </body>
 </html>
@@ -374,7 +374,7 @@ Best regards,
 The UvoCollab Team
 
 ---
-Questions? Reply to this email or contact us at support@uvocollab.com
+Questions? Reply to this email or contact us at hello@uvotamstudio.com
 `;
 
   const buyerHtml = `
@@ -434,7 +434,7 @@ Questions? Reply to this email or contact us at support@uvocollab.com
     <p><strong>Best regards,</strong><br>The UvoCollab Team</p>
   </div>
   <div class="footer">
-    Questions? Reply to this email or contact us at support@uvocollab.com
+    Questions? Reply to this email or contact us at hello@uvotamstudio.com
   </div>
 </body>
 </html>
@@ -466,7 +466,7 @@ Best regards,
 The UvoCollab Team
 
 ---
-Questions? Reply to this email or contact us at support@uvocollab.com
+Questions? Reply to this email or contact us at hello@uvotamstudio.com
 `;
 
   const legendHtml = `
@@ -526,7 +526,7 @@ Questions? Reply to this email or contact us at support@uvocollab.com
     <p><strong>Best regards,</strong><br>The UvoCollab Team</p>
   </div>
   <div class="footer">
-    Questions? Reply to this email or contact us at support@uvocollab.com
+    Questions? Reply to this email or contact us at hello@uvotamstudio.com
   </div>
 </body>
 </html>
@@ -575,7 +575,7 @@ Best regards,
 The UvoCollab Team
 
 ---
-Questions? Reply to this email or contact us at support@uvocollab.com
+Questions? Reply to this email or contact us at hello@uvotamstudio.com
 `;
 
   const html = `
@@ -633,7 +633,7 @@ Questions? Reply to this email or contact us at support@uvocollab.com
     <p><strong>Best regards,</strong><br>The UvoCollab Team</p>
   </div>
   <div class="footer">
-    Questions? Reply to this email or contact us at support@uvocollab.com
+    Questions? Reply to this email or contact us at hello@uvotamstudio.com
   </div>
 </body>
 </html>
@@ -678,7 +678,7 @@ Best regards,
 The UvoCollab Team
 
 ---
-Questions? Reply to this email or contact us at support@uvocollab.com
+Questions? Reply to this email or contact us at hello@uvotamstudio.com
 `;
 
   const html = `
@@ -735,7 +735,7 @@ Questions? Reply to this email or contact us at support@uvocollab.com
     <p><strong>Best regards,</strong><br>The UvoCollab Team</p>
   </div>
   <div class="footer">
-    Questions? Reply to this email or contact us at support@uvocollab.com
+    Questions? Reply to this email or contact us at hello@uvotamstudio.com
   </div>
 </body>
 </html>
@@ -762,7 +762,7 @@ Best regards,
 The UvoCollab Team
 
 ---
-Questions? Reply to this email or contact us at support@uvocollab.com`;
+Questions? Reply to this email or contact us at hello@uvotamstudio.com`;
   const html = `<p>Hello,</p>
 <p>Great news! Your podcast <strong>${podcastTitle}</strong> has been approved and is now visible on UvoCollab's marketplace.</p>
 <p>You can now manage your podcast listing and create collaboration services via your dashboard.</p>
@@ -790,7 +790,7 @@ Best regards,
 The UvoCollab Team
 
 ---
-Questions? Reply to this email or contact us at support@uvocollab.com`;
+Questions? Reply to this email or contact us at hello@uvotamstudio.com`;
   const html = `<p>Hello,</p>
 <p>Thank you for submitting your podcast <strong>${podcastTitle}</strong> to UvoCollab.</p>
 ${reason ? `<div style="background:#FEF3C7;padding:10px;border-left:4px solid #F59E0B;">${reason}</div>` : ''}
@@ -850,7 +850,7 @@ Best regards,
 The UvoCollab Team
 
 ---
-Questions? Reply to this email or contact us at support@uvocollab.com`;
+Questions? Reply to this email or contact us at hello@uvotamstudio.com`;
 
   const paymentHtml = offeredAmount > 0 
     ? `<div style="background:#D1FAE5;padding:15px;border-radius:5px;margin:20px 0;">
@@ -909,7 +909,7 @@ Questions? Reply to this email or contact us at support@uvocollab.com`;
     <p>Best regards,<br><strong>The UvoCollab Team</strong></p>
   </div>
   <div class="footer">
-    Questions? Reply to this email or contact us at support@uvocollab.com
+    Questions? Reply to this email or contact us at hello@uvotamstudio.com
   </div>
 </body>
 </html>`;
@@ -968,7 +968,7 @@ Best regards,
 The UvoCollab Team
 
 ---
-Questions? Reply to this email or contact us at support@uvocollab.com`;
+Questions? Reply to this email or contact us at hello@uvotamstudio.com`;
 
   const paymentHtml = recipientOffer === 0 && matchedOffer === 0
     ? `<div style="background:#DBEAFE;padding:15px;border-radius:5px;margin:20px 0;">
@@ -1035,7 +1035,7 @@ Questions? Reply to this email or contact us at support@uvocollab.com`;
     <p>Best regards,<br><strong>The UvoCollab Team</strong></p>
   </div>
   <div class="footer">
-    Questions? Reply to this email or contact us at support@uvocollab.com
+    Questions? Reply to this email or contact us at hello@uvotamstudio.com
   </div>
 </body>
 </html>`;
@@ -1091,7 +1091,7 @@ Best regards,
 The UvoCollab Team
 
 ---
-Questions? Reply to this email or contact us at support@uvocollab.com`;
+Questions? Reply to this email or contact us at hello@uvotamstudio.com`;
 
   const paymentHtml = proposedPrice === 0
     ? `<div style="background:#DBEAFE;padding:15px;border-radius:5px;margin:20px 0;">
@@ -1156,7 +1156,7 @@ Questions? Reply to this email or contact us at support@uvocollab.com`;
     <p>Best regards,<br><strong>The UvoCollab Team</strong></p>
   </div>
   <div class="footer">
-    Questions? Reply to this email or contact us at support@uvocollab.com
+    Questions? Reply to this email or contact us at hello@uvotamstudio.com
   </div>
 </body>
 </html>`;
@@ -1214,7 +1214,7 @@ Best regards,
 The UvoCollab Team
 
 ---
-Questions? Reply to this email or contact us at support@uvocollab.com`;
+Questions? Reply to this email or contact us at hello@uvotamstudio.com`;
 
   const topicsHtml = topics.length > 0 
     ? `<div style="margin:20px 0;">
@@ -1288,7 +1288,7 @@ Questions? Reply to this email or contact us at support@uvocollab.com`;
     <p>Best regards,<br><strong>The UvoCollab Team</strong></p>
   </div>
   <div class="footer">
-    Questions? Reply to this email or contact us at support@uvocollab.com
+    Questions? Reply to this email or contact us at hello@uvotamstudio.com
   </div>
 </body>
 </html>`;
@@ -1337,7 +1337,7 @@ Best regards,
 The UvoCollab Team
 
 ---
-Questions? Reply to this email or contact us at support@uvocollab.com`;
+Questions? Reply to this email or contact us at hello@uvotamstudio.com`;
 
   const paymentHtml = paymentReleased && paymentAmount
     ? `<div style="background:#D1FAE5;padding:20px;border-radius:5px;margin:20px 0;border-left:4px solid #10B981;">
@@ -1397,7 +1397,7 @@ Questions? Reply to this email or contact us at support@uvocollab.com`;
     <p>Best regards,<br><strong>The UvoCollab Team</strong></p>
   </div>
   <div class="footer">
-    Questions? Reply to this email or contact us at support@uvocollab.com
+    Questions? Reply to this email or contact us at hello@uvotamstudio.com
   </div>
 </body>
 </html>`;
@@ -1437,7 +1437,7 @@ Best regards,
 The UvoCollab Team
 
 ---
-Questions? Reply to this email or contact us at support@uvocollab.com`;
+Questions? Reply to this email or contact us at hello@uvotamstudio.com`;
 
   const benefitsHtml = verificationBenefits.length > 0
     ? `<div style="margin:20px 0;">
@@ -1489,7 +1489,7 @@ Questions? Reply to this email or contact us at support@uvocollab.com`;
     <p>Best regards,<br><strong>The UvoCollab Team</strong></p>
   </div>
   <div class="footer">
-    Questions? Reply to this email or contact us at support@uvocollab.com
+    Questions? Reply to this email or contact us at hello@uvotamstudio.com
   </div>
 </body>
 </html>`;
@@ -1530,7 +1530,7 @@ Best regards,
 The UvoCollab Team
 
 ---
-Questions? Reply to this email or contact us at support@uvocollab.com`;
+Questions? Reply to this email or contact us at hello@uvotamstudio.com`;
 
   const suggestionsHtml = improvementSuggestions.length > 0
     ? `<div style="background:#EEF2FF;padding:20px;border-radius:5px;margin:20px 0;border-left:4px solid #667eea;">
@@ -1578,7 +1578,7 @@ Questions? Reply to this email or contact us at support@uvocollab.com`;
     <p>Best regards,<br><strong>The UvoCollab Team</strong></p>
   </div>
   <div class="footer">
-    Questions? Reply to this email or contact us at support@uvocollab.com
+    Questions? Reply to this email or contact us at hello@uvotamstudio.com
   </div>
 </body>
 </html>`;
