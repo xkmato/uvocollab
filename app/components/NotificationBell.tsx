@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { markAllNotificationsAsRead, markNotificationsAsRead } from '@/lib/notification-utils';
+import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { Notification } from '../types/notification';
-import { markNotificationsAsRead, markAllNotificationsAsRead } from '@/lib/notification-utils';
-import Link from 'next/link';
 
 export default function NotificationBell() {
   const { user } = useAuth();
@@ -20,7 +20,12 @@ export default function NotificationBell() {
 
     try {
       setLoading(true);
-      const response = await fetch(`/api/notifications?userId=${user.uid}&limit=10`);
+      const idToken = await user.getIdToken();
+      const response = await fetch(`/api/notifications?limit=10`, {
+        headers: {
+          'Authorization': `Bearer ${idToken}`,
+        },
+      });
       if (response.ok) {
         const data = await response.json();
         setNotifications(data.notifications || []);
@@ -58,7 +63,8 @@ export default function NotificationBell() {
   const handleMarkAsRead = async (notificationId: string) => {
     if (!user) return;
 
-    const success = await markNotificationsAsRead([notificationId], user.uid);
+    const idToken = await user.getIdToken();
+    const success = await markNotificationsAsRead([notificationId], idToken);
     if (success) {
       setNotifications(prev =>
         prev.map(n => (n.id === notificationId ? { ...n, read: true } : n))
@@ -71,7 +77,8 @@ export default function NotificationBell() {
   const handleMarkAllAsRead = async () => {
     if (!user) return;
 
-    const success = await markAllNotificationsAsRead(user.uid);
+    const idToken = await user.getIdToken();
+    const success = await markAllNotificationsAsRead(idToken);
     if (success) {
       setNotifications(prev => prev.map(n => ({ ...n, read: true })));
       setUnreadCount(0);
@@ -193,9 +200,8 @@ export default function NotificationBell() {
               notifications.map(notification => (
                 <div
                   key={notification.id}
-                  className={`p-4 border-b border-white/5 hover:bg-white/5 transition-colors ${
-                    !notification.read ? 'bg-purple-500/10' : ''
-                  }`}
+                  className={`p-4 border-b border-white/5 hover:bg-white/5 transition-colors ${!notification.read ? 'bg-purple-500/10' : ''
+                    }`}
                 >
                   <div className="flex gap-3">
                     {/* Icon */}

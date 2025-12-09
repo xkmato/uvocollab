@@ -1,5 +1,5 @@
 import { CreateNotificationData, Notification } from '@/app/types/notification';
-import { adminDb } from '@/lib/firebase-admin';
+import { adminAuth, adminDb } from '@/lib/firebase-admin';
 import { FieldValue } from 'firebase-admin/firestore';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -9,17 +9,22 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
-    const unreadOnly = searchParams.get('unreadOnly') === 'true';
-    const limitCount = parseInt(searchParams.get('limit') || '20');
-
-    if (!userId) {
+    // Verify authentication
+    const authHeader = request.headers.get('authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json(
-        { error: 'User ID is required' },
-        { status: 400 }
+        { error: 'Unauthorized: No token provided' },
+        { status: 401 }
       );
     }
+
+    const token = authHeader.split('Bearer ')[1];
+    const decodedToken = await adminAuth.verifyIdToken(token);
+    const userId = decodedToken.uid;
+
+    const { searchParams } = new URL(request.url);
+    const unreadOnly = searchParams.get('unreadOnly') === 'true';
+    const limitCount = parseInt(searchParams.get('limit') || '20');
 
     // Build query
     let q = adminDb
@@ -116,18 +121,24 @@ export async function POST(request: NextRequest) {
  */
 export async function PATCH(request: NextRequest) {
   try {
-    const { notificationIds, userId } = await request.json();
+    // Verify authentication
+    const authHeader = request.headers.get('authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return NextResponse.json(
+        { error: 'Unauthorized: No token provided' },
+        { status: 401 }
+      );
+    }
+
+    const token = authHeader.split('Bearer ')[1];
+    const decodedToken = await adminAuth.verifyIdToken(token);
+    const userId = decodedToken.uid;
+
+    const { notificationIds } = await request.json();
 
     if (!notificationIds || !Array.isArray(notificationIds) || notificationIds.length === 0) {
       return NextResponse.json(
         { error: 'Notification IDs array is required' },
-        { status: 400 }
-      );
-    }
-
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'User ID is required' },
         { status: 400 }
       );
     }
@@ -161,15 +172,18 @@ export async function PATCH(request: NextRequest) {
  */
 export async function DELETE(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
-
-    if (!userId) {
+    // Verify authentication
+    const authHeader = request.headers.get('authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json(
-        { error: 'User ID is required' },
-        { status: 400 }
+        { error: 'Unauthorized: No token provided' },
+        { status: 401 }
       );
     }
+
+    const token = authHeader.split('Bearer ')[1];
+    const decodedToken = await adminAuth.verifyIdToken(token);
+    const userId = decodedToken.uid;
 
     // Get all unread notifications for user
     const q = adminDb

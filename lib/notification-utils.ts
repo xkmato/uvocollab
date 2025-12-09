@@ -33,15 +33,16 @@ export async function createNotification(data: CreateNotificationData): Promise<
  */
 export async function markNotificationsAsRead(
   notificationIds: string[],
-  userId: string
+  idToken: string
 ): Promise<boolean> {
   try {
     const response = await fetch('/api/notifications', {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${idToken}`,
       },
-      body: JSON.stringify({ notificationIds, userId }),
+      body: JSON.stringify({ notificationIds }),
     });
 
     if (!response.ok) {
@@ -58,10 +59,13 @@ export async function markNotificationsAsRead(
 /**
  * Mark all notifications as read for a user
  */
-export async function markAllNotificationsAsRead(userId: string): Promise<boolean> {
+export async function markAllNotificationsAsRead(idToken: string): Promise<boolean> {
   try {
-    const response = await fetch(`/api/notifications?userId=${userId}`, {
+    const response = await fetch('/api/notifications', {
       method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${idToken}`,
+      },
     });
 
     if (!response.ok) {
