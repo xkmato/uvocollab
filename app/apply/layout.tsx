@@ -7,7 +7,7 @@ export const metadata: Metadata = {
         title: 'Become a Legend - Apply to Join UvoCollab',
         description: 'Join an exclusive community of verified music and podcast industry professionals.',
         type: 'website',
-        url: 'https://uvocollab.com/apply',
+        url: 'https://collab.uvotam.com/apply',
     },
     twitter: {
         card: 'summary_large_image',

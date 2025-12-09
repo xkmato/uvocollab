@@ -7,7 +7,7 @@ export const metadata: Metadata = {
         title: 'Music & Podcast Marketplace - Find Verified Professionals',
         description: 'Discover verified music and podcast professionals for your next collaboration. Features, verses, guest bookings, sponsorships, production, and more.',
         type: 'website',
-        url: 'https://uvocollab.com/marketplace',
+        url: 'https://collab.uvotam.com/marketplace',
     },
     twitter: {
         card: 'summary_large_image',

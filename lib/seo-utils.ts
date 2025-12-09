@@ -45,8 +45,8 @@ export function generateOrganizationSchema(): OrganizationSchema {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'UvoCollab',
-    url: 'https://uvocollab.com',
-    logo: 'https://uvocollab.com/logo.png',
+    url: 'https://collab.uvotam.com',
+    logo: 'https://collab.uvotam.com/logo.png',
     sameAs: [
       'https://twitter.com/uvocollab',
       'https://instagram.com/uvocollab',
@@ -149,7 +149,7 @@ export function generateWebPageSchema(
       name: 'UvoCollab',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://uvocollab.com/logo.png',
+        url: 'https://collab.uvotam.com/logo.png',
       },
     },
   };
@@ -161,6 +161,6 @@ export function generateMarketplaceSchema() {
     '@type': 'ItemList',
     name: 'UvoCollab Marketplace',
     description: 'Verified music and podcast industry professionals offering collaboration services',
-    url: 'https://uvocollab.com/marketplace',
+    url: 'https://collab.uvotam.com/marketplace',
   };
 }

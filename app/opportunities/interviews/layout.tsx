@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     title: 'Guest Interview Opportunities | Podcast Guest Spots',
     description: 'Browse podcast interview opportunities. Find podcasts actively seeking guests.',
     type: 'website',
-    url: 'https://uvocollab.com/opportunities/interviews',
+    url: 'https://collab.uvotam.com/opportunities/interviews',
   },
 };
 

@@ -56,7 +56,7 @@ export async function sendApprovalEmail(
   managementEmail?: string
 ): Promise<void> {
   const subject = '🎉 Your UvoCollab Legend Application Has Been Approved!';
-  
+
   const text = `
 Congratulations ${artistName}!
 
@@ -135,13 +135,13 @@ Questions? Reply to this email or contact us at hello@uvotamstudio.com
 
   // Send to both applicant and management if management email is provided
   await sendEmail({ to: recipientEmail, subject, text, html });
-  
+
   if (managementEmail && managementEmail !== recipientEmail) {
-    await sendEmail({ 
-      to: managementEmail, 
-      subject: `${artistName}'s UvoCollab Legend Application Approved`, 
+    await sendEmail({
+      to: managementEmail,
+      subject: `${artistName}'s UvoCollab Legend Application Approved`,
       text: `Hello,\n\nWe're reaching out to inform you that ${artistName}'s application to become a Legend on UvoCollab has been approved.\n\n${text}`,
-      html 
+      html
     });
   }
 }
@@ -156,7 +156,7 @@ export async function sendDeclineEmail(
   managementEmail?: string
 ): Promise<void> {
   const subject = 'UvoCollab Legend Application Update';
-  
+
   const text = `
 Hello ${artistName},
 
@@ -217,13 +217,13 @@ Questions? Reply to this email or contact us at hello@uvotamstudio.com
 
   // Send to both applicant and management if management email is provided
   await sendEmail({ to: recipientEmail, subject, text, html });
-  
+
   if (managementEmail && managementEmail !== recipientEmail) {
-    await sendEmail({ 
-      to: managementEmail, 
-      subject: `${artistName}'s UvoCollab Legend Application Update`, 
+    await sendEmail({
+      to: managementEmail,
+      subject: `${artistName}'s UvoCollab Legend Application Update`,
       text: `Hello,\n\nWe're reaching out to inform you about ${artistName}'s application to become a Legend on UvoCollab.\n\n${text}`,
-      html 
+      html
     });
   }
 }
@@ -239,9 +239,9 @@ export async function sendCollaborationAcceptedEmail(
   price: number
 ): Promise<void> {
   const subject = `🎉 ${legendName} Accepted Your Collaboration Request!`;
-  
-  const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://uvocollab.com'}/dashboard`;
-  
+
+  const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://collab.uvotam.com'}/dashboard`;
+
   const text = `
 Hello ${buyerName},
 
@@ -346,8 +346,8 @@ export async function sendContractSignedEmails(
   serviceTitle: string,
   collaborationId: string
 ): Promise<void> {
-  const hubUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://uvocollab.com'}/collaboration/${collaborationId}`;
-  
+  const hubUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://collab.uvotam.com'}/collaboration/${collaborationId}`;
+
   // Email to Buyer
   const buyerSubject = '✅ Contract Signed - Collaboration Begins!';
   const buyerText = `
@@ -551,9 +551,9 @@ export async function sendPitchAcceptedEmail(
   collaborationId: string
 ): Promise<void> {
   const subject = `🎉 Great News! ${legendName} Accepted Your Pitch!`;
-  
-  const paymentUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://uvocollab.com'}/collaboration/${collaborationId}`;
-  
+
+  const paymentUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://collab.uvotam.com'}/collaboration/${collaborationId}`;
+
   const text = `
 Hello ${buyerName},
 
@@ -652,9 +652,9 @@ export async function sendPitchDeclinedEmail(
   serviceTitle: string
 ): Promise<void> {
   const subject = `Update on Your Collaboration Request with ${legendName}`;
-  
-  const marketplaceUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://uvocollab.com'}/marketplace`;
-  
+
+  const marketplaceUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://collab.uvotam.com'}/marketplace`;
+
   const text = `
 Hello ${buyerName},
 
@@ -815,19 +815,19 @@ export async function sendGuestInvitationEmail(
   expiresAt: Date
 ): Promise<void> {
   const subject = `🎙️ You're invited to be a guest on "${podcastName}"`;
-  
-  const paymentInfo = offeredAmount > 0 
-    ? `\n\n💰 Offered Amount: $${offeredAmount}` 
+
+  const paymentInfo = offeredAmount > 0
+    ? `\n\n💰 Offered Amount: $${offeredAmount}`
     : '\n\n✨ This is a free collaboration opportunity';
-  
-  const topicsText = topics.length > 0 
-    ? `\n\n📋 Proposed Topics:\n${topics.map(t => `  • ${t}`).join('\n')}` 
+
+  const topicsText = topics.length > 0
+    ? `\n\n📋 Proposed Topics:\n${topics.map(t => `  • ${t}`).join('\n')}`
     : '';
-  
-  const expiryDate = expiresAt.toLocaleDateString('en-US', { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+
+  const expiryDate = expiresAt.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
   });
 
   const text = `Hi ${recipientName},
@@ -852,19 +852,19 @@ The UvoCollab Team
 ---
 Questions? Reply to this email or contact us at hello@uvotamstudio.com`;
 
-  const paymentHtml = offeredAmount > 0 
+  const paymentHtml = offeredAmount > 0
     ? `<div style="background:#D1FAE5;padding:15px;border-radius:5px;margin:20px 0;">
          <strong>💰 Offered Amount:</strong> $${offeredAmount}
-       </div>` 
+       </div>`
     : `<div style="background:#DBEAFE;padding:15px;border-radius:5px;margin:20px 0;">
          <strong>✨ This is a free collaboration opportunity</strong>
        </div>`;
-  
-  const topicsHtml = topics.length > 0 
+
+  const topicsHtml = topics.length > 0
     ? `<div style="margin:20px 0;">
          <strong>📋 Proposed Topics:</strong>
          <ul>${topics.map(t => `<li>${t}</li>`).join('')}</ul>
-       </div>` 
+       </div>`
     : '';
 
   const html = `<!DOCTYPE html>
@@ -932,15 +932,15 @@ export async function sendMatchNotificationEmail(
 ): Promise<void> {
   const isGuestRecipient = matchedType === 'podcast';
   const subject = `🎉 You've matched with ${matchedName}!`;
-  
+
   const paymentDetails = recipientOffer === 0 && matchedOffer === 0
     ? 'This is a free collaboration opportunity'
     : isGuestRecipient
       ? `You offered $${recipientOffer} • ${matchedName} is willing to pay $${matchedOffer}`
       : `${matchedName} offered $${matchedOffer} • You're willing to pay $${recipientOffer}`;
-  
-  const topicsText = topics.length > 0 
-    ? `\n\n📋 Shared Topics of Interest:\n${topics.map(t => `  • ${t}`).join('\n')}` 
+
+  const topicsText = topics.length > 0
+    ? `\n\n📋 Shared Topics of Interest:\n${topics.map(t => `  • ${t}`).join('\n')}`
     : '';
 
   const text = `Hi ${recipientName},
@@ -976,17 +976,17 @@ Questions? Reply to this email or contact us at hello@uvotamstudio.com`;
        </div>`
     : `<div style="background:#D1FAE5;padding:15px;border-radius:5px;margin:20px 0;">
          <strong>💰 Payment Details:</strong><br>
-         ${isGuestRecipient 
-           ? `You offered <strong>$${recipientOffer}</strong> • ${matchedName} is willing to pay <strong>$${matchedOffer}</strong>`
-           : `${matchedName} offered <strong>$${matchedOffer}</strong> • You're willing to pay <strong>$${recipientOffer}</strong>`
-         }
+         ${isGuestRecipient
+      ? `You offered <strong>$${recipientOffer}</strong> • ${matchedName} is willing to pay <strong>$${matchedOffer}</strong>`
+      : `${matchedName} offered <strong>$${matchedOffer}</strong> • You're willing to pay <strong>$${recipientOffer}</strong>`
+    }
        </div>`;
-  
-  const topicsHtml = topics.length > 0 
+
+  const topicsHtml = topics.length > 0
     ? `<div style="margin:20px 0;">
          <strong>📋 Shared Topics of Interest:</strong>
          <ul>${topics.map(t => `<li>${t}</li>`).join('')}</ul>
-       </div>` 
+       </div>`
     : '';
 
   const html = `<!DOCTYPE html>
@@ -1058,17 +1058,17 @@ export async function sendCollaborationProposalEmail(
   collaborationLink: string
 ): Promise<void> {
   const subject = `🎙️ ${senderName} sent you a collaboration proposal`;
-  
+
   const paymentText = proposedPrice === 0
     ? '\n\n💰 This is a free collaboration opportunity'
     : senderType === 'guest'
       ? `\n\n💰 Guest Fee: $${proposedPrice} (guest pays podcast)`
       : `\n\n💰 Guest Fee: $${proposedPrice} (podcast pays guest)`;
-  
-  const topicsText = proposedTopics.length > 0 
-    ? `\n\n📋 Proposed Topics:\n${proposedTopics.map(t => `  • ${t}`).join('\n')}` 
+
+  const topicsText = proposedTopics.length > 0
+    ? `\n\n📋 Proposed Topics:\n${proposedTopics.map(t => `  • ${t}`).join('\n')}`
     : '';
-  
+
   const datesText = proposedDates.length > 0
     ? `\n\n📅 Proposed Recording Dates:\n${proposedDates.map(d => `  • ${d}`).join('\n')}`
     : '';
@@ -1101,14 +1101,14 @@ Questions? Reply to this email or contact us at hello@uvotamstudio.com`;
          <strong>💰 Guest Fee:</strong> $${proposedPrice}<br>
          <small>${senderType === 'guest' ? '(guest pays podcast)' : '(podcast pays guest)'}</small>
        </div>`;
-  
-  const topicsHtml = proposedTopics.length > 0 
+
+  const topicsHtml = proposedTopics.length > 0
     ? `<div style="margin:20px 0;">
          <strong>📋 Proposed Topics:</strong>
          <ul>${proposedTopics.map(t => `<li>${t}</li>`).join('')}</ul>
-       </div>` 
+       </div>`
     : '';
-  
+
   const datesHtml = proposedDates.length > 0
     ? `<div style="margin:20px 0;">
          <strong>📅 Proposed Recording Dates:</strong>
@@ -1182,21 +1182,21 @@ export async function sendRecordingReminderEmail(
 ): Promise<void> {
   const urgency = hoursUntilRecording <= 1 ? '⏰ STARTING SOON' : '📅 UPCOMING';
   const subject = `${urgency}: Recording with ${otherPartyName}`;
-  
-  const topicsText = topics.length > 0 
-    ? `\n\n📋 Topics:\n${topics.map(t => `  • ${t}`).join('\n')}` 
+
+  const topicsText = topics.length > 0
+    ? `\n\n📋 Topics:\n${topics.map(t => `  • ${t}`).join('\n')}`
     : '';
-  
-  const prepNotesText = prepNotes 
-    ? `\n\nPreparation Notes:\n${prepNotes}` 
+
+  const prepNotesText = prepNotes
+    ? `\n\nPreparation Notes:\n${prepNotes}`
     : '';
 
   const text = `Hi ${recipientName},
 
-${hoursUntilRecording <= 1 
-  ? `Your recording with ${otherPartyName} is starting in ${hoursUntilRecording} hour(s)!` 
-  : `This is a reminder about your upcoming recording with ${otherPartyName}.`
-}
+${hoursUntilRecording <= 1
+      ? `Your recording with ${otherPartyName} is starting in ${hoursUntilRecording} hour(s)!`
+      : `This is a reminder about your upcoming recording with ${otherPartyName}.`
+    }
 
 📅 Recording Details:
 • Date: ${recordingDate}
@@ -1216,13 +1216,13 @@ The UvoCollab Team
 ---
 Questions? Reply to this email or contact us at hello@uvotamstudio.com`;
 
-  const topicsHtml = topics.length > 0 
+  const topicsHtml = topics.length > 0
     ? `<div style="margin:20px 0;">
          <strong>📋 Topics:</strong>
          <ul>${topics.map(t => `<li>${t}</li>`).join('')}</ul>
-       </div>` 
+       </div>`
     : '';
-  
+
   const prepNotesHtml = prepNotes
     ? `<div style="background:#FEF3C7;padding:15px;border-radius:5px;margin:20px 0;border-left:4px solid #F59E0B;">
          <strong>Preparation Notes:</strong><br><br>
@@ -1251,8 +1251,8 @@ Questions? Reply to this email or contact us at hello@uvotamstudio.com`;
   </div>
   <div class="content">
     <p>Hi ${recipientName},</p>
-    <p>${hoursUntilRecording <= 1 
-      ? `Your recording with <strong>${otherPartyName}</strong> is starting in <strong>${hoursUntilRecording} hour(s)</strong>!` 
+    <p>${hoursUntilRecording <= 1
+      ? `Your recording with <strong>${otherPartyName}</strong> is starting in <strong>${hoursUntilRecording} hour(s)</strong>!`
       : `This is a reminder about your upcoming recording with <strong>${otherPartyName}</strong>.`
     }</p>
     
@@ -1310,7 +1310,7 @@ export async function sendEpisodeReleaseEmail(
   paymentAmount?: number
 ): Promise<void> {
   const subject = `🎉 Your episode on "${podcastName}" is live!`;
-  
+
   const paymentText = paymentReleased && paymentAmount
     ? `\n\n💰 Payment Released:\nYour payment of $${paymentAmount} has been released from escrow and will be transferred to your account shortly.`
     : '';
@@ -1414,7 +1414,7 @@ export async function sendGuestVerificationApprovalEmail(
   verificationBenefits: string[]
 ): Promise<void> {
   const subject = '✅ Your Guest Profile Has Been Verified!';
-  
+
   const benefitsText = verificationBenefits.length > 0
     ? `\n\nAs a verified guest, you now enjoy:\n${verificationBenefits.map(b => `  • ${b}`).join('\n')}`
     : '';
@@ -1507,7 +1507,7 @@ export async function sendGuestVerificationDeclineEmail(
   improvementSuggestions: string[]
 ): Promise<void> {
   const subject = 'UvoCollab Guest Verification Update';
-  
+
   const suggestionsText = improvementSuggestions.length > 0
     ? `\n\nTo improve your chances of verification:\n${improvementSuggestions.map(s => `  • ${s}`).join('\n')}`
     : '';

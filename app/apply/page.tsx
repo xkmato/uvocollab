@@ -467,7 +467,7 @@ export default function ApplyAsLegend() {
                 {/* Additional Info */}
                 <div className="mt-8 text-center text-white/60 text-sm">
                     Questions about the application process?{' '}
-                    <a href="mailto:legends@uvocollab.com" className="text-purple-400 hover:text-purple-300 underline">
+                    <a href="mailto:legends@collab.uvotam.com" className="text-purple-400 hover:text-purple-300 underline">
                         Contact our team
                     </a>
                 </div>

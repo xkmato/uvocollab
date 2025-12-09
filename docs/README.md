@@ -197,9 +197,9 @@ All documentation in this directory follows these standards:
 
 If you have questions about any documentation or suggestions for improvement:
 
-- **Development Team**: dev@uvocollab.com
-- **SEO Questions**: seo@uvocollab.com
-- **General**: info@uvocollab.com
+- **Development Team**: dev@collab.uvotam.com
+- **SEO Questions**: seo@collab.uvotam.com
+- **General**: info@collab.uvotam.com
 
 ---
 

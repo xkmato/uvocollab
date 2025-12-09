@@ -124,7 +124,7 @@ export default function PublicGuestProfilePage() {
     image: guest.profileImageUrl || '',
     jobTitle: 'Podcast Guest',
     knowsAbout: guest.guestTopics || [],
-    url: `https://uvocollab.com/guest/${guestId}`,
+    url: `https://collab.uvotam.com/guest/${guestId}`,
     sameAs: guest.socialLinks?.map(link => link.url) || [],
     offers: guest.guestRate && guest.guestRate > 0 ? {
       '@type': 'Offer',

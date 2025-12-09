@@ -1,8 +1,8 @@
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://uvocollab.com';
-  
+  const baseUrl = 'https://collab.uvotam.com';
+
   return {
     rules: [
       {

@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
     // Prepare calendar event
     const schedulingDetails = collabData.schedulingDetails;
     const recordingDate = schedulingDetails.date.toDate();
-    
+
     // Parse time to get hours and minutes
     const [hours, minutes] = schedulingDetails.time.split(':').map(Number);
     const startTime = new Date(recordingDate);
@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
       location: collabData.recordingUrl || 'Recording link to be provided',
       startTime,
       endTime,
-      organizerEmail: process.env.MAILGUN_FROM_EMAIL || 'noreply@uvocollab.com',
+      organizerEmail: process.env.MAILGUN_FROM_EMAIL || 'noreply@collab.uvotam.com',
       attendeeEmails: [guestData.email, ownerData.email],
     };
 
@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
 
     // Send calendar invite emails
     const subject = '📅 Calendar Invite: Podcast Recording - UvoCollab';
-    
+
     const details = formatRecordingDetails(
       schedulingDetails,
       collabData.recordingUrl,

@@ -8,16 +8,16 @@ Quick commands and snippets for SEO maintenance on UvoCollab.
 
 ```bash
 # Test homepage
-curl -I https://uvocollab.com
+curl -I https://collab.uvotam.com
 
 # Test sitemap
-curl https://uvocollab.com/sitemap.xml
+curl https://collab.uvotam.com/sitemap.xml
 
 # Test robots.txt
-curl https://uvocollab.com/robots.txt
+curl https://collab.uvotam.com/robots.txt
 
 # Test manifest
-curl https://uvocollab.com/manifest.json
+curl https://collab.uvotam.com/manifest.json
 ```
 
 ### Local Testing (Development)
@@ -82,14 +82,14 @@ npx @next/bundle-analyzer
 
 ```bash
 # Using curl and jq to extract JSON-LD
-curl -s https://uvocollab.com | grep -o '<script type="application/ld+json">.*</script>' | sed 's/<[^>]*>//g' | jq '.'
+curl -s https://collab.uvotam.com | grep -o '<script type="application/ld+json">.*</script>' | sed 's/<[^>]*>//g' | jq '.'
 ```
 
 ### Check Meta Tags
 
 ```bash
 # Extract all meta tags
-curl -s https://uvocollab.com | grep -i '<meta'
+curl -s https://collab.uvotam.com | grep -i '<meta'
 ```
 
 ## Common Meta Tag Patterns
@@ -130,8 +130,8 @@ export const metadata = {
       "@context": "https://schema.org",
       "@type": "Organization",
       name: "UvoCollab",
-      url: "https://uvocollab.com",
-      logo: "https://uvocollab.com/logo.png",
+      url: "https://collab.uvotam.com",
+      logo: "https://collab.uvotam.com/logo.png",
     }),
   }}
 />
@@ -147,7 +147,7 @@ export const metadata = {
       "@context": "https://schema.org",
       "@type": "Person",
       name: "Legend Name",
-      url: "https://uvocollab.com/legend/[id]",
+      url: "https://collab.uvotam.com/legend/[id]",
       image: "profile-image-url",
       jobTitle: "Music Producer",
     }),
@@ -263,7 +263,7 @@ const geistSans = Geist({
 
 For SEO questions or issues:
 
-- Email: dev@uvocollab.com
+- Email: dev@collab.uvotam.com
 - Internal docs: `/docs/SEO_IMPLEMENTATION.md`
 - Testing checklist: `/docs/SEO_TESTING_CHECKLIST.md`
 

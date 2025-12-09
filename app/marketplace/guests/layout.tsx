@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     title: 'Browse Podcast Guests | Expert Guest Marketplace',
     description: 'Discover verified podcast guests and expert speakers. Browse by topic, rate, and expertise.',
     type: 'website',
-    url: 'https://uvocollab.com/marketplace/guests',
+    url: 'https://collab.uvotam.com/marketplace/guests',
   },
 };
 

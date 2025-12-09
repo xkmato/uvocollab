@@ -26,7 +26,7 @@ export function generateICS(event: CalendarEvent): string {
       .replace(/\n/g, '\\n');
   };
 
-  const uid = `${Date.now()}@uvocollab.com`;
+  const uid = `${Date.now()}@collab.uvotam.com`;
   const now = formatDate(new Date());
   const startTime = formatDate(event.startTime);
   const endTime = formatDate(event.endTime);

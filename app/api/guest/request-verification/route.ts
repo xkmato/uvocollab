@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
         // Send notification email to admin team
         try {
             await sendEmail({
-                to: process.env.ADMIN_EMAIL || 'admin@uvocollab.com',
+                to: process.env.ADMIN_EMAIL || 'admin@collab.uvotam.com',
                 subject: 'New Guest Verification Request',
                 text: `New Guest Verification Request from ${userData?.displayName} (${userData?.email})`,
                 html: `

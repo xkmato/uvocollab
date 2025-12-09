@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     // NOTE: For manual payouts, we don't strictly require a subaccount anymore.
     // If subaccount exists, we can use it (if we want automatic split), but for now we are moving to manual withdrawals.
     // So we will allow payment even if no subaccount, and funds will go to platform.
-    
+
     /*
     if (!legendData?.flutterwaveSubaccountId) {
       return NextResponse.json(
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
     // If subaccount exists, we could use it, but to be consistent with "manual withdrawal", 
     // we might want to collect everything to platform account first.
     // Let's just return the basic payment info.
-    
+
     return NextResponse.json({
       success: true,
       publicKey: process.env.FLUTTERWAVE_PUBLIC_KEY,
@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
       customizations: {
         title: `Collaboration with ${legendData?.displayName || 'Legend'}`,
         description: `Payment for ${collabData.serviceTitle || 'Service'}`,
-        logo: 'https://uvocollab.com/logo.png', // Replace with actual logo URL
+        logo: 'https://collab.uvotam.com/logo.png', // Replace with actual logo URL
       },
     });
   } catch (error) {

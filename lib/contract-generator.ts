@@ -328,7 +328,7 @@ export async function generateContractPDF(
 
     doc
       .text('Generated via UvoCollab Platform', { align: 'center' })
-      .text('www.uvocollab.com', { align: 'center' });
+      .text('www.collab.uvotam.com', { align: 'center' });
 
     doc.end();
   });
@@ -564,7 +564,7 @@ export async function generateGuestReleasePDF(
 
     doc
       .text('Generated via UvoCollab Platform', { align: 'center' })
-      .text('www.uvocollab.com', { align: 'center' });
+      .text('www.collab.uvotam.com', { align: 'center' });
 
     doc.end();
   });

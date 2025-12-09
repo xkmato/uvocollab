@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
 
         const serviceData = serviceDoc.data();
         const serviceType = serviceData?.type || 'guest_spot';
-        
+
         // Verify the price matches
         if (serviceData?.price !== price) {
             return NextResponse.json(
@@ -217,9 +217,9 @@ async function sendNewPodcastPitchNotification(
     collaborationData: CreateCollaborationData
 ): Promise<void> {
     const subject = `🎙️ New Collaboration Request for ${podcastTitle}`;
-    
-    const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://uvocollab.com'}/dashboard/podcast`;
-    
+
+    const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://collab.uvotam.com'}/dashboard/podcast`;
+
     // Build details based on service type
     let detailsText = '';
     let detailsHtml = '';
@@ -247,7 +247,7 @@ async function sendNewPodcastPitchNotification(
             <div class="pitch-details"><p>${collaborationData.adProductDescription}</p></div>
         `;
     }
-    
+
     const text = `
 Hello ${ownerName},
 

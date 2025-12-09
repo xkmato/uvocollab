@@ -8,7 +8,7 @@ export const metadata: Metadata = {
         title: 'Become a Podcast Guest | UvoCollab',
         description: 'Join UvoCollab as a podcast guest and connect with podcasters worldwide. Share your expertise, build your brand, and monetize your knowledge.',
         type: 'website',
-        url: 'https://uvocollab.com/guests',
+        url: 'https://collab.uvotam.com/guests',
     },
     twitter: {
         card: 'summary_large_image',

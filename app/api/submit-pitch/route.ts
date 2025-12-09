@@ -183,9 +183,9 @@ async function sendNewPitchNotification(
     managementEmail?: string
 ): Promise<void> {
     const subject = `🎵 New Collaboration Request: ${serviceTitle}`;
-    
-    const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://uvocollab.com'}/legend/dashboard`;
-    
+
+    const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://collab.uvotam.com'}/legend/dashboard`;
+
     const text = `
 Hello ${legendName},
 
@@ -273,7 +273,7 @@ Questions? Reply to this email or contact us at hello@uvotamstudio.com
 
     // Send to legend
     await sendEmail({ to: legendEmail, subject, text, html });
-    
+
     // Also send to management if provided and different from legend's email
     if (managementEmail && managementEmail !== legendEmail) {
         const mgmtText = `
@@ -283,11 +283,11 @@ ${legendName} has received a new collaboration request from ${buyerName} on UvoC
 
 ${text}
 `;
-        await sendEmail({ 
-            to: managementEmail, 
-            subject: `${legendName} - New Collaboration Request: ${serviceTitle}`, 
+        await sendEmail({
+            to: managementEmail,
+            subject: `${legendName} - New Collaboration Request: ${serviceTitle}`,
             text: mgmtText,
-            html 
+            html
         });
     }
 }

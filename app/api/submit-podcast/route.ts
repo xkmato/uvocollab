@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
     try {
       const adminEmail = process.env.SUPPORT_EMAIL || 'hello@uvotamstudio.com';
       const subject = `New Podcast Submission: ${podcastData.title}`;
-      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://uvocollab.com';
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://collab.uvotam.com';
       const text = `A new podcast submission has been created by ${ownerEmail}.
 
 Title: ${podcastData.title}

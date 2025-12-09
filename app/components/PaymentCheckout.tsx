@@ -108,7 +108,7 @@ export default function PaymentCheckout({
                 customizations: {
                     title: 'UvoCollab',
                     description: `Payment for: ${service.title} by ${legend.displayName}`,
-                    logo: 'https://uvocollab.com/logo.png', // Update with actual logo URL
+                    logo: 'https://collab.uvotam.com/logo.png', // Update with actual logo URL
                 },
                 callback: async (response) => {
                     if (response.status === 'successful') {

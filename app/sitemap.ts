@@ -1,8 +1,8 @@
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://uvocollab.com';
-  
+  const baseUrl = 'https://collab.uvotam.com';
+
   return [
     {
       url: baseUrl,

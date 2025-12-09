@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://uvocollab.com'),
+  metadataBase: new URL('https://collab.uvotam.com'),
   title: {
     default: 'UvoCollab - Connect Rising Artists & Podcasters with Industry Legends',
     template: '%s | UvoCollab'
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://uvocollab.com',
+    url: 'https://collab.uvotam.com',
     siteName: 'UvoCollab',
     title: 'UvoCollab - Connect Rising Artists, Podcasters & Expert Guests with Industry Legends',
     description: 'Secure collaboration platform connecting emerging artists, podcasters, and expert guests with verified industry professionals. Features, verses, production, guest bookings, sponsorships, and more with escrow payments and legal contracts.',
@@ -107,7 +107,7 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.json',
   alternates: {
-    canonical: 'https://uvocollab.com',
+    canonical: 'https://collab.uvotam.com',
   },
   category: 'music & podcasting',
 };
@@ -134,11 +134,11 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebSite",
               "name": "UvoCollab",
-              "url": "https://uvocollab.com",
+              "url": "https://collab.uvotam.com",
               "description": "Connect rising artists and podcasters with industry legends",
               "potentialAction": {
                 "@type": "SearchAction",
-                "target": "https://uvocollab.com/marketplace?search={search_term_string}",
+                "target": "https://collab.uvotam.com/marketplace?search={search_term_string}",
                 "query-input": "required name=search_term_string"
               }
             })
