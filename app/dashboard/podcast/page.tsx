@@ -66,7 +66,7 @@ export default function PodcastDashboard() {
 
     // If we reach here, user has multiple podcasts - show selector
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/50 to-blue-50/50 py-8">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/50 to-blue-50/50 pt-24 pb-8">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center mb-8">
                     <h1 className="text-3xl font-bold text-gray-900">Your Podcasts</h1>
@@ -128,10 +128,10 @@ export default function PodcastDashboard() {
                                     </div>
                                     <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                                         <span className={`text-xs font-medium px-2 py-1 rounded-full ${podcast.status === 'approved'
-                                                ? 'bg-green-100 text-green-800'
-                                                : podcast.status === 'pending'
-                                                    ? 'bg-yellow-100 text-yellow-800'
-                                                    : 'bg-red-100 text-red-800'
+                                            ? 'bg-green-100 text-green-800'
+                                            : podcast.status === 'pending'
+                                                ? 'bg-yellow-100 text-yellow-800'
+                                                : 'bg-red-100 text-red-800'
                                             }`}>
                                             {podcast.status}
                                         </span>

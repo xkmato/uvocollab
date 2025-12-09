@@ -66,13 +66,13 @@ export default function LegendDashboard() {
             // Since the API is mocked to return true, we should check Firestore directly if we want accurate status
             // But for now, we want to hide the warning, so true is fine.
             // However, if we want the red dot on the tab to be accurate, we should check properly.
-            
+
             // Let's check Firestore directly like we did in the form
             const userDoc = await getDocs(query(collection(db, 'users'), where('uid', '==', user.uid)));
             if (!userDoc.empty) {
                 const userData = userDoc.docs[0].data();
                 const hasPaymentDetails = !!(
-                    userData.flutterwaveAccountNumber || 
+                    userData.flutterwaveAccountNumber ||
                     (userData.paymentMethod === 'mobile_money' && userData.mobileMoneyProvider && userData.flutterwaveAccountNumber)
                 );
                 setBankAccountConnected(hasPaymentDetails);
@@ -359,7 +359,7 @@ export default function LegendDashboard() {
     if (!user || !userData || userData.role !== 'legend') return null;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/50 to-blue-50/50">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/50 to-blue-50/50 pt-24 pb-8">
             {/* Header */}
             <div className="bg-white border-b sticky top-0 z-30 shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -470,8 +470,8 @@ export default function LegendDashboard() {
 
                             {profileMessage && (
                                 <div className={`mb-6 p-4 rounded-lg flex items-center ${profileMessage.includes('success')
-                                        ? 'bg-green-50 text-green-800 border border-green-100'
-                                        : 'bg-red-50 text-red-800 border border-red-100'
+                                    ? 'bg-green-50 text-green-800 border border-green-100'
+                                    : 'bg-red-50 text-red-800 border border-red-100'
                                     }`}>
                                     {profileMessage.includes('success') ? (
                                         <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>

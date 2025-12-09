@@ -152,7 +152,7 @@ export default function Dashboard() {
     if (!user) return null;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/50 to-blue-50/50">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/50 to-blue-50/50 pt-24 pb-8">
             <div className="bg-white border-b">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center py-6">
@@ -183,7 +183,7 @@ export default function Dashboard() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Guest Onboarding Modal */}
                 {userData?.isGuest && (
-                    <GuestOnboardingModal user={userData} onComplete={() => {}} />
+                    <GuestOnboardingModal user={userData} onComplete={() => { }} />
                 )}
 
                 {/* Getting Started Checklist for Guests */}
