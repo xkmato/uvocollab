@@ -31,7 +31,16 @@ export default function EpisodeList({ podcastId }: EpisodeListProps) {
 
                 if (!res.ok) {
                     const data = await res.json();
-                    throw new Error(data.error || 'Failed to fetch episodes');
+                    const errorMessage = data.error || 'Failed to fetch episodes';
+
+                    // Silently handle missing RSS feed - don't throw or log
+                    if (errorMessage.includes('No RSS feed')) {
+                        setError(errorMessage);
+                        setLoading(false);
+                        return;
+                    }
+
+                    throw new Error(errorMessage);
                 }
 
                 const data = await res.json();
