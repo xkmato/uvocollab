@@ -26,7 +26,7 @@ export default function PodcastServiceList({ services, onEdit, onDelete }: Podca
                             <h4 className="text-lg font-semibold text-gray-900">{service.title}</h4>
                             <span className={`px-2 py-1 text-xs font-medium rounded-full ${service.price === 0 ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
                                 }`}>
-                                {service.price === 0 ? 'Free' : `$${service.price}`}
+                                {service.price === 0 ? 'Free' : `${service.price.toFixed(0)} UGX`}
                             </span>
                         </div>
                         <p className="text-sm text-gray-600 mb-3 line-clamp-2">{service.description}</p>

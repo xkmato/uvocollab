@@ -315,7 +315,7 @@ export default function PodcastGuestWishlistPage() {
                       </div>
                       <div className="text-right">
                         <div className="text-2xl font-bold text-purple-600">
-                          {wishlist.budgetAmount > 0 ? `$${wishlist.budgetAmount}` : 'Free'}
+                          {wishlist.budgetAmount > 0 ? `${wishlist.budgetAmount.toFixed(0)} UGX` : 'Free'}
                         </div>
                         <div className="text-sm text-gray-500">Your budget</div>
                       </div>

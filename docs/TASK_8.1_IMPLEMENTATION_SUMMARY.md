@@ -64,7 +64,7 @@ payoutError?: {                  // Error tracking
 
 - Uses `initiateTransfer()` function from `lib/flutterwave.ts`
 - Transfers to Legend's connected bank account
-- Default currency: NGN (Nigerian Naira)
+- Default currency: UGX (Ugandan Shillings)
 - Includes narration for tracking
 - Generates unique reference per payout
 

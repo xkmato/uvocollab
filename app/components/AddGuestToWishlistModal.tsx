@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { User } from '@/app/types/user';
+import { useState } from 'react';
 
 interface AddGuestToWishlistModalProps {
   guest: User;
@@ -98,7 +98,7 @@ export default function AddGuestToWishlistModal({
             )}
             {guest.guestRate && guest.guestRate > 0 && (
               <p className="text-sm text-purple-600 font-semibold mt-2">
-                Guest Rate: ${guest.guestRate}
+                Guest Rate: {guest.guestRate.toFixed(0)} UGX
               </p>
             )}
           </div>
@@ -112,25 +112,25 @@ export default function AddGuestToWishlistModal({
           {/* Budget Amount */}
           <div>
             <label htmlFor="budgetAmount" className="block text-sm font-semibold text-gray-700 mb-2">
-              Your Budget Amount (USD)
+              Your Budget Amount (UGX)
               <span className="text-gray-500 font-normal ml-2">What you&apos;re willing to pay</span>
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs">UGX</span>
               <input
                 type="number"
                 id="budgetAmount"
                 min="0"
-                step="0.01"
+                step="1"
                 value={budgetAmount}
                 onChange={(e) => setBudgetAmount(parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                className="w-full pl-12 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                 placeholder="0.00"
               />
             </div>
             <p className="mt-1 text-xs text-gray-500">
               {budgetAmount > 0
-                ? `You're offering to pay $${budgetAmount.toFixed(2)} for this guest appearance`
+                ? `You're offering to pay ${budgetAmount.toFixed(0)} UGX for this guest appearance`
                 : "You're requesting a free guest appearance"}
             </p>
             {guest.guestRate && budgetAmount < guest.guestRate && (

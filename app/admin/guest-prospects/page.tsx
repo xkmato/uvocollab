@@ -1,12 +1,12 @@
 'use client';
 
 import { useAuth } from '@/app/contexts/AuthContext';
+import { PodcastGuestWishlist } from '@/app/types/guest';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { PodcastGuestWishlist } from '@/app/types/guest';
 
 interface ProspectWithPodcast extends PodcastGuestWishlist {
   podcastOwnerName?: string;
@@ -43,14 +43,14 @@ export default function GuestProspectsPage() {
     try {
       setLoading(true);
       const wishlistRef = collection(db, 'podcastGuestWishlists');
-      
+
       // Get all unregistered guests
       const q = query(
         wishlistRef,
         where('isRegistered', '==', false),
         orderBy('createdAt', 'desc')
       );
-      
+
       const snapshot = await getDocs(q);
       const prospectList = snapshot.docs.map((doc) => {
         const data = doc.data();
@@ -70,16 +70,16 @@ export default function GuestProspectsPage() {
             const podcastDoc = await getDocs(
               query(collection(db, 'podcasts'), where('__name__', '==', prospect.podcastId))
             );
-            
+
             if (!podcastDoc.empty) {
               const podcastData = podcastDoc.docs[0].data();
               const ownerId = podcastData.ownerId;
-              
+
               if (ownerId) {
                 const ownerDoc = await getDocs(
                   query(collection(db, 'users'), where('__name__', '==', ownerId))
                 );
-                
+
                 if (!ownerDoc.empty) {
                   prospect.podcastOwnerName = ownerDoc.docs[0].data().displayName || 'Unknown';
                 }
@@ -151,7 +151,7 @@ export default function GuestProspectsPage() {
       const podcastDoc = await getDocs(
         query(collection(db, 'podcasts'), where('__name__', '==', prospect.podcastId))
       );
-      
+
       if (podcastDoc.empty) {
         throw new Error('Podcast not found');
       }
@@ -240,7 +240,7 @@ export default function GuestProspectsPage() {
         {/* Prospects List */}
         <div className="bg-slate-800 rounded-lg p-6">
           <h2 className="text-2xl font-bold mb-6">All Prospects</h2>
-          
+
           {prospects.length === 0 ? (
             <div className="text-center py-12 text-gray-400">
               <p className="text-xl mb-2">No prospects found</p>
@@ -265,7 +265,7 @@ export default function GuestProspectsPage() {
                     </div>
                     <div className="text-right">
                       <div className="text-lg font-bold text-green-400">
-                        ${prospect.budgetAmount}
+                        {prospect.budgetAmount.toFixed(0)} UGX
                       </div>
                       <div className="text-xs text-gray-400">Budget</div>
                     </div>

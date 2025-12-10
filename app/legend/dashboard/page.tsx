@@ -6,10 +6,10 @@ import { Collaboration } from '@/app/types/collaboration';
 import { Service } from '@/app/types/service';
 import { User } from '@/app/types/user';
 import { db } from '@/lib/firebase';
-import { collection, deleteDoc, doc, getDocs, orderBy, query, setDoc, updateDoc, where, addDoc } from 'firebase/firestore';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { addDoc, collection, deleteDoc, doc, getDocs, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import ProfileWizard from './components/ProfileWizard';
 import ServiceWizard from './components/ServiceWizard';
@@ -597,7 +597,7 @@ export default function LegendDashboard() {
                                                 <div className="flex items-end justify-between mb-6">
                                                     <div>
                                                         <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold">Price</p>
-                                                        <p className="text-2xl font-bold text-gray-900">${service.price}</p>
+                                                        <p className="text-2xl font-bold text-gray-900">{service.price.toFixed(0)} UGX</p>
                                                     </div>
                                                     <div className="text-right">
                                                         <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold">Deliverable</p>
@@ -708,7 +708,7 @@ export default function LegendDashboard() {
                                                             </p>
                                                         </div>
                                                         <div className="text-right">
-                                                            <p className="text-3xl font-bold text-gray-900">${collab.price}</p>
+                                                            <p className="text-3xl font-bold text-gray-900">{collab.price.toFixed(0)} UGX</p>
                                                             <p className="text-sm text-gray-500">{service?.deliverable}</p>
                                                         </div>
                                                     </div>

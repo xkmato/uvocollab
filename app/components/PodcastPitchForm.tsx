@@ -247,7 +247,7 @@ export default function PodcastPitchForm({ podcast, service, onClose, onSuccess 
                                 {service.type.replace('_', ' ')}
                             </span>
                             <p className="text-xl font-bold text-purple-600">
-                                {service.price > 0 ? `$${service.price}` : 'Free'}
+                                {service.price > 0 ? `${service.price.toFixed(0)} UGX` : 'Free'}
                             </p>
                         </div>
                     </div>

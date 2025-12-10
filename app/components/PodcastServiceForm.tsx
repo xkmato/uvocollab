@@ -103,7 +103,7 @@ export default function PodcastServiceForm({ podcastId, service, onSuccess, onCa
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Price ($)</label>
+                    <label className="block text-sm font-medium text-gray-700">Price (UGX)</label>
                     <input
                         type="number"
                         min="0"

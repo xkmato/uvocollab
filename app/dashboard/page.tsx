@@ -1,8 +1,8 @@
 'use client';
 
 import BecomeGuestModal from '@/app/components/BecomeGuestModal';
-import GuestOnboardingModal from '@/app/components/GuestOnboardingModal';
 import GettingStartedChecklist from '@/app/components/GettingStartedChecklist';
+import GuestOnboardingModal from '@/app/components/GuestOnboardingModal';
 import PaymentCheckout from '@/app/components/PaymentCheckout';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { Collaboration } from '@/app/types/collaboration';
@@ -357,7 +357,7 @@ export default function Dashboard() {
                                             </div>
                                             <div className="text-right">
                                                 {getStatusBadge(collab.status)}
-                                                <p className="text-2xl font-bold text-blue-600 mt-2">${collab.price}</p>
+                                                <p className="text-2xl font-bold text-blue-600 mt-2">{collab.price.toFixed(0)} UGX</p>
                                             </div>
                                         </div>
 
@@ -384,7 +384,7 @@ export default function Dashboard() {
                                                         onClick={() => setSelectedCollab(collab.id!)}
                                                         className="w-full px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 font-semibold"
                                                     >
-                                                        Pay Now - ${collab.price}
+                                                        Pay Now - {collab.price.toFixed(0)} UGX
                                                     </button>
                                                 )}
                                             </div>

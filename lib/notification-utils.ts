@@ -131,14 +131,14 @@ export function getNotificationContent(
     case 'payment_received':
       return {
         title: '💰 Payment Received',
-        message: `Payment of $${context.amount} has been received and held in escrow.`,
+        message: `Payment of ${context.amount?.toFixed(0)} UGX has been received and held in escrow.`,
         actionText: 'View Collaboration',
       };
 
     case 'payment_released':
       return {
         title: '💸 Payment Released',
-        message: `Your payment of $${context.amount} has been released and will be transferred shortly.`,
+        message: `Your payment of ${context.amount?.toFixed(0)} UGX has been released and will be transferred shortly.`,
         actionText: 'View Details',
       };
 

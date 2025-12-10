@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { Podcast } from '@/app/types/podcast';
+import { useState } from 'react';
 
 interface AddPodcastToWishlistModalProps {
   podcast: Podcast;
@@ -108,16 +108,16 @@ export default function AddPodcastToWishlistModal({
           {/* Offer Amount */}
           <div>
             <label htmlFor="offerAmount" className="block text-sm font-semibold text-gray-700 mb-2">
-              Your Offer Amount (USD)
-              <span className="text-gray-500 font-normal ml-2">Optional - Leave at $0 for free appearance</span>
+              Your Offer Amount (UGX)
+              <span className="text-gray-500 font-normal ml-2">Optional - Leave at 0 for free appearance</span>
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs">UGX</span>
               <input
                 type="number"
                 id="offerAmount"
                 min="0"
-                step="0.01"
+                step="1"
                 value={offerAmount}
                 onChange={(e) => setOfferAmount(parseFloat(e.target.value) || 0)}
                 className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
@@ -126,7 +126,7 @@ export default function AddPodcastToWishlistModal({
             </div>
             <p className="mt-1 text-xs text-gray-500">
               {offerAmount > 0
-                ? `You're offering to pay $${offerAmount.toFixed(2)} to appear on this podcast`
+                ? `You're offering to pay ${offerAmount.toFixed(0)} UGX to appear on this podcast`
                 : "You're offering a free guest appearance"}
             </p>
           </div>

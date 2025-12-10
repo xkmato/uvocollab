@@ -99,7 +99,7 @@ export default function PaymentCheckout({
                 public_key: data.publicKey,
                 tx_ref: data.txRef,
                 amount: collaboration.price,
-                currency: 'USD',
+                currency: 'UGX',
                 payment_options: 'card,banktransfer,ussd',
                 customer: {
                     email: userData.email,
@@ -197,7 +197,7 @@ export default function PaymentCheckout({
                     <div className="border-t pt-3 mt-3">
                         <div className="flex justify-between items-center text-lg">
                             <span className="font-semibold text-gray-900">Total Amount:</span>
-                            <span className="font-bold text-blue-600">${collaboration.price.toFixed(2)}</span>
+                            <span className="font-bold text-blue-600">{collaboration.price.toFixed(0)} UGX</span>
                         </div>
                     </div>
                 </div>
@@ -209,11 +209,11 @@ export default function PaymentCheckout({
                 <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                         <span className="text-blue-800">{providerLabel} Payout:</span>
-                        <span className="font-medium text-blue-900">${legendPayout.toFixed(2)}</span>
+                        <span className="font-medium text-blue-900">{legendPayout.toFixed(0)} UGX</span>
                     </div>
                     <div className="flex justify-between">
                         <span className="text-blue-800">Platform Fee (20%):</span>
-                        <span className="font-medium text-blue-900">${platformFee.toFixed(2)}</span>
+                        <span className="font-medium text-blue-900">{platformFee.toFixed(0)} UGX</span>
                     </div>
                 </div>
             </div>
@@ -255,7 +255,7 @@ export default function PaymentCheckout({
                 disabled={loading || !scriptLoaded}
                 className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
             >
-                {loading ? 'Processing...' : !scriptLoaded ? 'Loading...' : `Pay $${collaboration.price.toFixed(2)}`}
+                {loading ? 'Processing...' : !scriptLoaded ? 'Loading...' : `Pay ${collaboration.price.toFixed(0)} UGX`}
             </button>
 
             <p className="text-xs text-gray-500 text-center mt-4">

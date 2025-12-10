@@ -210,7 +210,7 @@ export default function GuestWishlistPage() {
                       </div>
                       <div className="text-right">
                         <div className="text-2xl font-bold text-purple-600">
-                          {wishlist.offerAmount > 0 ? `$${wishlist.offerAmount}` : 'Free'}
+                          {wishlist.offerAmount > 0 ? `${wishlist.offerAmount.toFixed(0)} UGX` : 'Free'}
                         </div>
                         <div className="text-sm text-gray-500">Your offer</div>
                       </div>

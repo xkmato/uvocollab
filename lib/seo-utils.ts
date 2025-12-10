@@ -78,7 +78,7 @@ export function generateServiceSchema(
     offers: {
       '@type': 'Offer',
       price: price.toString(),
-      priceCurrency: 'USD',
+      priceCurrency: 'UGX',
     },
   };
 }

@@ -433,7 +433,7 @@ export default function InterviewOpportunitiesPage() {
                                                 <div className="text-2xl font-bold text-purple-600">
                                                     {opportunity.service.price === 0
                                                         ? 'Free'
-                                                        : `$${opportunity.service.price}`}
+                                                        : `${opportunity.service.price.toFixed(0)} UGX`}
                                                 </div>
                                                 <div className="text-sm text-gray-500">
                                                     {opportunity.service.price === 0

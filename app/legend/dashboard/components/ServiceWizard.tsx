@@ -53,7 +53,7 @@ export default function ServiceWizard({ initialData, onSave, onCancel, isSaving 
         e.preventDefault();
         const priceNum = parseFloat(formData.price);
         if (isNaN(priceNum) || priceNum <= 0) {
-            setError('Price must be greater than $0');
+            setError('Price must be greater than 0 UGX');
             return;
         }
 
@@ -156,10 +156,10 @@ export default function ServiceWizard({ initialData, onSave, onCancel, isSaving 
                             <div className="space-y-6 animate-fadeIn">
                                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Pricing & Availability</h3>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Price (USD) *</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Price (UGX) *</label>
                                     <div className="relative rounded-lg shadow-sm">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <span className="text-gray-500 sm:text-sm">$</span>
+                                            <span className="text-gray-500 sm:text-sm">UGX</span>
                                         </div>
                                         <input
                                             type="number"
@@ -203,8 +203,8 @@ export default function ServiceWizard({ initialData, onSave, onCancel, isSaving 
                             onClick={handleBack}
                             disabled={step === 1}
                             className={`px-6 py-2.5 rounded-lg font-medium transition-all ${step === 1
-                                    ? 'text-gray-300 cursor-not-allowed'
-                                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                                ? 'text-gray-300 cursor-not-allowed'
+                                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                                 }`}
                         >
                             Back

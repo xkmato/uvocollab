@@ -172,7 +172,7 @@ export default function PitchForm({ legend, service, buyerId, onClose, onSuccess
                         <h3 className="font-semibold text-gray-900 mb-2">{service.title}</h3>
                         <p className="text-sm text-gray-700 mb-2">{service.description}</p>
                         <p className="text-sm text-gray-600">Deliverable: {service.deliverable}</p>
-                        <p className="text-2xl font-bold text-blue-600 mt-2">${service.price}</p>
+                        <p className="text-2xl font-bold text-blue-600 mt-2">{service.price.toFixed(0)} UGX</p>
                     </div>
 
                     {/* Important Notice */}

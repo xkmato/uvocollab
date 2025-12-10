@@ -281,7 +281,7 @@ export default function PodcastMatchesPage() {
                       <p className="text-gray-600">Your Budget:</p>
                       <p className="font-semibold text-gray-900">
                         {match.podcastBudgetAmount > 0
-                          ? `$${match.podcastBudgetAmount.toLocaleString()}`
+                          ? `${match.podcastBudgetAmount.toFixed(0)} UGX`
                           : 'Free'}
                       </p>
                     </div>
@@ -289,7 +289,7 @@ export default function PodcastMatchesPage() {
                       <p className="text-gray-600">Guest Offer:</p>
                       <p className="font-semibold text-gray-900">
                         {match.guestOfferAmount > 0
-                          ? `$${match.guestOfferAmount.toLocaleString()}`
+                          ? `${match.guestOfferAmount.toFixed(0)} UGX`
                           : 'Free'}
                       </p>
                     </div>

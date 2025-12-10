@@ -88,7 +88,7 @@ export async function generateContractPDF(
       .moveDown();
 
     doc
-      .text(`Total Service Fee: $${contractData.price.toFixed(2)} USD`)
+      .text(`Total Service Fee: ${contractData.price.toFixed(0)} UGX`)
       .moveDown(2);
 
     // Work for Hire Section
@@ -204,7 +204,7 @@ export async function generateContractPDF(
       .fontSize(11)
       .font('Helvetica')
       .text(
-        `Buyer has paid the total service fee of $${contractData.price.toFixed(2)} USD, which is currently held in escrow by UvoCollab.`
+        `Buyer has paid the total service fee of ${contractData.price.toFixed(0)} UGX, which is currently held in escrow by UvoCollab.`
       )
       .moveDown();
 
@@ -446,7 +446,7 @@ export async function generateGuestReleasePDF(
         .fontSize(11)
         .font('Helvetica')
         .text(
-          `As consideration for the Appearance and the rights granted herein, Guest has paid Podcaster the sum of $${contractData.price.toFixed(2)} USD.`
+          `As consideration for the Appearance and the rights granted herein, Guest has paid Podcaster the sum of ${contractData.price.toFixed(0)} UGX.`
         )
         .moveDown();
     } else {

@@ -129,7 +129,7 @@ export default function PublicGuestProfilePage() {
     offers: guest.guestRate && guest.guestRate > 0 ? {
       '@type': 'Offer',
       price: guest.guestRate,
-      priceCurrency: 'USD',
+      priceCurrency: 'UGX',
       description: 'Guest appearance fee',
     } : undefined,
   } : null;

@@ -24,7 +24,7 @@ The Legend Public Profile page is the public-facing "storefront" for verified Le
 - Each service card shows:
   - Service title (e.g., "16-bar verse")
   - Detailed description
-  - Price in USD
+  - Price in UGX
   - Deliverable information (e.g., "1 WAV file")
   - "Request Collaboration" button
 

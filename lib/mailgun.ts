@@ -249,7 +249,7 @@ Great news! ${legendName} has accepted your collaboration request for "${service
 
 Project Details:
 - Service: ${serviceTitle}
-- Price: $${price}
+- Price: ${price.toFixed(0)} UGX
 - Status: Awaiting Payment
 
 Next Steps:
@@ -305,7 +305,7 @@ Questions? Reply to this email or contact us at hello@uvotamstudio.com
       <h3>Project Details:</h3>
       <ul>
         <li><strong>Service:</strong> ${serviceTitle}</li>
-        <li><strong>Price:</strong> $${price}</li>
+        <li><strong>Price:</strong> ${price.toFixed(0)} UGX</li>
         <li><strong>Status:</strong> Awaiting Payment</li>
       </ul>
     </div>
@@ -560,7 +560,7 @@ Hello ${buyerName},
 Exciting news! ${legendName} has accepted your pitch for "${serviceTitle}"!
 
 Next Steps:
-1. Complete your payment of $${price}
+1. Complete your payment of ${price.toFixed(0)} UGX
 2. Review and sign the collaboration contract
 3. Start working with ${legendName} in your private Collaboration Hub
 
@@ -616,7 +616,7 @@ Questions? Reply to this email or contact us at hello@uvotamstudio.com
     <div class="next-steps">
       <h3>Next Steps:</h3>
       <ol>
-        <li>Complete your payment of <strong>$${price}</strong></li>
+        <li>Complete your payment of <strong>${price.toFixed(0)} UGX</strong></li>
         <li>Review and sign the collaboration contract</li>
         <li>Start working with ${legendName} in your private Collaboration Hub</li>
       </ol>
@@ -817,7 +817,7 @@ export async function sendGuestInvitationEmail(
   const subject = `🎙️ You're invited to be a guest on "${podcastName}"`;
 
   const paymentInfo = offeredAmount > 0
-    ? `\n\n💰 Offered Amount: $${offeredAmount}`
+    ? `\n\n💰 Offered Amount: ${offeredAmount.toFixed(0)} UGX`
     : '\n\n✨ This is a free collaboration opportunity';
 
   const topicsText = topics.length > 0
@@ -854,7 +854,7 @@ Questions? Reply to this email or contact us at hello@uvotamstudio.com`;
 
   const paymentHtml = offeredAmount > 0
     ? `<div style="background:#D1FAE5;padding:15px;border-radius:5px;margin:20px 0;">
-         <strong>💰 Offered Amount:</strong> $${offeredAmount}
+         <strong>💰 Offered Amount:</strong> ${offeredAmount.toFixed(0)} UGX
        </div>`
     : `<div style="background:#DBEAFE;padding:15px;border-radius:5px;margin:20px 0;">
          <strong>✨ This is a free collaboration opportunity</strong>
@@ -936,8 +936,8 @@ export async function sendMatchNotificationEmail(
   const paymentDetails = recipientOffer === 0 && matchedOffer === 0
     ? 'This is a free collaboration opportunity'
     : isGuestRecipient
-      ? `You offered $${recipientOffer} • ${matchedName} is willing to pay $${matchedOffer}`
-      : `${matchedName} offered $${matchedOffer} • You're willing to pay $${recipientOffer}`;
+      ? `You offered ${recipientOffer.toFixed(0)} UGX • ${matchedName} is willing to pay ${matchedOffer.toFixed(0)} UGX`
+      : `${matchedName} offered ${matchedOffer.toFixed(0)} UGX • You're willing to pay ${recipientOffer.toFixed(0)} UGX`;
 
   const topicsText = topics.length > 0
     ? `\n\n📋 Shared Topics of Interest:\n${topics.map(t => `  • ${t}`).join('\n')}`
@@ -977,8 +977,8 @@ Questions? Reply to this email or contact us at hello@uvotamstudio.com`;
     : `<div style="background:#D1FAE5;padding:15px;border-radius:5px;margin:20px 0;">
          <strong>💰 Payment Details:</strong><br>
          ${isGuestRecipient
-      ? `You offered <strong>$${recipientOffer}</strong> • ${matchedName} is willing to pay <strong>$${matchedOffer}</strong>`
-      : `${matchedName} offered <strong>$${matchedOffer}</strong> • You're willing to pay <strong>$${recipientOffer}</strong>`
+      ? `You offered <strong>${recipientOffer.toFixed(0)} UGX</strong> • ${matchedName} is willing to pay <strong>${matchedOffer.toFixed(0)} UGX</strong>`
+      : `${matchedName} offered <strong>${matchedOffer.toFixed(0)} UGX</strong> • You're willing to pay <strong>${recipientOffer.toFixed(0)} UGX</strong>`
     }
        </div>`;
 
@@ -1062,8 +1062,8 @@ export async function sendCollaborationProposalEmail(
   const paymentText = proposedPrice === 0
     ? '\n\n💰 This is a free collaboration opportunity'
     : senderType === 'guest'
-      ? `\n\n💰 Guest Fee: $${proposedPrice} (guest pays podcast)`
-      : `\n\n💰 Guest Fee: $${proposedPrice} (podcast pays guest)`;
+      ? `\n\n💰 Guest Fee: ${proposedPrice.toFixed(0)} UGX (guest pays podcast)`
+      : `\n\n💰 Guest Fee: ${proposedPrice.toFixed(0)} UGX (podcast pays guest)`;
 
   const topicsText = proposedTopics.length > 0
     ? `\n\n📋 Proposed Topics:\n${proposedTopics.map(t => `  • ${t}`).join('\n')}`
@@ -1098,7 +1098,7 @@ Questions? Reply to this email or contact us at hello@uvotamstudio.com`;
          <strong>✨ This is a free collaboration opportunity</strong>
        </div>`
     : `<div style="background:#D1FAE5;padding:15px;border-radius:5px;margin:20px 0;">
-         <strong>💰 Guest Fee:</strong> $${proposedPrice}<br>
+         <strong>💰 Guest Fee:</strong> ${proposedPrice.toFixed(0)} UGX<br>
          <small>${senderType === 'guest' ? '(guest pays podcast)' : '(podcast pays guest)'}</small>
        </div>`;
 
@@ -1312,7 +1312,7 @@ export async function sendEpisodeReleaseEmail(
   const subject = `🎉 Your episode on "${podcastName}" is live!`;
 
   const paymentText = paymentReleased && paymentAmount
-    ? `\n\n💰 Payment Released:\nYour payment of $${paymentAmount} has been released from escrow and will be transferred to your account shortly.`
+    ? `\n\n💰 Payment Released:\nYour payment of ${paymentAmount.toFixed(0)} UGX has been released from escrow and will be transferred to your account shortly.`
     : '';
 
   const text = `Hi ${recipientName},
@@ -1342,7 +1342,7 @@ Questions? Reply to this email or contact us at hello@uvotamstudio.com`;
   const paymentHtml = paymentReleased && paymentAmount
     ? `<div style="background:#D1FAE5;padding:20px;border-radius:5px;margin:20px 0;border-left:4px solid #10B981;">
          <strong>💰 Payment Released:</strong><br><br>
-         Your payment of <strong>$${paymentAmount}</strong> has been released from escrow and will be transferred to your account shortly.
+         Your payment of <strong>${paymentAmount.toFixed(0)} UGX</strong> has been released from escrow and will be transferred to your account shortly.
        </div>`
     : '';
 

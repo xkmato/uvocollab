@@ -42,7 +42,7 @@ export async function createSubaccount(params: {
       business_email: params.businessEmail,
       business_contact: params.businessContact,
       business_mobile: params.businessMobile,
-      country: 'NG',
+      country: 'UG',
       split_type: params.splitType,
       split_value: params.splitValue,
     };
@@ -56,9 +56,9 @@ export async function createSubaccount(params: {
 }
 
 /**
- * Get list of Nigerian banks for bank account verification
+ * Get list of Ugandan banks for bank account verification
  */
-export async function getBanks(country: string = 'NG') {
+export async function getBanks(country: string = 'UG') {
   try {
     const flw = getFlutterwaveClient();
     const response = await flw.Bank.country({ country });
@@ -159,7 +159,7 @@ export async function initiateTransfer(params: {
       account_number: params.accountNumber,
       amount: params.amount,
       narration: params.narration,
-      currency: params.currency || 'NGN',
+      currency: params.currency || 'UGX',
       reference: params.reference,
       beneficiary_name: params.beneficiaryName,
     };

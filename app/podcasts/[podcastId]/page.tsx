@@ -320,7 +320,7 @@ export default function PodcastDetailPage() {
                                     </div>
                                     <div className="text-right">
                                         <span className="block text-2xl font-bold text-purple-600">
-                                            {service.price > 0 ? `$${service.price}` : 'Free'}
+                                            {service.price > 0 ? `${service.price.toFixed(0)} UGX` : 'Free'}
                                         </span>
                                         <span className="text-sm text-gray-500">{service.duration}</span>
                                     </div>
