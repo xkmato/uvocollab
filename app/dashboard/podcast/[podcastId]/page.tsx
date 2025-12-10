@@ -228,7 +228,7 @@ export default function PodcastDashboard() {
                         {!isEditingPodcast && (
                             <button
                                 onClick={() => setIsEditingPodcast(true)}
-                                className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                                className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700"
                             >
                                 Edit Details
                             </button>
@@ -245,7 +245,7 @@ export default function PodcastDashboard() {
                                         type="text"
                                         value={podcastForm.title}
                                         onChange={(e) => setPodcastForm({ ...podcastForm, title: e.target.value })}
-                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border text-gray-900 bg-white"
                                         aria-label="Podcast title"
                                     />
                                 </div>
@@ -256,7 +256,7 @@ export default function PodcastDashboard() {
                                         value={podcastForm.description}
                                         onChange={(e) => setPodcastForm({ ...podcastForm, description: e.target.value })}
                                         rows={3}
-                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border text-gray-900 bg-white"
                                         aria-label="Podcast description"
                                     />
                                 </div>
@@ -268,7 +268,7 @@ export default function PodcastDashboard() {
                                             type="url"
                                             value={podcastForm.rssFeedUrl}
                                             onChange={(e) => setPodcastForm({ ...podcastForm, rssFeedUrl: e.target.value })}
-                                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border text-gray-900 bg-white"
                                             aria-label="RSS Feed URL"
                                             required
                                         />
@@ -281,7 +281,7 @@ export default function PodcastDashboard() {
                                             type="url"
                                             value={podcastForm.websiteUrl}
                                             onChange={(e) => setPodcastForm({ ...podcastForm, websiteUrl: e.target.value })}
-                                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border text-gray-900 bg-white"
                                             aria-label="Website URL"
                                         />
                                     </div>
@@ -300,7 +300,7 @@ export default function PodcastDashboard() {
                                                         updated[index].platform = e.target.value;
                                                         setPodcastForm({ ...podcastForm, platformLinks: updated });
                                                     }}
-                                                    className="w-1/3 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                                    className="w-1/3 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border text-gray-900 bg-white placeholder-gray-400"
                                                 />
                                                 <input
                                                     type="url"
@@ -311,7 +311,7 @@ export default function PodcastDashboard() {
                                                         updated[index].url = e.target.value;
                                                         setPodcastForm({ ...podcastForm, platformLinks: updated });
                                                     }}
-                                                    className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                                    className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border text-gray-900 bg-white placeholder-gray-400"
                                                 />
                                                 {podcastForm.platformLinks.length > 1 && (
                                                     <button
