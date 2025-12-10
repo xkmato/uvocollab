@@ -351,7 +351,7 @@ export default function PodcastDetailPage() {
 
             {/* Episodes Section */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <EpisodeList podcastId={podcastId} />
+                <EpisodeList podcastId={podcastId} podcastTitle={podcast?.title} />
             </div>
 
             {/* Pitch Form Modal */}
