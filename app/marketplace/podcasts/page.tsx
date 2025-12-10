@@ -63,11 +63,14 @@ export default function PodcastMarketplacePage() {
                 ...doc.data(),
             })) as Podcast[];
 
-            setAllPodcasts(podcastsData);
+            // Filter out deactivated podcasts
+            const activePodcasts = podcastsData.filter(podcast => podcast.isActive !== false);
+
+            setAllPodcasts(activePodcasts);
 
             // Load services for each podcast to enable price filtering
             const servicesMap: Record<string, PodcastService[]> = {};
-            for (const podcast of podcastsData) {
+            for (const podcast of activePodcasts) {
                 const servicesRef = collection(db, 'podcasts', podcast.id, 'services');
                 const servicesSnap = await getDocs(servicesRef);
                 servicesMap[podcast.id] = servicesSnap.docs.map((doc) => ({

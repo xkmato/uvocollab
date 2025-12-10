@@ -17,6 +17,9 @@ export interface Podcast {
   websiteUrl?: string; // Optional
   platformLinks?: PodcastPlatformLink[]; // Optional - platforms like Spotify, Apple Podcasts, etc.
   status: PodcastStatus;
+  isActive?: boolean; // Optional - defaults to true, set to false for soft delete
+  deactivatedAt?: Date; // Optional - timestamp when podcast was deactivated
+  deactivatedBy?: string; // Optional - user ID who deactivated the podcast
   createdAt: Date; // Firestore Timestamp
   updatedAt: Date; // Firestore Timestamp
 }

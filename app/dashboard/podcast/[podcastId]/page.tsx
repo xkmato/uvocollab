@@ -1,5 +1,7 @@
 'use client';
 
+import EpisodeList from '@/app/components/EpisodeList';
+import PodcastManagementActions from '@/app/components/PodcastManagementActions';
 import PodcastServiceForm from '@/app/components/PodcastServiceForm';
 import PodcastServiceList from '@/app/components/PodcastServiceList';
 import { useAuth } from '@/app/contexts/AuthContext';
@@ -201,6 +203,24 @@ export default function PodcastDashboard() {
                     <Link href="/dashboard/podcast" className="text-blue-600 hover:text-blue-800">← All Podcasts</Link>
                 </div>
 
+                {/* Deactivation Warning Banner */}
+                {podcast.isActive === false && (
+                    <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8">
+                        <div className="flex">
+                            <div className="flex-shrink-0">
+                                <svg className="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                            <div className="ml-3">
+                                <p className="text-sm text-yellow-700">
+                                    <strong>This podcast is deactivated.</strong> It is not visible in the marketplace. You can reactivate it using the management actions below.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {/* Podcast Details Section */}
                 <div className="bg-white rounded-lg shadow mb-8 overflow-hidden">
                     <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
@@ -382,6 +402,11 @@ export default function PodcastDashboard() {
                             </div>
                         )}
                     </div>
+                </div>
+
+                {/* Episodes Section */}
+                <div className="mb-8">
+                    <EpisodeList podcastId={podcast.id} />
                 </div>
 
                 {/* Incoming Pitches Section */}
@@ -605,6 +630,16 @@ export default function PodcastDashboard() {
                                 onDelete={handleDeleteService}
                             />
                         )}
+                    </div>
+
+                    {/* Podcast Management Actions */}
+                    <div className="mt-6 pt-6 border-t border-gray-200">
+                        <h3 className="text-sm font-medium text-gray-700 mb-3">Podcast Management</h3>
+                        <PodcastManagementActions
+                            podcastId={podcast.id}
+                            isActive={podcast.isActive !== false}
+                            onStatusChange={fetchPodcastData}
+                        />
                     </div>
                 </div>
             </div>
