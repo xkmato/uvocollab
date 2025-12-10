@@ -7,6 +7,7 @@ export interface RssValidationResult {
     error?: string;
     feedTitle?: string;
     itemCount?: number;
+    coverImageUrl?: string;
 }
 
 /**
@@ -54,10 +55,14 @@ export async function validateRssFeed(feedUrl: string): Promise<RssValidationRes
             };
         }
 
+        // Extract cover image from feed
+        const coverImageUrl = feed.itunes?.image || feed.image?.url || null;
+
         return {
             isValid: true,
             feedTitle: feed.title,
             itemCount: feed.items?.length || 0,
+            coverImageUrl: coverImageUrl || undefined,
         };
     } catch (error) {
         console.error('RSS validation error:', error);

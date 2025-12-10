@@ -77,7 +77,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Fields allowed to be updated
-    const { title, description, coverImageUrl, categories, avgListeners, rssFeedUrl, websiteUrl, platformLinks } = body;
+    const { title, description, categories, avgListeners, rssFeedUrl, websiteUrl, platformLinks } = body;
 
     const updateData: Record<string, unknown> = {
       updatedAt: new Date(),
@@ -85,11 +85,10 @@ export async function PUT(request: NextRequest) {
 
     if (title !== undefined) updateData.title = title;
     if (description !== undefined) updateData.description = description;
-    if (coverImageUrl !== undefined) updateData.coverImageUrl = coverImageUrl;
     if (categories !== undefined) updateData.categories = categories;
     if (avgListeners !== undefined) updateData.avgListeners = avgListeners;
 
-    // Validate RSS feed if it's being updated
+    // Validate RSS feed if it's being updated and extract cover image
     if (rssFeedUrl !== undefined) {
       if (!rssFeedUrl || !rssFeedUrl.trim()) {
         return NextResponse.json({ error: 'RSS feed URL cannot be empty' }, { status: 400 });
@@ -105,6 +104,10 @@ export async function PUT(request: NextRequest) {
       }
 
       updateData.rssFeedUrl = rssFeedUrl;
+      // Update cover image from RSS feed
+      if (rssValidation.coverImageUrl) {
+        updateData.coverImageUrl = rssValidation.coverImageUrl;
+      }
     }
 
     if (websiteUrl !== undefined) updateData.websiteUrl = websiteUrl;

@@ -29,7 +29,6 @@ export async function POST(request: NextRequest) {
       description,
       rssFeedUrl,
       categories,
-      coverImageUrl,
       avgListeners,
       websiteUrl,
       platformLinks,
@@ -38,7 +37,6 @@ export async function POST(request: NextRequest) {
       description?: string;
       rssFeedUrl?: string;
       categories: string[];
-      coverImageUrl?: string;
       avgListeners?: number;
       websiteUrl?: string;
       platformLinks?: Array<{ platform: string; url: string }>;
@@ -72,7 +70,7 @@ export async function POST(request: NextRequest) {
       description: description?.trim() || null,
       rssFeedUrl: rssFeedUrl?.trim() || null,
       categories,
-      coverImageUrl: coverImageUrl || null,
+      coverImageUrl: rssValidation.coverImageUrl || null,
       avgListeners: avgListeners || null,
       websiteUrl: websiteUrl || null,
       platformLinks: platformLinks || [],

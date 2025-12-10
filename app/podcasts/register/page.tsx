@@ -18,7 +18,6 @@ export default function RegisterPodcast() {
         websiteUrl: '',
         category: '',
         avgListeners: '',
-        coverImageUrl: '',
         platformLinks: [{ platform: '', url: '' }],
     });
 
@@ -69,7 +68,6 @@ export default function RegisterPodcast() {
                 description: formData.description,
                 rssFeedUrl: formData.rssFeedUrl || null,
                 categories: [formData.category],
-                coverImageUrl: formData.coverImageUrl || null,
                 avgListeners: formData.avgListeners ? Number(formData.avgListeners) : null,
                 websiteUrl: formData.websiteUrl || null,
                 platformLinks: formData.platformLinks.filter(link => link.platform && link.url),
@@ -229,7 +227,7 @@ export default function RegisterPodcast() {
                                 required
                             />
                             <p className="mt-2 text-sm text-white/60">
-                                Your podcast RSS feed URL is required. This is used to fetch your episodes.
+                                Your podcast RSS feed URL is required. We&apos;ll use it to fetch your episodes and cover art.
                             </p>
                         </div>
 
@@ -259,22 +257,6 @@ export default function RegisterPodcast() {
                                 placeholder="e.g. 5000"
                                 min="0"
                             />
-                        </div>
-
-                        {/* Cover Image URL */}
-                        <div>
-                            <label className="block text-white font-semibold mb-2">Cover Image URL</label>
-                            <input
-                                type="url"
-                                name="coverImageUrl"
-                                value={formData.coverImageUrl}
-                                onChange={handleChange}
-                                className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:bg-white/10 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/50 transition-all"
-                                placeholder="https://..."
-                            />
-                            <p className="mt-2 text-sm text-white/60">
-                                Please provide a direct link to your podcast cover art (square, min 1400x1400px recommended).
-                            </p>
                         </div>
 
                         {/* Platform Links */}
