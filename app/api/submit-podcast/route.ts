@@ -49,6 +49,22 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
+    // Validate RSS feed is provided
+    if (!rssFeedUrl || !rssFeedUrl.trim()) {
+      return NextResponse.json({ error: 'RSS feed URL is required' }, { status: 400 });
+    }
+
+    // Validate RSS feed
+    const { validateRssFeed } = await import('@/app/lib/validateRss');
+    const rssValidation = await validateRssFeed(rssFeedUrl.trim());
+
+    if (!rssValidation.isValid) {
+      return NextResponse.json({
+        error: `Invalid RSS feed: ${rssValidation.error}`
+      }, { status: 400 });
+    }
+
+
     // Create podcast document
     const podcastData = {
       ownerId,

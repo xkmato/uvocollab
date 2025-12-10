@@ -54,9 +54,10 @@ export default function RegisterPodcast() {
             }
 
             // Basic validation
-            if (!formData.title || !formData.description || !formData.category) {
+            if (!formData.title || !formData.description || !formData.category || !formData.rssFeedUrl) {
                 throw new Error('Please fill in all required fields');
             }
+
 
             // Implement actual submission logic (Task 1.3)
             console.log('Submitting podcast data:', formData);
@@ -217,7 +218,7 @@ export default function RegisterPodcast() {
 
                         {/* RSS Feed */}
                         <div>
-                            <label className="block text-white font-semibold mb-2">RSS Feed URL (Optional)</label>
+                            <label className="block text-white font-semibold mb-2">RSS Feed URL *</label>
                             <input
                                 type="url"
                                 name="rssFeedUrl"
@@ -225,8 +226,13 @@ export default function RegisterPodcast() {
                                 onChange={handleChange}
                                 className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:bg-white/10 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/50 transition-all"
                                 placeholder="https://feed.podbean.com/..."
+                                required
                             />
+                            <p className="mt-2 text-sm text-white/60">
+                                Your podcast RSS feed URL is required. This is used to fetch your episodes.
+                            </p>
                         </div>
+
 
                         {/* Website URL */}
                         <div>

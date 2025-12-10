@@ -75,11 +75,11 @@ export async function PUT(request: NextRequest) {
     if (doc.data()?.ownerId !== ownerId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
-    
+
     // Fields allowed to be updated
     const { title, description, coverImageUrl, categories, avgListeners, rssFeedUrl, websiteUrl, platformLinks } = body;
-    
-        const updateData: Record<string, unknown> = {
+
+    const updateData: Record<string, unknown> = {
       updatedAt: new Date(),
     };
 
@@ -88,9 +88,28 @@ export async function PUT(request: NextRequest) {
     if (coverImageUrl !== undefined) updateData.coverImageUrl = coverImageUrl;
     if (categories !== undefined) updateData.categories = categories;
     if (avgListeners !== undefined) updateData.avgListeners = avgListeners;
-    if (rssFeedUrl !== undefined) updateData.rssFeedUrl = rssFeedUrl;
+
+    // Validate RSS feed if it's being updated
+    if (rssFeedUrl !== undefined) {
+      if (!rssFeedUrl || !rssFeedUrl.trim()) {
+        return NextResponse.json({ error: 'RSS feed URL cannot be empty' }, { status: 400 });
+      }
+
+      const { validateRssFeed } = await import('@/app/lib/validateRss');
+      const rssValidation = await validateRssFeed(rssFeedUrl.trim());
+
+      if (!rssValidation.isValid) {
+        return NextResponse.json({
+          error: `Invalid RSS feed: ${rssValidation.error}`
+        }, { status: 400 });
+      }
+
+      updateData.rssFeedUrl = rssFeedUrl;
+    }
+
     if (websiteUrl !== undefined) updateData.websiteUrl = websiteUrl;
     if (platformLinks !== undefined) updateData.platformLinks = platformLinks;
+
 
     await docRef.update(updateData);
 

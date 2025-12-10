@@ -180,18 +180,33 @@ export default function PodcastDetailPage() {
                                 {podcast.description}
                             </p>
 
-                            {/* Wishlist Button for Guests */}
-                            {userData?.isGuest && (
-                                <button
-                                    onClick={() => setShowWishlistModal(true)}
-                                    className="inline-flex items-center px-6 py-3 bg-white border-2 border-purple-600 text-purple-600 font-semibold rounded-lg hover:bg-purple-50 transition-colors"
-                                >
-                                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                    </svg>
-                                    Add to My Wishlist
-                                </button>
-                            )}
+                            <div className="flex flex-wrap gap-3">
+                                {/* Wishlist Button for Guests */}
+                                {userData?.isGuest && (
+                                    <button
+                                        onClick={() => setShowWishlistModal(true)}
+                                        className="inline-flex items-center px-6 py-3 bg-white border-2 border-purple-600 text-purple-600 font-semibold rounded-lg hover:bg-purple-50 transition-colors"
+                                    >
+                                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                        </svg>
+                                        Add to My Wishlist
+                                    </button>
+                                )}
+
+                                {/* Edit Button for Owners */}
+                                {userData?.uid === podcast?.ownerId && (
+                                    <button
+                                        onClick={() => router.push(`/dashboard/podcast/${podcastId}`)}
+                                        className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+                                    >
+                                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                        Edit Podcast
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
