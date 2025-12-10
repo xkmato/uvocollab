@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Migration script to update existing podcasts with cover images from their RSS feeds
  * Run this once to populate coverImageUrl for all existing podcasts that have RSS feeds
