@@ -176,6 +176,34 @@ export default function PodcastDetailPage() {
                                 )}
                             </div>
 
+                            {/* Platform Links Section */}
+                            {podcast.platformLinks && podcast.platformLinks.length > 0 && (
+                                <div className="mb-6">
+                                    <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
+                                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                        </svg>
+                                        Listen On
+                                    </h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        {podcast.platformLinks.map((link, index) => (
+                                            <a
+                                                key={index}
+                                                href={link.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 text-purple-700 rounded-lg font-medium hover:from-purple-100 hover:to-blue-100 hover:border-purple-300 transition-all shadow-sm hover:shadow-md"
+                                            >
+                                                <span>{link.platform}</span>
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                                </svg>
+                                            </a>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
                             <p className="text-gray-700 text-lg leading-relaxed max-w-3xl mb-6">
                                 {podcast.description}
                             </p>
