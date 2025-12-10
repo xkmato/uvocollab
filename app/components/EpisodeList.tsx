@@ -146,7 +146,7 @@ export default function EpisodeList({ podcastId, podcastTitle }: EpisodeListProp
                                         <button
                                             onClick={() => playEpisode({
                                                 title: episode.title,
-                                                audioUrl: episode.audioUrl,
+                                                audioUrl: episode.audioUrl!,
                                                 imageUrl: episode.imageUrl,
                                                 podcastTitle: podcastTitle
                                             })}
