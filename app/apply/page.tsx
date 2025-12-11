@@ -1,3 +1,10 @@
+import ComingSoon from '../components/ComingSoon';
+
+export default function ApplyAsLegend() {
+    return <ComingSoon feature="Legend Applications" />;
+}
+
+/*
 'use client';
 
 import { useAuth } from '@/app/contexts/AuthContext';
@@ -6,7 +13,7 @@ import { useState } from 'react';
 
 type WizardStep = 1 | 2 | 3 | 4 | 5;
 
-export default function ApplyAsLegend() {
+function ApplyAsLegendOriginal() {
     const router = useRouter();
     const { user, loading } = useAuth();
     const [currentStep, setCurrentStep] = useState<WizardStep>(1);
@@ -472,6 +479,7 @@ export default function ApplyAsLegend() {
                     </a>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
+*/

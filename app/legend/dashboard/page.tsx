@@ -1,3 +1,10 @@
+import ComingSoon from '@/app/components/ComingSoon';
+
+export default function LegendDashboard() {
+    return <ComingSoon feature="Legend Dashboard" />;
+}
+
+/*
 "use client";
 
 import BankAccountForm from '@/app/components/BankAccountForm';
@@ -14,7 +21,7 @@ import { useEffect, useState } from 'react';
 import ProfileWizard from './components/ProfileWizard';
 import ServiceWizard from './components/ServiceWizard';
 
-export default function LegendDashboard() {
+function LegendDashboardOriginal() {
     const { user, userData, logout, loading } = useAuth();
     const router = useRouter();
     const [services, setServices] = useState<Service[]>([]);
@@ -869,6 +876,7 @@ export default function LegendDashboard() {
                     )}
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
+*/

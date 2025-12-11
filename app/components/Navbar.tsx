@@ -32,16 +32,10 @@ export default function Navbar() {
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center gap-8">
                         <Link
-                            href="/marketplace"
-                            className={`text-sm font-medium transition-colors hover:text-white ${isActive('/marketplace') ? 'text-white' : 'text-white/70'}`}
+                            href="/podcasts"
+                            className={`text-sm font-medium transition-colors hover:text-white ${isActive('/podcasts') ? 'text-white' : 'text-white/70'}`}
                         >
-                            Marketplace
-                        </Link>
-                        <Link
-                            href="/marketplace/podcasts"
-                            className={`text-sm font-medium transition-colors hover:text-white ${isActive('/marketplace/podcasts') ? 'text-white' : 'text-white/70'}`}
-                        >
-                            Podcasts
+                            Browse Podcasts
                         </Link>
                         <Link
                             href="/guests"
@@ -112,18 +106,11 @@ export default function Navbar() {
                 <div className="md:hidden bg-slate-900 border-b border-white/10">
                     <div className="px-4 pt-2 pb-6 space-y-2">
                         <Link
-                            href="/marketplace"
+                            href="/podcasts"
                             className="block px-3 py-2 text-base font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-lg"
                             onClick={() => setIsMenuOpen(false)}
                         >
-                            Marketplace
-                        </Link>
-                        <Link
-                            href="/marketplace/podcasts"
-                            className="block px-3 py-2 text-base font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-lg"
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            Podcasts
+                            Browse Podcasts
                         </Link>
                         <Link
                             href="/guests"
