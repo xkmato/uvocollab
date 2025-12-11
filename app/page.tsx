@@ -105,7 +105,7 @@ export default function Home() {
             {/* Browse Podcasts Section */}
             <div className="max-w-5xl mx-auto">
               <Link
-                href="/podcasts"
+                href="/marketplace/podcasts"
                 className="group block p-6 rounded-2xl overflow-hidden bg-white/5 backdrop-blur-xl border border-white/10 hover:border-cyan-500/50 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl hover:shadow-cyan-500/20"
               >
                 <div className="flex items-center gap-6">

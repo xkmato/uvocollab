@@ -35,7 +35,7 @@ export default function ComingSoon({ feature = "This feature" }: { feature?: str
                         Back to Home
                     </Link>
                     <Link
-                        href="/podcasts"
+                        href="/marketplace/podcasts"
                         className="px-8 py-4 bg-white/10 backdrop-blur-md border-2 border-white/30 text-white font-semibold rounded-full hover:bg-white/20 hover:shadow-xl hover:scale-105 transition-all duration-300"
                     >
                         Browse Podcasts
