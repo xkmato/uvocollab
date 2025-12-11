@@ -367,7 +367,6 @@ function LegendDashboardOriginal() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/50 to-blue-50/50 pt-24 pb-8">
-            {/* Header */}
             <div className="bg-white border-b sticky top-0 z-30 shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center py-4">
@@ -405,35 +404,6 @@ function LegendDashboardOriginal() {
             </div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* Bank Account Warning - REMOVED for manual withdrawal flow */}
-                {/* {!checkingBankStatus && !bankAccountConnected && (
-                    <div className="mb-8 bg-gradient-to-r from-yellow-50 to-orange-50 border-l-4 border-yellow-400 p-6 rounded-r-lg shadow-sm animate-fadeIn">
-                        <div className="flex">
-                            <div className="flex-shrink-0">
-                                <svg className="h-6 w-6 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                            <div className="ml-4">
-                                <h3 className="text-lg font-medium text-yellow-800">Action Required</h3>
-                                <p className="mt-1 text-yellow-700">
-                                    You need to connect your bank account to receive payments.
-                                    Your services will not be visible in the marketplace until your bank account is connected.
-                                </p>
-                                <div className="mt-4">
-                                    <button
-                                        onClick={() => setActiveTab('payment')}
-                                        className="px-4 py-2 bg-yellow-100 text-yellow-800 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors"
-                                    >
-                                        Connect Bank Account
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )} */}
-
-                {/* Tab Navigation */}
                 <div className="flex space-x-1 bg-white p-1 rounded-xl shadow-sm mb-8 overflow-x-auto">
                     {([
                         { id: 'requests', label: 'Collaboration Requests', count: collaborations.length },
@@ -465,9 +435,7 @@ function LegendDashboardOriginal() {
                     ))}
                 </div>
 
-                {/* Content Area */}
                 <div className="animate-fadeIn">
-                    {/* Profile Tab */}
                     {activeTab === 'profile' && (
                         <div className="max-w-3xl mx-auto">
                             <div className="mb-6">
@@ -497,7 +465,6 @@ function LegendDashboardOriginal() {
                         </div>
                     )}
 
-                    {/* Payment Settings Tab */}
                     {activeTab === 'payment' && (
                         <div className="max-w-3xl mx-auto">
                             <div className="mb-6">
@@ -510,7 +477,6 @@ function LegendDashboardOriginal() {
                                 }} />
                             </div>
 
-                            {/* Withdrawal Section */}
                             <div className="bg-white rounded-2xl shadow-xl overflow-hidden p-8">
                                 <h3 className="text-xl font-bold text-gray-900 mb-4">Withdraw Funds</h3>
                                 <p className="text-gray-600 mb-6">
@@ -537,7 +503,6 @@ function LegendDashboardOriginal() {
                         </div>
                     )}
 
-                    {/* Services Tab */}
                     {activeTab === 'services' && (
                         <div>
                             <div className="flex justify-between items-center mb-8">
@@ -632,7 +597,6 @@ function LegendDashboardOriginal() {
                                 </div>
                             )}
 
-                            {/* Service Form Modal */}
                             {showServiceForm && (
                                 <ServiceWizard
                                     initialData={editingService}
@@ -644,7 +608,6 @@ function LegendDashboardOriginal() {
                         </div>
                     )}
 
-                    {/* Requests Tab */}
                     {activeTab === 'requests' && (
                         <div>
                             <div className="mb-8">
@@ -696,7 +659,6 @@ function LegendDashboardOriginal() {
                                         return (
                                             <div key={collab.id} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden">
                                                 <div className="p-6">
-                                                    {/* Header */}
                                                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 pb-6 border-b border-gray-100">
                                                         <div className="mb-4 md:mb-0">
                                                             <div className="flex items-center gap-3 mb-1">
@@ -721,9 +683,7 @@ function LegendDashboardOriginal() {
                                                     </div>
 
                                                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                                                        {/* Left Column: Artist Info & Message */}
                                                         <div className="lg:col-span-2 space-y-6">
-                                                            {/* Buyer Info */}
                                                             {buyer && (
                                                                 <div className="flex items-center space-x-4 bg-gray-50 p-4 rounded-lg">
                                                                     {buyer.profileImageUrl ? (
@@ -746,7 +706,6 @@ function LegendDashboardOriginal() {
                                                                 </div>
                                                             )}
 
-                                                            {/* Message */}
                                                             <div>
                                                                 <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-2">Creative Concept</h4>
                                                                 <div className="bg-white border border-gray-200 rounded-lg p-4 text-gray-700 leading-relaxed">
@@ -755,9 +714,7 @@ function LegendDashboardOriginal() {
                                                             </div>
                                                         </div>
 
-                                                        {/* Right Column: Assets & Actions */}
                                                         <div className="space-y-6">
-                                                            {/* Assets */}
                                                             <div className="bg-gray-50 rounded-lg p-5">
                                                                 <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-4">Project Assets</h4>
 
@@ -800,7 +757,6 @@ function LegendDashboardOriginal() {
                                                                 </div>
                                                             </div>
 
-                                                            {/* Actions */}
                                                             <div className="pt-2">
                                                                 {collab.status === 'pending_review' && (
                                                                     <div className="grid grid-cols-1 gap-3">
@@ -841,7 +797,6 @@ function LegendDashboardOriginal() {
                                                         </div>
                                                     </div>
 
-                                                    {/* Status Messages */}
                                                     {collab.status === 'pending_payment' && (
                                                         <div className="mt-6 bg-blue-50 border border-blue-100 rounded-lg p-4 flex items-start">
                                                             <svg className="w-5 h-5 text-blue-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>

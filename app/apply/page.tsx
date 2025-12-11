@@ -154,14 +154,12 @@ function ApplyAsLegendOriginal() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-            {/* Background Animations */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float"></div>
                 <div className="absolute bottom-20 right-10 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float" style={{ animationDelay: '1s' }}></div>
             </div>
 
             <div className="max-w-4xl mx-auto relative z-10">
-                {/* Header */}
                 <div className="text-center mb-12 animate-fadeIn">
                     <h1 className="text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 mb-4">
                         Become a Legend
@@ -171,12 +169,9 @@ function ApplyAsLegendOriginal() {
                     </p>
                 </div>
 
-                {/* Progress Steps */}
                 <div className="mb-12">
                     <div className="flex justify-between items-center relative">
-                        {/* Progress Bar Background */}
                         <div className="absolute top-1/2 left-0 right-0 h-1 bg-white/10 -translate-y-1/2"></div>
-                        {/* Active Progress Bar */}
                         <div
                             className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-purple-500 to-pink-500 -translate-y-1/2 transition-all duration-500"
                             style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
@@ -201,7 +196,6 @@ function ApplyAsLegendOriginal() {
                     </div>
                 </div>
 
-                {/* Form Card */}
                 <div className="glass-dark rounded-3xl p-8 md:p-12 shadow-2xl animate-fadeIn">
                     {error && (
                         <div className="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-xl text-red-200 animate-slideIn">
@@ -209,7 +203,6 @@ function ApplyAsLegendOriginal() {
                         </div>
                     )}
 
-                    {/* Step 1: Contact Info */}
                     {currentStep === 1 && (
                         <div className="space-y-6 animate-fadeIn">
                             <h2 className="text-3xl font-bold text-white mb-6">Let&apos;s start with your contact information</h2>
@@ -254,7 +247,6 @@ function ApplyAsLegendOriginal() {
                         </div>
                     )}
 
-                    {/* Step 2: Management */}
                     {currentStep === 2 && (
                         <div className="space-y-6 animate-fadeIn">
                             <h2 className="text-3xl font-bold text-white mb-6">Tell us about your management</h2>
@@ -288,7 +280,6 @@ function ApplyAsLegendOriginal() {
                         </div>
                     )}
 
-                    {/* Step 3: Proof of Status */}
                     {currentStep === 3 && (
                         <div className="space-y-6 animate-fadeIn">
                             <h2 className="text-3xl font-bold text-white mb-2">Verify your professional status</h2>
@@ -348,7 +339,6 @@ function ApplyAsLegendOriginal() {
                         </div>
                     )}
 
-                    {/* Step 4: About You */}
                     {currentStep === 4 && (
                         <div className="space-y-6 animate-fadeIn">
                             <h2 className="text-3xl font-bold text-white mb-2">Tell your story</h2>
@@ -388,7 +378,6 @@ function ApplyAsLegendOriginal() {
                         </div>
                     )}
 
-                    {/* Step 5: Review */}
                     {currentStep === 5 && (
                         <div className="space-y-6 animate-fadeIn">
                             <h2 className="text-3xl font-bold text-white mb-6">Review your application</h2>
@@ -430,7 +419,6 @@ function ApplyAsLegendOriginal() {
                         </div>
                     )}
 
-                    {/* Navigation Buttons */}
                     <div className="flex justify-between items-center mt-12 pt-8 border-t border-white/10">
                         <button
                             onClick={prevStep}
@@ -471,7 +459,6 @@ function ApplyAsLegendOriginal() {
                     </div>
                 </div>
 
-                {/* Additional Info */}
                 <div className="mt-8 text-center text-white/60 text-sm">
                     Questions about the application process?{' '}
                     <a href="mailto:legends@collab.uvotam.com" className="text-purple-400 hover:text-purple-300 underline">

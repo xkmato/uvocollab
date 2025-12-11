@@ -151,11 +151,9 @@ function LegendPublicProfileOriginal() {
 
     return (
         <div className="min-h-screen bg-gray-50 pt-20">
-            {/* Hero Section with Profile Info */}
-<div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-            {/* Profile Image */}
             <div className="flex-shrink-0">
                 {legend.profileImageUrl ? (
                     <div className="relative w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden">
@@ -175,11 +173,9 @@ function LegendPublicProfileOriginal() {
                 )}
             </div>
 
-            {/* Profile Details */}
             <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
                     <h1 className="text-4xl font-bold">{legend.displayName}</h1>
-                    {/* Verified Legend Badge */}
                     <div className="flex items-center gap-1 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full border border-white/30">
                         <svg
                             className="w-5 h-5 text-yellow-300"
@@ -211,7 +207,6 @@ function LegendPublicProfileOriginal() {
     </div>
 </div>
 
-{/* Services Section */ }
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div className="mb-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-2">Available Services</h2>
@@ -310,7 +305,6 @@ function LegendPublicProfileOriginal() {
     )}
 </div>
 
-{/* Additional Info Section */ }
 <div className="bg-white border-t">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center">
@@ -358,7 +352,6 @@ function LegendPublicProfileOriginal() {
     </div>
 </div>
 
-{/* Pitch Form Modal */ }
 {
     showPitchForm && selectedService && legend && user && (
         <PitchForm

@@ -163,8 +163,7 @@ function MarketplacePageOriginal() {
 
     return (
         <div className="min-h-screen bg-gray-50 pt-20">
-            {/* Hero Section */}
-<div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center">
             <h1 className="text-5xl font-bold mb-4">Marketplace</h1>
@@ -175,7 +174,6 @@ function MarketplacePageOriginal() {
     </div>
 </div>
 
-{/* Filters Section */ }
 <div className="bg-white border-b">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
@@ -213,7 +211,6 @@ function MarketplacePageOriginal() {
 
         {showFilters && (
             <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
-                {/* Genre Filter */}
                 <div>
                     <label htmlFor="genre-select" className="block text-sm font-medium text-gray-700 mb-2">
                         Genre
@@ -238,7 +235,6 @@ function MarketplacePageOriginal() {
                     </select>
                 </div>
 
-                {/* Price Range Filter */}
                 <div>
                     <label htmlFor="price-range-select" className="block text-sm font-medium text-gray-700 mb-2">
                         Price Range
@@ -256,7 +252,6 @@ function MarketplacePageOriginal() {
                     </select>
                 </div>
 
-                {/* Service Type Filter */}
                 <div>
                     <label htmlFor="service-type-select" className="block text-sm font-medium text-gray-700 mb-2">
                         Service Type
@@ -284,7 +279,6 @@ function MarketplacePageOriginal() {
     </div>
 </div>
 
-{/* Marketplace Grid */ }
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     {filteredLegends.length === 0 ? (
         <div className="bg-white rounded-lg shadow p-12 text-center">
@@ -349,7 +343,6 @@ function MarketplacePageOriginal() {
                         onClick={() => handleCardClick(legend.uid)}
                         className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 overflow-hidden"
                     >
-                        {/* Profile Image */}
                         <div className="relative h-48 bg-gradient-to-br from-blue-100 to-purple-100">
                             {legend.profileImageUrl ? (
                                 <Image
@@ -365,7 +358,6 @@ function MarketplacePageOriginal() {
                                     </span>
                                 </div>
                             )}
-                            {/* Verified Badge Overlay */}
                             <div className="absolute top-3 right-3">
                                 <div className="flex items-center gap-1 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-full shadow-md">
                                     <svg
@@ -384,7 +376,6 @@ function MarketplacePageOriginal() {
                             </div>
                         </div>
 
-                        {/* Card Content */}
                         <div className="p-5">
                             <h3 className="text-xl font-bold text-gray-900 mb-2 truncate">
                                 {legend.displayName}
@@ -417,7 +408,6 @@ function MarketplacePageOriginal() {
     )}
 </div>
 
-{/* Info Section */ }
 <div className="bg-white border-t mt-12">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center">

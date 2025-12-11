@@ -212,18 +212,15 @@ function GuestMarketplacePageOriginal() {
     return (
         <div className="min-h-screen bg-gray-50 pt-20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-                {/* Header */}
-<div className="mb-6 sm:mb-8">
+                <div className="mb-6 sm:mb-8">
     <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Discover Guests</h1>
     <p className="mt-2 text-sm sm:text-base text-gray-600">
         Find the perfect guest for your podcast
     </p>
 </div>
 
-{/* Search and Filter Bar */ }
 <div className="bg-white rounded-lg shadow-sm p-3 sm:p-4 mb-4 sm:mb-6">
     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-        {/* Search */}
         <div className="flex-1">
             <input
                 type="text"
@@ -233,7 +230,6 @@ function GuestMarketplacePageOriginal() {
                 className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
         </div>
-        {/* Filter Toggle */}
         <button
             onClick={() => setShowFilters(!showFilters)}
             className="px-4 sm:px-6 py-2 text-sm sm:text-base bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2"
@@ -245,10 +241,8 @@ function GuestMarketplacePageOriginal() {
         </button>
     </div>
 
-    {/* Filters */}
     {showFilters && (
         <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-            {/* Price Range Filter */}
             <div>
                 <label htmlFor="price-range-filter" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                     💰 Price Range
@@ -267,7 +261,6 @@ function GuestMarketplacePageOriginal() {
                 </select>
             </div>
 
-            {/* Topics Filter */}
             <div>
                 <label htmlFor="topics-filter" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                     🎯 Topics
@@ -287,7 +280,6 @@ function GuestMarketplacePageOriginal() {
                 </select>
             </div>
 
-            {/* Verification Filter */}
             <div>
                 <label htmlFor="verification-filter" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                     ✓ Verification
@@ -307,12 +299,10 @@ function GuestMarketplacePageOriginal() {
     )}
 </div>
 
-{/* Results Count */ }
 <div className="mb-3 sm:mb-4 text-sm sm:text-base text-gray-600">
     {filteredGuests.length} {filteredGuests.length === 1 ? 'guest' : 'guests'} found
 </div>
 
-{/* Guest Grid */ }
 {
     filteredGuests.length === 0 ? (
         <div className="bg-white rounded-lg shadow-sm p-6 sm:p-8 text-center">
@@ -325,7 +315,6 @@ function GuestMarketplacePageOriginal() {
                 key={guest.uid}
                 className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-4 sm:p-6"
             >
-                {/* Guest Header */}
                 <div className="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
                     <div className="relative flex-shrink-0">
                         {guest.profileImageUrl ? (
@@ -371,12 +360,10 @@ function GuestMarketplacePageOriginal() {
                     </div>
                 </div>
 
-                {/* Guest Bio */}
                 <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4 line-clamp-3">
                     {guest.guestBio || guest.bio || 'No bio available'}
                 </p>
 
-                {/* Topics */}
                 {guest.guestTopics && guest.guestTopics.length > 0 && (
                     <div className="mb-3 sm:mb-4">
                         <div className="flex flex-wrap gap-1.5 sm:gap-2">
@@ -397,14 +384,12 @@ function GuestMarketplacePageOriginal() {
                     </div>
                 )}
 
-                {/* Availability */}
                 {guest.guestAvailability && (
                     <p className="text-xs text-gray-500 mb-3 sm:mb-4 truncate">
                         📅 {guest.guestAvailability}
                     </p>
                 )}
 
-                {/* Actions */}
                 <div className="flex flex-col sm:flex-row gap-2">
                     <button
                         onClick={() => handleViewProfile(guest.uid)}
@@ -428,7 +413,6 @@ function GuestMarketplacePageOriginal() {
 }
             </div >
 
-    {/* Add to Wishlist Modal */ }
 {
     showWishlistModal && selectedGuest && userPodcastId && (
         <AddGuestToWishlistModal
